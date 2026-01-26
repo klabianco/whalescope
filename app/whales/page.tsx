@@ -329,7 +329,7 @@ export default function WhalesPage() {
               >
                 View
               </Link>
-              {connected && (
+              {connected ? (
                 <button
                   onClick={() => toggleFollow(whale.address)}
                   style={{
@@ -344,6 +344,21 @@ export default function WhalesPage() {
                   }}
                 >
                   {following.includes(whale.address) ? '✓' : '+'}
+                </button>
+              ) : (
+                <button
+                  onClick={() => document.querySelector<HTMLButtonElement>('.wallet-adapter-button')?.click()}
+                  style={{
+                    padding: '10px 20px',
+                    background: '#333',
+                    color: '#888',
+                    border: 'none',
+                    borderRadius: '8px',
+                    fontSize: '13px',
+                    cursor: 'pointer'
+                  }}
+                >
+                  Connect to +
                 </button>
               )}
             </div>
