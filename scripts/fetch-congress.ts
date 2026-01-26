@@ -18,27 +18,38 @@ interface QuiverTrade {
 
 // Party lookup by BioGuideID or name (known politicians)
 const PARTY_LOOKUP: Record<string, 'D' | 'R'> = {
+  // Democrats
   'Nancy Pelosi': 'D',
+  'Josh Gottheimer': 'D',
+  'Alexandria Ocasio-Cortez': 'D',
+  'Ro Khanna': 'D',
+  'Gilbert Cisneros': 'D',
+  'Rick Larsen': 'D',
+  'Cleo Fields': 'D',
+  'Jonathan Jackson': 'D',
+  // Republicans
   'Tommy Tuberville': 'R',
   'Dan Crenshaw': 'R',
   'Michael McCaul': 'R',
-  'Josh Gottheimer': 'D',
   'Marjorie Taylor Greene': 'R',
-  'Alexandria Ocasio-Cortez': 'D',
-  'Ro Khanna': 'D',
   'Kevin Hern': 'R',
   'Mark Green': 'R',
   'David J. Taylor': 'R',
   'French Hill': 'R',
+  'James French Hill': 'R',
   'John James': 'R',
   'Rick W. Allen': 'R',
   'Mike Kelly': 'R',
   'Steve Womack': 'R',
   'Gary Palmer': 'R',
-  'Tommy Tuberville': 'R',
   'John Hoeven': 'R',
   'Markwayne Mullin': 'R',
   'Shelley Moore Capito': 'R',
+  'Tim Moore': 'R',
+  'Roger Williams': 'R',
+  'Dan Newhouse': 'R',
+  'Virginia Foxx': 'R',
+  'Robert E. Latta': 'R',
   // Add more as needed
 };
 
