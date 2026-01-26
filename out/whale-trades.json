@@ -1,0 +1,13 @@
+[
+  {
+    "wallet": "5Q544fKrFoe6tsEbD7S8EmxGTJYAKtTVhAW5Q5pge4j1",
+    "walletLabel": "Raydium Top Trader",
+    "signature": "3vckcVg5GAEQCSZ9gTPVPP8a5uefrAixHk5ARq56m4a6kGHKpV6PJDTPG6TfZc8EfmMLuncUxkveXJh2vSNNHPdH",
+    "timestamp": 1769390431,
+    "type": "SWAP",
+    "description": "CreQJ2t94QK5dsxUZGXfPJ8Nx7wA9LHr5chxjSMkbNft swapped 7148.966688 Pnut  for 4.11662714 SOL",
+    "tokenMint": "2qEHjDLDLbuBgRYvsxhc5D6uDWAivNFZGan56P1tpump",
+    "tokenAmount": 7148.966688,
+    "action": "BUY"
+  }
+]
