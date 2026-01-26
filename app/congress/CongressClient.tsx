@@ -49,9 +49,12 @@ export default function CongressClient({ trades, topTraders }: Props) {
         <h1 style={{ fontSize: '36px', marginBottom: '8px' }}>
           🏛️ Congress Tracker
         </h1>
-        <p style={{ color: '#888' }}>
+        <p style={{ color: '#888', marginBottom: '16px' }}>
           See what politicians are buying and selling
         </p>
+        <Link href="/congress/watchlist" style={{ color: '#60a5fa', textDecoration: 'none' }}>
+          👀 Your Watchlist →
+        </Link>
       </div>
 
       {/* Top Traders */}
