@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Script from 'next/script'
 import './globals.css'
 import { ClientProviders } from './providers/ClientProviders'
 
@@ -18,6 +19,12 @@ export default function RootLayout({
         <ClientProviders>
           {children}
         </ClientProviders>
+        <Script 
+          data-goatcounter="https://whalescope.goatcounter.com/count"
+          async
+          src="//gc.zgo.at/count.js"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   )
