@@ -1,5 +1,6 @@
 import { readFileSync, existsSync } from 'fs';
 import { join } from 'path';
+import Link from 'next/link';
 
 interface WhaleTrade {
   wallet: string;
@@ -108,9 +109,12 @@ export default function Home() {
                     }}>
                       {trade.action}
                     </span>
-                    <span style={{ fontWeight: '600', color: '#fff' }}>
-                      {trade.walletLabel}
-                    </span>
+                    <Link 
+                      href={`/wallet/${trade.wallet}`}
+                      style={{ fontWeight: '600', color: '#fff', textDecoration: 'none' }}
+                    >
+                      {trade.walletLabel} →
+                    </Link>
                   </div>
                   <span style={{ color: '#666', fontSize: '14px' }}>
                     {timeAgo(trade.timestamp)}
