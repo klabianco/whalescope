@@ -50,9 +50,13 @@ export default function Home() {
         <p style={{ fontSize: '20px', color: '#888', marginBottom: '16px' }}>
           See what smart money is buying on Solana
         </p>
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '16px' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', flexWrap: 'wrap' }}>
           <Link href="/search" style={{ color: '#60a5fa', textDecoration: 'none' }}>
             🔍 Search Tokens
+          </Link>
+          <span style={{ color: '#444' }}>·</span>
+          <Link href="/congress" style={{ color: '#60a5fa', textDecoration: 'none' }}>
+            🏛️ Congress Tracker
           </Link>
           <span style={{ color: '#444' }}>·</span>
           <Link href="/watchlist" style={{ color: '#60a5fa', textDecoration: 'none' }}>
