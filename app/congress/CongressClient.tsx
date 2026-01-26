@@ -61,10 +61,10 @@ export default function CongressClient({ trades, topTraders }: Props) {
             Most Active Traders
           </h2>
           <div style={{ display: 'flex', gap: '12px', overflowX: 'auto', paddingBottom: '8px' }}>
-            {topTraders.map((trader) => (
+            {topTraders.filter(t => t.name).map((trader) => (
               <Link 
                 key={trader.name}
-                href={`/congress/${encodeURIComponent(trader.name.toLowerCase().replace(/ /g, '-'))}`}
+                href={`/congress/${encodeURIComponent((trader.name || '').toLowerCase().replace(/ /g, '-'))}`}
                 style={{
                   background: '#111118',
                   border: '1px solid #222',
