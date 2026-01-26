@@ -1,0 +1,122 @@
+[
+  {
+    "name": "Jump Crypto",
+    "type": "Market Maker",
+    "address": "5Q544fKrFoe6tsEbD7S8EmxGTJYAKtTVhAW5Q5pge4j1",
+    "description": "Major crypto trading firm and market maker"
+  },
+  {
+    "name": "Wintermute",
+    "type": "Market Maker", 
+    "address": "CuieVDEDtLo7FypA9SbLM9saXFdb1dsshEkyErMqkRQq",
+    "description": "Algorithmic trading firm"
+  },
+  {
+    "name": "Binance Hot Wallet",
+    "type": "Exchange",
+    "address": "5tzFkiKscXHK5ZXCGbXZxdw7gTjjD1mBwuoFbhUvuAi9",
+    "description": "Binance exchange hot wallet"
+  },
+  {
+    "name": "Coinbase Prime",
+    "type": "Exchange",
+    "address": "GJRs4FwHtemZ5ZE9x3FNvJ8TMwitKTh21yxdRPqn7npE",
+    "description": "Coinbase institutional custody"
+  },
+  {
+    "name": "Solana Foundation",
+    "type": "Foundation",
+    "address": "GK2zqSsXLA2rwVZk347RYhh6jJpRsCA69FjLW93ZGi3B",
+    "description": "Official Solana Foundation wallet"
+  },
+  {
+    "name": "Multicoin Capital",
+    "type": "VC",
+    "address": "AKnL4NNf3DGWZJS6cPknBuEGnVsV4A4m5tgebLHaRSZ9",
+    "description": "Crypto venture capital fund"
+  },
+  {
+    "name": "Paradigm",
+    "type": "VC",
+    "address": "HN7cABqLq46Es1jh92dQQisAq662SmxELLLsHHe4YWrH",
+    "description": "Major crypto VC fund"
+  },
+  {
+    "name": "Alameda Research",
+    "type": "Trading Firm (Defunct)",
+    "address": "5VCwKtCXgCJ6kit5FybXjvriW3xELsFDhYrPSqtJNmcD",
+    "description": "Former FTX trading arm - defunct but wallets still tracked"
+  },
+  {
+    "name": "Kraken",
+    "type": "Exchange",
+    "address": "FWznbcNXWQuHTawe9RxvQ2LdCENssh12dsznf4RiouN5",
+    "description": "Kraken exchange wallet"
+  },
+  {
+    "name": "OKX",
+    "type": "Exchange",
+    "address": "5VCwKtCXgCJ6kit5FybXjvriW3xELsFDhYrPSqtJNmcD",
+    "description": "OKX exchange hot wallet"
+  },
+  {
+    "name": "DeFiance Capital",
+    "type": "VC",
+    "address": "CZ2FBDqQ7Y94VQp5RhdPLpqbqg5e56sCNQYhXpyTdqGw",
+    "description": "DeFi-focused VC fund"
+  },
+  {
+    "name": "Galaxy Digital",
+    "type": "VC",
+    "address": "E6aTzkZKdCECgpDtBZtVpqiHwfoxx3XpEfH4yjnBPMNE",
+    "description": "Mike Novogratz's crypto investment firm"
+  },
+  {
+    "name": "Amber Group",
+    "type": "Trading Firm",
+    "address": "FKY6NyXGpMPR3pE2gEThXHPLNZLLqt7pCijBxEuiaNjf",
+    "description": "Crypto trading and financial services"
+  },
+  {
+    "name": "Three Arrows Capital",
+    "type": "VC (Defunct)",
+    "address": "9BVcYqEQxyccuwznvxXqDkSJFavvTyheiTYk231T1A8S",
+    "description": "Former crypto hedge fund - defunct"
+  },
+  {
+    "name": "Polychain Capital",
+    "type": "VC",
+    "address": "FYSvSgMqmPEhNWHQkdehrPQdrb6WVSzMBLRNV6aHMFJN",
+    "description": "Major crypto VC fund"
+  },
+  {
+    "name": "Crypto.com",
+    "type": "Exchange",
+    "address": "AobVSwdW9BbpMdJvTqeCN4hPAmh4rHm7vwLnQ5ATSPo9",
+    "description": "Crypto.com exchange wallet"
+  },
+  {
+    "name": "Bybit",
+    "type": "Exchange",
+    "address": "AC5RDfQFmDS1deWZos921JfqscXdByf8BKHs5ACWjtW2",
+    "description": "Bybit exchange wallet"
+  },
+  {
+    "name": "Messari",
+    "type": "Research",
+    "address": "DRpbCBMxVnDK7maPM5tGv6MvB3v1sRMC86PZ8okm21hy",
+    "description": "Crypto research firm"
+  },
+  {
+    "name": "Delphi Digital",
+    "type": "Research/VC",
+    "address": "8MQNm3R4VbpDgKEqxnULz7zBhMCXfyiLpENMkaEMuNbL",
+    "description": "Crypto research and ventures"
+  },
+  {
+    "name": "Sino Global Capital",
+    "type": "VC",
+    "address": "BuNe7qF1cNgEBbXKPuZrWdcTxbRHm9vHxU8BHKW8kWqf",
+    "description": "Asia-focused crypto VC"
+  }
+]

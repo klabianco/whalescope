@@ -24,6 +24,9 @@ export const Header: FC = () => {
       </Link>
 
       <nav style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
+        <Link href="/whales" style={{ color: '#888', textDecoration: 'none', fontSize: '14px' }}>
+          Whales
+        </Link>
         <Link href="/search" style={{ color: '#888', textDecoration: 'none', fontSize: '14px' }}>
           Tokens
         </Link>
