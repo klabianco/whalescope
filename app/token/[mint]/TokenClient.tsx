@@ -26,6 +26,24 @@ interface EarlyBuyer {
 // Helius API key
 const HELIUS_KEY = '2bc6aa5c-ec94-4566-9102-18294afa2b14';
 
+function getFollowedWallets(): string[] {
+  if (typeof window === 'undefined') return [];
+  try {
+    return JSON.parse(localStorage.getItem('followedWallets') || '[]');
+  } catch {
+    return [];
+  }
+}
+
+function toggleFollowWallet(address: string): string[] {
+  const current = getFollowedWallets();
+  const newList = current.includes(address)
+    ? current.filter(w => w !== address)
+    : [...current, address];
+  localStorage.setItem('followedWallets', JSON.stringify(newList));
+  return newList;
+}
+
 export default function TokenClient({ mint }: { mint: string }) {
   const [tokenInfo, setTokenInfo] = useState<TokenInfo | null>(null);
   const [holders, setHolders] = useState<Holder[]>([]);
@@ -34,6 +52,16 @@ export default function TokenClient({ mint }: { mint: string }) {
   const [loadingHistory, setLoadingHistory] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'holders' | 'early'>('holders');
+  const [followedWallets, setFollowedWallets] = useState<string[]>([]);
+
+  useEffect(() => {
+    setFollowedWallets(getFollowedWallets());
+  }, []);
+
+  function handleFollow(address: string) {
+    const newList = toggleFollowWallet(address);
+    setFollowedWallets(newList);
+  }
 
   useEffect(() => {
     if (mint) {
@@ -293,13 +321,29 @@ export default function TokenClient({ mint }: { mint: string }) {
                       </a>
                     </div>
                   </div>
-                  <div style={{ textAlign: 'right' }}>
-                    <div style={{ color: '#fff', fontWeight: '600' }}>
-                      {formatNumber(holder.balance)}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                    <div style={{ textAlign: 'right' }}>
+                      <div style={{ color: '#fff', fontWeight: '600' }}>
+                        {formatNumber(holder.balance)}
+                      </div>
+                      <div style={{ color: '#888', fontSize: '13px' }}>
+                        {holder.percentage.toFixed(2)}%
+                      </div>
                     </div>
-                    <div style={{ color: '#888', fontSize: '13px' }}>
-                      {holder.percentage.toFixed(2)}%
-                    </div>
+                    <button
+                      onClick={() => handleFollow(holder.address)}
+                      style={{
+                        padding: '6px 12px',
+                        background: followedWallets.includes(holder.address) ? '#4ade80' : '#333',
+                        color: followedWallets.includes(holder.address) ? '#000' : '#fff',
+                        border: 'none',
+                        borderRadius: '6px',
+                        fontSize: '12px',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      {followedWallets.includes(holder.address) ? '✓ Following' : '+ Follow'}
+                    </button>
                   </div>
                 </div>
               ))}
@@ -357,18 +401,34 @@ export default function TokenClient({ mint }: { mint: string }) {
                       </div>
                     </div>
                   </div>
-                  <div style={{ textAlign: 'right' }}>
-                    <div style={{ color: '#fff', fontWeight: '600' }}>
-                      {formatNumber(buyer.amount)}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                    <div style={{ textAlign: 'right' }}>
+                      <div style={{ color: '#fff', fontWeight: '600' }}>
+                        {formatNumber(buyer.amount)}
+                      </div>
+                      <a 
+                        href={`https://solscan.io/tx/${buyer.signature}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ color: '#888', fontSize: '12px', textDecoration: 'none' }}
+                      >
+                        View tx →
+                      </a>
                     </div>
-                    <a 
-                      href={`https://solscan.io/tx/${buyer.signature}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{ color: '#888', fontSize: '12px', textDecoration: 'none' }}
+                    <button
+                      onClick={() => handleFollow(buyer.address)}
+                      style={{
+                        padding: '6px 12px',
+                        background: followedWallets.includes(buyer.address) ? '#4ade80' : '#333',
+                        color: followedWallets.includes(buyer.address) ? '#000' : '#fff',
+                        border: 'none',
+                        borderRadius: '6px',
+                        fontSize: '12px',
+                        cursor: 'pointer'
+                      }}
                     >
-                      View tx →
-                    </a>
+                      {followedWallets.includes(buyer.address) ? '✓ Following' : '+ Follow'}
+                    </button>
                   </div>
                 </div>
               ))}

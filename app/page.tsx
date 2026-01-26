@@ -47,9 +47,18 @@ export default function Home() {
         <h1 style={{ fontSize: '48px', fontWeight: '700', marginBottom: '16px' }}>
           🐋 WhaleScope
         </h1>
-        <p style={{ fontSize: '20px', color: '#888', marginBottom: '24px' }}>
+        <p style={{ fontSize: '20px', color: '#888', marginBottom: '16px' }}>
           See what smart money is buying on Solana
         </p>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '16px' }}>
+          <Link href="/search" style={{ color: '#60a5fa', textDecoration: 'none' }}>
+            🔍 Search Tokens
+          </Link>
+          <span style={{ color: '#444' }}>·</span>
+          <Link href="/watchlist" style={{ color: '#60a5fa', textDecoration: 'none' }}>
+            👀 Watchlist
+          </Link>
+        </div>
       </div>
 
       {/* Token Search CTA */}
