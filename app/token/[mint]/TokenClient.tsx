@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useWallet } from '@solana/wallet-adapter-react';
+import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 
 interface Holder {
   address: string;
@@ -26,25 +28,8 @@ interface EarlyBuyer {
 // Helius API key
 const HELIUS_KEY = '2bc6aa5c-ec94-4566-9102-18294afa2b14';
 
-function getFollowedWallets(): string[] {
-  if (typeof window === 'undefined') return [];
-  try {
-    return JSON.parse(localStorage.getItem('followedWallets') || '[]');
-  } catch {
-    return [];
-  }
-}
-
-function toggleFollowWallet(address: string): string[] {
-  const current = getFollowedWallets();
-  const newList = current.includes(address)
-    ? current.filter(w => w !== address)
-    : [...current, address];
-  localStorage.setItem('followedWallets', JSON.stringify(newList));
-  return newList;
-}
-
 export default function TokenClient({ mint }: { mint: string }) {
+  const { publicKey, connected } = useWallet();
   const [tokenInfo, setTokenInfo] = useState<TokenInfo | null>(null);
   const [holders, setHolders] = useState<Holder[]>([]);
   const [earlyBuyers, setEarlyBuyers] = useState<EarlyBuyer[]>([]);
@@ -54,12 +39,26 @@ export default function TokenClient({ mint }: { mint: string }) {
   const [activeTab, setActiveTab] = useState<'holders' | 'early'>('holders');
   const [followedWallets, setFollowedWallets] = useState<string[]>([]);
 
+  const storageKey = publicKey ? publicKey.toBase58() : null;
+
   useEffect(() => {
-    setFollowedWallets(getFollowedWallets());
-  }, []);
+    if (storageKey) {
+      try {
+        const saved = localStorage.getItem(`wallets_${storageKey}`);
+        setFollowedWallets(saved ? JSON.parse(saved) : []);
+      } catch {
+        setFollowedWallets([]);
+      }
+    }
+  }, [storageKey]);
 
   function handleFollow(address: string) {
-    const newList = toggleFollowWallet(address);
+    if (!storageKey) return;
+    const current = followedWallets;
+    const newList = current.includes(address)
+      ? current.filter(w => w !== address)
+      : [...current, address];
+    localStorage.setItem(`wallets_${storageKey}`, JSON.stringify(newList));
     setFollowedWallets(newList);
   }
 
@@ -78,21 +77,17 @@ export default function TokenClient({ mint }: { mint: string }) {
   async function fetchEarlyBuyers(mintAddress: string) {
     setLoadingHistory(true);
     try {
-      // Use Helius parsed transaction history
       const res = await fetch(
         `https://api.helius.xyz/v0/addresses/${mintAddress}/transactions?api-key=${HELIUS_KEY}&type=SWAP`
       );
       const txs = await res.json();
       
-      // Parse swap transactions to find early buyers
       const buyers: EarlyBuyer[] = [];
       const seenWallets = new Set<string>();
       
-      // Sort by timestamp ascending (oldest first)
       const sorted = (txs || []).sort((a: any, b: any) => a.timestamp - b.timestamp);
       
       for (const tx of sorted) {
-        // Look for swaps where this token was received
         const tokenTransfers = tx.tokenTransfers || [];
         for (const transfer of tokenTransfers) {
           if (transfer.mint === mintAddress && transfer.toUserAccount) {
@@ -124,7 +119,6 @@ export default function TokenClient({ mint }: { mint: string }) {
     setError(null);
     
     try {
-      // Fetch token metadata
       const metadataRes = await fetch(`https://api.helius.xyz/v0/token-metadata?api-key=${HELIUS_KEY}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -142,7 +136,6 @@ export default function TokenClient({ mint }: { mint: string }) {
       };
       setTokenInfo(info);
 
-      // Fetch top holders
       const holdersRes = await fetch(`https://mainnet.helius-rpc.com/?api-key=${HELIUS_KEY}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -157,7 +150,6 @@ export default function TokenClient({ mint }: { mint: string }) {
       const holdersData = await holdersRes.json();
       const accounts = holdersData?.result?.value || [];
       
-      // Calculate total from largest accounts
       const totalSupply = accounts.reduce((sum: number, acc: any) => {
         return sum + parseFloat(acc.uiAmount || 0);
       }, 0);
@@ -165,7 +157,6 @@ export default function TokenClient({ mint }: { mint: string }) {
       info.supply = totalSupply;
       setTokenInfo({...info});
       
-      // Map to holder format
       const holderList: Holder[] = accounts.slice(0, 20).map((acc: any) => {
         const balance = parseFloat(acc.uiAmount || 0);
         return {
@@ -204,6 +195,41 @@ export default function TokenClient({ mint }: { mint: string }) {
       year: 'numeric'
     });
   }
+
+  // Follow button component
+  const FollowButton = ({ address }: { address: string }) => {
+    if (!connected) {
+      return (
+        <WalletMultiButton style={{
+          padding: '6px 12px',
+          background: '#333',
+          color: '#fff',
+          border: 'none',
+          borderRadius: '6px',
+          fontSize: '12px',
+          height: 'auto'
+        }} />
+      );
+    }
+    
+    const isFollowing = followedWallets.includes(address);
+    return (
+      <button
+        onClick={() => handleFollow(address)}
+        style={{
+          padding: '6px 12px',
+          background: isFollowing ? '#4ade80' : '#333',
+          color: isFollowing ? '#000' : '#fff',
+          border: 'none',
+          borderRadius: '6px',
+          fontSize: '12px',
+          cursor: 'pointer'
+        }}
+      >
+        {isFollowing ? '✓ Following' : '+ Follow'}
+      </button>
+    );
+  };
 
   return (
     <main style={{ maxWidth: '900px', margin: '0 auto', padding: '40px 20px' }}>
@@ -330,20 +356,7 @@ export default function TokenClient({ mint }: { mint: string }) {
                         {holder.percentage.toFixed(2)}%
                       </div>
                     </div>
-                    <button
-                      onClick={() => handleFollow(holder.address)}
-                      style={{
-                        padding: '6px 12px',
-                        background: followedWallets.includes(holder.address) ? '#4ade80' : '#333',
-                        color: followedWallets.includes(holder.address) ? '#000' : '#fff',
-                        border: 'none',
-                        borderRadius: '6px',
-                        fontSize: '12px',
-                        cursor: 'pointer'
-                      }}
-                    >
-                      {followedWallets.includes(holder.address) ? '✓ Following' : '+ Follow'}
-                    </button>
+                    <FollowButton address={holder.address} />
                   </div>
                 </div>
               ))}
@@ -415,20 +428,7 @@ export default function TokenClient({ mint }: { mint: string }) {
                         View tx →
                       </a>
                     </div>
-                    <button
-                      onClick={() => handleFollow(buyer.address)}
-                      style={{
-                        padding: '6px 12px',
-                        background: followedWallets.includes(buyer.address) ? '#4ade80' : '#333',
-                        color: followedWallets.includes(buyer.address) ? '#000' : '#fff',
-                        border: 'none',
-                        borderRadius: '6px',
-                        fontSize: '12px',
-                        cursor: 'pointer'
-                      }}
-                    >
-                      {followedWallets.includes(buyer.address) ? '✓ Following' : '+ Follow'}
-                    </button>
+                    <FollowButton address={buyer.address} />
                   </div>
                 </div>
               ))}

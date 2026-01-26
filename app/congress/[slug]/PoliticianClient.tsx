@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useWallet } from '@solana/wallet-adapter-react';
+import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 
 interface Trade {
   politician: string;
@@ -16,30 +18,34 @@ interface Trade {
 }
 
 export default function PoliticianClient({ slug }: { slug: string }) {
+  const { publicKey, connected } = useWallet();
   const [trades, setTrades] = useState<Trade[]>([]);
   const [loading, setLoading] = useState(true);
   const [following, setFollowing] = useState(false);
   const [politicianInfo, setPoliticianInfo] = useState<{name: string; party: string; chamber: string} | null>(null);
 
+  const storageKey = publicKey ? publicKey.toBase58() : null;
+
   useEffect(() => {
-    // Check if following
-    const saved = localStorage.getItem('followedPoliticians');
-    const list = saved ? JSON.parse(saved) : [];
-    setFollowing(list.includes(slug));
-    
-    // Fetch all trades and filter for this politician
+    if (storageKey) {
+      try {
+        const saved = localStorage.getItem(`politicians_${storageKey}`);
+        const list = saved ? JSON.parse(saved) : [];
+        setFollowing(list.includes(slug));
+      } catch {
+        setFollowing(false);
+      }
+    }
     fetchTrades();
-  }, [slug]);
+  }, [slug, storageKey]);
 
   async function fetchTrades() {
     try {
-      // Fetch the congress-trades.json from public folder
       const res = await fetch('/congress-trades.json');
       if (!res.ok) throw new Error('Failed to fetch');
       
       const allTrades: Trade[] = await res.json();
       
-      // Convert slug back to name (e.g., "nancy-pelosi" -> match "Nancy Pelosi")
       const slugLower = slug.toLowerCase();
       const filtered = allTrades.filter(t => {
         const nameSlug = t.politician.toLowerCase().replace(/ /g, '-');
@@ -63,13 +69,19 @@ export default function PoliticianClient({ slug }: { slug: string }) {
   }
 
   function toggleFollow() {
-    const saved = localStorage.getItem('followedPoliticians');
-    const list = saved ? JSON.parse(saved) : [];
-    const newList = following
-      ? list.filter((s: string) => s !== slug)
-      : [...list, slug];
-    localStorage.setItem('followedPoliticians', JSON.stringify(newList));
-    setFollowing(!following);
+    if (!storageKey) return;
+    
+    try {
+      const saved = localStorage.getItem(`politicians_${storageKey}`);
+      const list = saved ? JSON.parse(saved) : [];
+      const newList = following
+        ? list.filter((s: string) => s !== slug)
+        : [...list, slug];
+      localStorage.setItem(`politicians_${storageKey}`, JSON.stringify(newList));
+      setFollowing(!following);
+    } catch (err) {
+      console.error('Failed to toggle follow:', err);
+    }
   }
 
   // Calculate stats
@@ -81,6 +93,41 @@ export default function PoliticianClient({ slug }: { slug: string }) {
       ? Object.entries(trades.reduce((acc, t) => { acc[t.ticker] = (acc[t.ticker] || 0) + 1; return acc; }, {} as Record<string, number>))
           .sort((a, b) => b[1] - a[1])[0]?.[0] || 'N/A'
       : 'N/A'
+  };
+
+  // Follow button
+  const FollowButton = () => {
+    if (!connected) {
+      return (
+        <WalletMultiButton style={{
+          backgroundColor: '#4ade80',
+          color: '#000',
+          borderRadius: '8px',
+          fontSize: '14px',
+          fontWeight: '600',
+          height: '44px',
+          padding: '0 24px'
+        }} />
+      );
+    }
+    
+    return (
+      <button
+        onClick={toggleFollow}
+        style={{
+          padding: '12px 24px',
+          background: following ? '#4ade80' : '#333',
+          color: following ? '#000' : '#fff',
+          border: 'none',
+          borderRadius: '8px',
+          fontSize: '14px',
+          fontWeight: '600',
+          cursor: 'pointer'
+        }}
+      >
+        {following ? '✓ Following' : '+ Follow'}
+      </button>
+    );
   };
 
   return (
@@ -124,21 +171,7 @@ export default function PoliticianClient({ slug }: { slug: string }) {
                 {politicianInfo.chamber}
               </p>
             </div>
-            <button
-              onClick={toggleFollow}
-              style={{
-                padding: '12px 24px',
-                background: following ? '#4ade80' : '#333',
-                color: following ? '#000' : '#fff',
-                border: 'none',
-                borderRadius: '8px',
-                fontSize: '14px',
-                fontWeight: '600',
-                cursor: 'pointer'
-              }}
-            >
-              {following ? '✓ Following' : '+ Follow'}
-            </button>
+            <FollowButton />
           </div>
 
           {/* Stats */}
