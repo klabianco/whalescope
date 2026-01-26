@@ -25,13 +25,10 @@ export const Header: FC = () => {
 
       <nav style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
         <Link href="/whales" style={{ color: '#888', textDecoration: 'none', fontSize: '14px' }}>
-          Whales
+          Smart Money
         </Link>
         <Link href="/search" style={{ color: '#888', textDecoration: 'none', fontSize: '14px' }}>
           Tokens
-        </Link>
-        <Link href="/congress" style={{ color: '#888', textDecoration: 'none', fontSize: '14px' }}>
-          Congress
         </Link>
         {publicKey && (
           <Link href="/watchlist" style={{ color: '#888', textDecoration: 'none', fontSize: '14px' }}>

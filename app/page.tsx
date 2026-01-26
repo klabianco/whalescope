@@ -51,7 +51,7 @@ export default function Home() {
         {/* Quick Links */}
         <div style={{ 
           display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
           gap: '16px',
           marginBottom: '40px'
         }}>
@@ -63,8 +63,8 @@ export default function Home() {
             textAlign: 'center'
           }}>
             <div style={{ fontSize: '32px', marginBottom: '8px' }}>🐋</div>
-            <div style={{ color: '#fff', fontWeight: '600' }}>Known Whales</div>
-            <div style={{ color: '#888', fontSize: '13px' }}>Track VCs & market makers</div>
+            <div style={{ color: '#fff', fontWeight: '600' }}>Smart Money</div>
+            <div style={{ color: '#888', fontSize: '13px' }}>Crypto whales & Congress trades</div>
           </Link>
           
           <Link href="/search" style={{
@@ -77,18 +77,6 @@ export default function Home() {
             <div style={{ fontSize: '32px', marginBottom: '8px' }}>🔍</div>
             <div style={{ color: '#fff', fontWeight: '600' }}>Token Search</div>
             <div style={{ color: '#888', fontSize: '13px' }}>Find top holders</div>
-          </Link>
-          
-          <Link href="/congress" style={{
-            background: 'linear-gradient(135deg, #1e3a5f 0%, #1a1a2e 100%)',
-            padding: '24px',
-            borderRadius: '12px',
-            textDecoration: 'none',
-            textAlign: 'center'
-          }}>
-            <div style={{ fontSize: '32px', marginBottom: '8px' }}>🏛️</div>
-            <div style={{ color: '#fff', fontWeight: '600' }}>Congress Tracker</div>
-            <div style={{ color: '#888', fontSize: '13px' }}>Politicians&apos; trades</div>
           </Link>
         </div>
 

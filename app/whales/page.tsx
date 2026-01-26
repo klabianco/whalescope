@@ -10,129 +10,31 @@ interface Whale {
   type: string;
   address: string;
   description: string;
+  market: 'crypto' | 'tradfi';
 }
 
-const KNOWN_WHALES: Whale[] = [
-  {
-    name: "Jump Crypto",
-    type: "Market Maker",
-    address: "5Q544fKrFoe6tsEbD7S8EmxGTJYAKtTVhAW5Q5pge4j1",
-    description: "Major crypto trading firm and market maker"
-  },
-  {
-    name: "Wintermute",
-    type: "Market Maker", 
-    address: "CuieVDEDtLo7FypA9SbLM9saXFdb1dsshEkyErMqkRQq",
-    description: "Algorithmic trading firm"
-  },
-  {
-    name: "Binance Hot Wallet",
-    type: "Exchange",
-    address: "5tzFkiKscXHK5ZXCGbXZxdw7gTjjD1mBwuoFbhUvuAi9",
-    description: "Binance exchange hot wallet"
-  },
-  {
-    name: "Coinbase Prime",
-    type: "Exchange",
-    address: "GJRs4FwHtemZ5ZE9x3FNvJ8TMwitKTh21yxdRPqn7npE",
-    description: "Coinbase institutional custody"
-  },
-  {
-    name: "Solana Foundation",
-    type: "Foundation",
-    address: "GK2zqSsXLA2rwVZk347RYhh6jJpRsCA69FjLW93ZGi3B",
-    description: "Official Solana Foundation wallet"
-  },
-  {
-    name: "Multicoin Capital",
-    type: "VC",
-    address: "AKnL4NNf3DGWZJS6cPknBuEGnVsV4A4m5tgebLHaRSZ9",
-    description: "Crypto venture capital fund"
-  },
-  {
-    name: "Paradigm",
-    type: "VC",
-    address: "HN7cABqLq46Es1jh92dQQisAq662SmxELLLsHHe4YWrH",
-    description: "Major crypto VC fund"
-  },
-  {
-    name: "Kraken",
-    type: "Exchange",
-    address: "FWznbcNXWQuHTawe9RxvQ2LdCENssh12dsznf4RiouN5",
-    description: "Kraken exchange wallet"
-  },
-  {
-    name: "OKX",
-    type: "Exchange",
-    address: "5VCwKtCXgCJ6kit5FybXjvriW3xELsFDhYrPSqtJNmcD",
-    description: "OKX exchange hot wallet"
-  },
-  {
-    name: "DeFiance Capital",
-    type: "VC",
-    address: "CZ2FBDqQ7Y94VQp5RhdPLpqbqg5e56sCNQYhXpyTdqGw",
-    description: "DeFi-focused VC fund"
-  },
-  {
-    name: "Galaxy Digital",
-    type: "VC",
-    address: "E6aTzkZKdCECgpDtBZtVpqiHwfoxx3XpEfH4yjnBPMNE",
-    description: "Mike Novogratz's crypto investment firm"
-  },
-  {
-    name: "Amber Group",
-    type: "Trading Firm",
-    address: "FKY6NyXGpMPR3pE2gEThXHPLNZLLqt7pCijBxEuiaNjf",
-    description: "Crypto trading and financial services"
-  },
-  {
-    name: "Polychain Capital",
-    type: "VC",
-    address: "FYSvSgMqmPEhNWHQkdehrPQdrb6WVSzMBLRNV6aHMFJN",
-    description: "Major crypto VC fund"
-  },
-  {
-    name: "Crypto.com",
-    type: "Exchange",
-    address: "AobVSwdW9BbpMdJvTqeCN4hPAmh4rHm7vwLnQ5ATSPo9",
-    description: "Crypto.com exchange wallet"
-  },
-  {
-    name: "Bybit",
-    type: "Exchange",
-    address: "AC5RDfQFmDS1deWZos921JfqscXdByf8BKHs5ACWjtW2",
-    description: "Bybit exchange wallet"
-  },
-  {
-    name: "Messari",
-    type: "Research",
-    address: "DRpbCBMxVnDK7maPM5tGv6MvB3v1sRMC86PZ8okm21hy",
-    description: "Crypto research firm"
-  },
-  {
-    name: "Delphi Digital",
-    type: "Research/VC",
-    address: "8MQNm3R4VbpDgKEqxnULz7zBhMCXfyiLpENMkaEMuNbL",
-    description: "Crypto research and ventures"
-  },
-  {
-    name: "Sino Global Capital",
-    type: "VC",
-    address: "BuNe7qF1cNgEBbXKPuZrWdcTxbRHm9vHxU8BHKW8kWqf",
-    description: "Asia-focused crypto VC"
-  },
-  {
-    name: "Three Arrows Capital",
-    type: "VC (Defunct)",
-    address: "9BVcYqEQxyccuwznvxXqDkSJFavvTyheiTYk231T1A8S",
-    description: "Former crypto hedge fund - defunct"
-  },
-  {
-    name: "Alameda Research",
-    type: "Trading Firm (Defunct)",
-    address: "5VCwKtCXgCJ6kit5FybXjvriW3xELsFDhYrPSqtJNmcD",
-    description: "Former FTX trading arm - defunct but wallets still tracked"
-  }
+interface CongressTrade {
+  politician: string;
+  party: 'D' | 'R' | 'I';
+  chamber: 'House' | 'Senate';
+  ticker: string;
+  type: 'Purchase' | 'Sale';
+  amount: string;
+  filed: string;
+  traded: string;
+}
+
+const CRYPTO_WHALES: Whale[] = [
+  { name: "Jump Crypto", type: "Market Maker", address: "5Q544fKrFoe6tsEbD7S8EmxGTJYAKtTVhAW5Q5pge4j1", description: "Major crypto trading firm", market: 'crypto' },
+  { name: "Wintermute", type: "Market Maker", address: "CuieVDEDtLo7FypA9SbLM9saXFdb1dsshEkyErMqkRQq", description: "Algorithmic trading firm", market: 'crypto' },
+  { name: "Binance", type: "Exchange", address: "5tzFkiKscXHK5ZXCGbXZxdw7gTjjD1mBwuoFbhUvuAi9", description: "Binance hot wallet", market: 'crypto' },
+  { name: "Coinbase Prime", type: "Exchange", address: "GJRs4FwHtemZ5ZE9x3FNvJ8TMwitKTh21yxdRPqn7npE", description: "Institutional custody", market: 'crypto' },
+  { name: "Solana Foundation", type: "Foundation", address: "GK2zqSsXLA2rwVZk347RYhh6jJpRsCA69FjLW93ZGi3B", description: "Official foundation wallet", market: 'crypto' },
+  { name: "Multicoin Capital", type: "VC", address: "AKnL4NNf3DGWZJS6cPknBuEGnVsV4A4m5tgebLHaRSZ9", description: "Crypto VC fund", market: 'crypto' },
+  { name: "Paradigm", type: "VC", address: "HN7cABqLq46Es1jh92dQQisAq662SmxELLLsHHe4YWrH", description: "Major crypto VC", market: 'crypto' },
+  { name: "Kraken", type: "Exchange", address: "FWznbcNXWQuHTawe9RxvQ2LdCENssh12dsznf4RiouN5", description: "Kraken exchange", market: 'crypto' },
+  { name: "Galaxy Digital", type: "VC", address: "E6aTzkZKdCECgpDtBZtVpqiHwfoxx3XpEfH4yjnBPMNE", description: "Novogratz's fund", market: 'crypto' },
+  { name: "Polychain Capital", type: "VC", address: "FYSvSgMqmPEhNWHQkdehrPQdrb6WVSzMBLRNV6aHMFJN", description: "Major crypto VC", market: 'crypto' },
 ];
 
 const TYPE_COLORS: Record<string, string> = {
@@ -140,231 +42,300 @@ const TYPE_COLORS: Record<string, string> = {
   'Exchange': '#fbbf24',
   'Foundation': '#a78bfa',
   'VC': '#4ade80',
-  'Trading Firm': '#f472b6',
-  'Research': '#22d3d8',
-  'Research/VC': '#22d3d8',
-  'VC (Defunct)': '#6b7280',
-  'Trading Firm (Defunct)': '#6b7280'
+  'Congress-D': '#60a5fa',
+  'Congress-R': '#f87171',
+  'Congress-I': '#a78bfa',
 };
 
 export default function WhalesPage() {
   const { publicKey, connected } = useWallet();
-  const [following, setFollowing] = useState<string[]>([]);
-  const [filter, setFilter] = useState<string>('All');
+  const [followingWallets, setFollowingWallets] = useState<string[]>([]);
+  const [followingPoliticians, setFollowingPoliticians] = useState<string[]>([]);
+  const [tab, setTab] = useState<'crypto' | 'congress'>('crypto');
+  const [politicians, setPoliticians] = useState<{name: string; party: string; chamber: string; slug: string; tradeCount: number}[]>([]);
   
   const storageKey = publicKey ? publicKey.toBase58() : null;
-  
-  const types = ['All'].concat(Array.from(new Set(KNOWN_WHALES.map(w => w.type))));
-  
-  const filteredWhales = filter === 'All' 
-    ? KNOWN_WHALES 
-    : KNOWN_WHALES.filter(w => w.type === filter);
 
   useEffect(() => {
     if (storageKey) {
       try {
-        const saved = localStorage.getItem(`wallets_${storageKey}`);
-        setFollowing(saved ? JSON.parse(saved) : []);
+        const savedWallets = localStorage.getItem(`wallets_${storageKey}`);
+        setFollowingWallets(savedWallets ? JSON.parse(savedWallets) : []);
+        const savedPols = localStorage.getItem(`politicians_${storageKey}`);
+        setFollowingPoliticians(savedPols ? JSON.parse(savedPols) : []);
       } catch {
-        setFollowing([]);
+        setFollowingWallets([]);
+        setFollowingPoliticians([]);
       }
-    } else {
-      setFollowing([]);
     }
+    
+    // Fetch congress data
+    fetch('/congress-trades.json')
+      .then(res => res.ok ? res.json() : [])
+      .then((trades: CongressTrade[]) => {
+        // Get unique politicians with trade counts
+        const polMap = new Map<string, {name: string; party: string; chamber: string; count: number}>();
+        trades.forEach(t => {
+          const key = t.politician;
+          if (polMap.has(key)) {
+            polMap.get(key)!.count++;
+          } else {
+            polMap.set(key, { name: t.politician, party: t.party, chamber: t.chamber, count: 1 });
+          }
+        });
+        const pols = Array.from(polMap.values())
+          .sort((a, b) => b.count - a.count)
+          .slice(0, 20)
+          .map(p => ({
+            name: p.name,
+            party: p.party,
+            chamber: p.chamber,
+            slug: p.name.toLowerCase().replace(/ /g, '-'),
+            tradeCount: p.count
+          }));
+        setPoliticians(pols);
+      })
+      .catch(() => setPoliticians([]));
   }, [storageKey]);
 
-  function toggleFollow(address: string) {
+  function toggleFollowWallet(address: string) {
     if (!storageKey) return;
-    
-    const newList = following.includes(address)
-      ? following.filter(a => a !== address)
-      : [...following, address];
-    
+    const newList = followingWallets.includes(address)
+      ? followingWallets.filter(a => a !== address)
+      : [...followingWallets, address];
     localStorage.setItem(`wallets_${storageKey}`, JSON.stringify(newList));
-    setFollowing(newList);
+    setFollowingWallets(newList);
   }
 
-  function followAll() {
+  function toggleFollowPolitician(slug: string) {
     if (!storageKey) return;
-    const allAddresses = filteredWhales.map(w => w.address);
-    const combined = Array.from(new Set(following.concat(allAddresses)));
-    localStorage.setItem(`wallets_${storageKey}`, JSON.stringify(combined));
-    setFollowing(combined);
+    const newList = followingPoliticians.includes(slug)
+      ? followingPoliticians.filter(s => s !== slug)
+      : [...followingPoliticians, slug];
+    localStorage.setItem(`politicians_${storageKey}`, JSON.stringify(newList));
+    setFollowingPoliticians(newList);
   }
 
   return (
     <main style={{ maxWidth: '1000px', margin: '0 auto', padding: '40px 20px' }}>
       {/* Header */}
-      <div style={{ marginBottom: '40px' }}>
+      <div style={{ marginBottom: '32px' }}>
         <Link href="/" style={{ color: '#60a5fa', textDecoration: 'none', fontSize: '14px' }}>
           ← Back to Home
         </Link>
         <h1 style={{ fontSize: '36px', margin: '16px 0 8px' }}>
-          🐋 Known Whales
+          🐋 Smart Money
         </h1>
         <p style={{ color: '#888', marginBottom: '24px' }}>
-          Track the biggest wallets on Solana. VCs, exchanges, market makers, and more.
+          Track the biggest players. Crypto whales & Congress trades.
         </p>
         
-        {/* Wallet + Follow All */}
-        <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap' }}>
-          {!connected ? (
-            <WalletMultiButton style={{
-              backgroundColor: '#4ade80',
-              color: '#000',
-              borderRadius: '8px',
-              fontSize: '14px',
-              fontWeight: '600',
-              height: '44px',
-              padding: '0 24px'
-            }} />
-          ) : (
-            <>
-              <button
-                onClick={followAll}
-                style={{
-                  padding: '12px 24px',
-                  background: '#4ade80',
-                  color: '#000',
-                  border: 'none',
-                  borderRadius: '8px',
-                  fontSize: '14px',
-                  fontWeight: '600',
-                  cursor: 'pointer'
-                }}
-              >
-                Follow All {filter !== 'All' ? filter : ''} ({filteredWhales.length})
-              </button>
-              <span style={{ color: '#666', fontSize: '14px' }}>
-                Following {following.length} wallets
-              </span>
-            </>
-          )}
-        </div>
+        {!connected && (
+          <WalletMultiButton style={{
+            backgroundColor: '#4ade80',
+            color: '#000',
+            borderRadius: '8px',
+            fontSize: '14px',
+            fontWeight: '600',
+            height: '44px',
+            padding: '0 24px'
+          }} />
+        )}
       </div>
 
-      {/* Filters */}
+      {/* Tabs */}
       <div style={{ 
         display: 'flex', 
-        gap: '8px', 
+        gap: '4px', 
         marginBottom: '24px',
-        flexWrap: 'wrap' 
+        background: '#111118',
+        padding: '4px',
+        borderRadius: '12px',
+        width: 'fit-content'
       }}>
-        {types.map(type => (
-          <button
-            key={type}
-            onClick={() => setFilter(type)}
-            style={{
-              padding: '8px 16px',
-              background: filter === type ? '#333' : 'transparent',
-              color: filter === type ? '#fff' : '#888',
-              border: '1px solid #333',
-              borderRadius: '20px',
-              fontSize: '13px',
-              cursor: 'pointer'
-            }}
-          >
-            {type}
-          </button>
-        ))}
+        <button
+          onClick={() => setTab('crypto')}
+          style={{
+            padding: '12px 24px',
+            background: tab === 'crypto' ? '#333' : 'transparent',
+            color: tab === 'crypto' ? '#fff' : '#888',
+            border: 'none',
+            borderRadius: '8px',
+            fontSize: '14px',
+            fontWeight: '600',
+            cursor: 'pointer'
+          }}
+        >
+          🪙 Crypto Whales
+        </button>
+        <button
+          onClick={() => setTab('congress')}
+          style={{
+            padding: '12px 24px',
+            background: tab === 'congress' ? '#333' : 'transparent',
+            color: tab === 'congress' ? '#fff' : '#888',
+            border: 'none',
+            borderRadius: '8px',
+            fontSize: '14px',
+            fontWeight: '600',
+            cursor: 'pointer'
+          }}
+        >
+          🏛️ Congress ({politicians.length})
+        </button>
       </div>
 
-      {/* Whale List */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-        {filteredWhales.map((whale) => (
-          <div key={whale.address} style={{
-            background: '#111118',
-            border: '1px solid #222',
-            borderRadius: '12px',
-            padding: '20px',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            gap: '16px',
-            flexWrap: 'wrap'
-          }}>
-            <div style={{ flex: 1, minWidth: '200px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '4px' }}>
-                <span style={{ fontSize: '18px', fontWeight: '600', color: '#fff' }}>
-                  {whale.name}
-                </span>
-                <span style={{
-                  background: TYPE_COLORS[whale.type] + '20',
-                  color: TYPE_COLORS[whale.type],
-                  padding: '2px 8px',
-                  borderRadius: '4px',
-                  fontSize: '11px',
-                  fontWeight: '600'
-                }}>
-                  {whale.type}
-                </span>
+      {/* Crypto Whales */}
+      {tab === 'crypto' && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          {CRYPTO_WHALES.map((whale) => (
+            <div key={whale.address} style={{
+              background: '#111118',
+              border: '1px solid #222',
+              borderRadius: '12px',
+              padding: '20px',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              gap: '16px',
+              flexWrap: 'wrap'
+            }}>
+              <div style={{ flex: 1, minWidth: '200px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '4px' }}>
+                  <span style={{ fontSize: '18px', fontWeight: '600', color: '#fff' }}>
+                    {whale.name}
+                  </span>
+                  <span style={{
+                    background: (TYPE_COLORS[whale.type] || '#666') + '20',
+                    color: TYPE_COLORS[whale.type] || '#666',
+                    padding: '2px 8px',
+                    borderRadius: '4px',
+                    fontSize: '11px',
+                    fontWeight: '600'
+                  }}>
+                    {whale.type}
+                  </span>
+                </div>
+                <p style={{ color: '#888', fontSize: '13px', margin: '4px 0 8px' }}>
+                  {whale.description}
+                </p>
+                <Link 
+                  href={`/wallet/${whale.address}`}
+                  style={{ color: '#60a5fa', fontSize: '12px', fontFamily: 'monospace', textDecoration: 'none' }}
+                >
+                  {whale.address.slice(0, 8)}...{whale.address.slice(-8)}
+                </Link>
               </div>
-              <p style={{ color: '#888', fontSize: '13px', margin: '4px 0 8px' }}>
-                {whale.description}
-              </p>
-              <Link 
-                href={`/wallet/${whale.address}`}
-                style={{ 
-                  color: '#60a5fa', 
-                  fontSize: '12px',
-                  fontFamily: 'monospace',
-                  textDecoration: 'none'
-                }}
-              >
-                {whale.address.slice(0, 8)}...{whale.address.slice(-8)}
-              </Link>
-            </div>
-            
-            <div style={{ display: 'flex', gap: '8px' }}>
-              <Link 
-                href={`/wallet/${whale.address}`}
-                style={{
-                  padding: '10px 20px',
-                  background: '#222',
-                  color: '#fff',
-                  borderRadius: '8px',
-                  textDecoration: 'none',
-                  fontSize: '14px'
-                }}
-              >
-                View
-              </Link>
-              {connected ? (
-                <button
-                  onClick={() => toggleFollow(whale.address)}
-                  style={{
-                    padding: '10px 20px',
-                    background: following.includes(whale.address) ? '#4ade80' : '#333',
-                    color: following.includes(whale.address) ? '#000' : '#fff',
-                    border: 'none',
-                    borderRadius: '8px',
-                    fontSize: '14px',
-                    fontWeight: '600',
-                    cursor: 'pointer'
-                  }}
+              
+              <div style={{ display: 'flex', gap: '8px' }}>
+                <Link 
+                  href={`/wallet/${whale.address}`}
+                  style={{ padding: '10px 20px', background: '#222', color: '#fff', borderRadius: '8px', textDecoration: 'none', fontSize: '14px' }}
                 >
-                  {following.includes(whale.address) ? '✓' : '+'}
-                </button>
-              ) : (
-                <button
-                  onClick={() => document.querySelector<HTMLButtonElement>('.wallet-adapter-button')?.click()}
-                  style={{
-                    padding: '10px 20px',
-                    background: '#333',
-                    color: '#888',
-                    border: 'none',
-                    borderRadius: '8px',
-                    fontSize: '13px',
-                    cursor: 'pointer'
-                  }}
-                >
-                  Connect to +
-                </button>
-              )}
+                  View
+                </Link>
+                {connected ? (
+                  <button
+                    onClick={() => toggleFollowWallet(whale.address)}
+                    style={{
+                      padding: '10px 20px',
+                      background: followingWallets.includes(whale.address) ? '#4ade80' : '#333',
+                      color: followingWallets.includes(whale.address) ? '#000' : '#fff',
+                      border: 'none',
+                      borderRadius: '8px',
+                      fontSize: '14px',
+                      fontWeight: '600',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    {followingWallets.includes(whale.address) ? '✓' : '+'}
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => document.querySelector<HTMLButtonElement>('.wallet-adapter-button')?.click()}
+                    style={{ padding: '10px 20px', background: '#333', color: '#888', border: 'none', borderRadius: '8px', fontSize: '13px', cursor: 'pointer' }}
+                  >
+                    Connect to +
+                  </button>
+                )}
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
+
+      {/* Congress */}
+      {tab === 'congress' && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          {politicians.map((pol) => (
+            <div key={pol.slug} style={{
+              background: '#111118',
+              border: '1px solid #222',
+              borderRadius: '12px',
+              padding: '20px',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              gap: '16px',
+              flexWrap: 'wrap'
+            }}>
+              <div style={{ flex: 1, minWidth: '200px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '4px' }}>
+                  <span style={{ fontSize: '18px', fontWeight: '600', color: '#fff' }}>
+                    {pol.name}
+                  </span>
+                  <span style={{
+                    background: (pol.party === 'D' ? '#60a5fa' : pol.party === 'R' ? '#f87171' : '#a78bfa') + '20',
+                    color: pol.party === 'D' ? '#60a5fa' : pol.party === 'R' ? '#f87171' : '#a78bfa',
+                    padding: '2px 8px',
+                    borderRadius: '4px',
+                    fontSize: '11px',
+                    fontWeight: '600'
+                  }}>
+                    {pol.party === 'D' ? 'Democrat' : pol.party === 'R' ? 'Republican' : 'Independent'}
+                  </span>
+                </div>
+                <p style={{ color: '#888', fontSize: '13px', margin: '4px 0' }}>
+                  {pol.chamber} · {pol.tradeCount} trades
+                </p>
+              </div>
+              
+              <div style={{ display: 'flex', gap: '8px' }}>
+                <Link 
+                  href={`/congress/${pol.slug}`}
+                  style={{ padding: '10px 20px', background: '#222', color: '#fff', borderRadius: '8px', textDecoration: 'none', fontSize: '14px' }}
+                >
+                  View Trades
+                </Link>
+                {connected ? (
+                  <button
+                    onClick={() => toggleFollowPolitician(pol.slug)}
+                    style={{
+                      padding: '10px 20px',
+                      background: followingPoliticians.includes(pol.slug) ? '#4ade80' : '#333',
+                      color: followingPoliticians.includes(pol.slug) ? '#000' : '#fff',
+                      border: 'none',
+                      borderRadius: '8px',
+                      fontSize: '14px',
+                      fontWeight: '600',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    {followingPoliticians.includes(pol.slug) ? '✓' : '+'}
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => document.querySelector<HTMLButtonElement>('.wallet-adapter-button')?.click()}
+                    style={{ padding: '10px 20px', background: '#333', color: '#888', border: 'none', borderRadius: '8px', fontSize: '13px', cursor: 'pointer' }}
+                  >
+                    Connect to +
+                  </button>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* Footer */}
       <footer style={{ textAlign: 'center', marginTop: '60px', color: '#666', fontSize: '14px' }}>
