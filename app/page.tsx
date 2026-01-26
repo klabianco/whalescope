@@ -43,22 +43,61 @@ export default function Home() {
   return (
     <main style={{ maxWidth: '900px', margin: '0 auto', padding: '40px 20px' }}>
       {/* Header */}
-      <div style={{ textAlign: 'center', marginBottom: '60px' }}>
+      <div style={{ textAlign: 'center', marginBottom: '40px' }}>
         <h1 style={{ fontSize: '48px', fontWeight: '700', marginBottom: '16px' }}>
           🐋 WhaleScope
         </h1>
         <p style={{ fontSize: '20px', color: '#888', marginBottom: '24px' }}>
           See what smart money is buying on Solana
         </p>
+      </div>
+
+      {/* Token Search CTA */}
+      <div style={{
+        background: 'linear-gradient(135deg, #1e3a5f 0%, #1a1a2e 100%)',
+        padding: '32px',
+        borderRadius: '16px',
+        textAlign: 'center',
+        marginBottom: '40px'
+      }}>
+        <h2 style={{ fontSize: '24px', marginBottom: '12px' }}>
+          🔍 Token God Mode
+        </h2>
+        <p style={{ color: '#888', marginBottom: '20px' }}>
+          Search any token. See who&apos;s holding. Find smart wallets.
+        </p>
+        <Link href="/search" style={{
+          display: 'inline-block',
+          background: '#4ade80',
+          color: '#000',
+          padding: '14px 32px',
+          borderRadius: '8px',
+          fontSize: '16px',
+          fontWeight: '600',
+          textDecoration: 'none'
+        }}>
+          Search Tokens →
+        </Link>
+      </div>
+
+      {/* Live Feed Header */}
+      <div style={{ 
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: '20px'
+      }}>
+        <h2 style={{ fontSize: '24px', color: '#fff' }}>
+          Recent Whale Trades
+        </h2>
         <div style={{ 
           background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)',
-          padding: '16px 24px',
-          borderRadius: '12px',
-          display: 'inline-block'
+          padding: '8px 16px',
+          borderRadius: '8px',
         }}>
           <span style={{ color: '#4ade80' }}>● Live</span>
-          <span style={{ marginLeft: '16px', color: '#888' }}>
-            Tracking {4} smart wallets
+          <span style={{ marginLeft: '12px', color: '#888', fontSize: '14px' }}>
+            Tracking {4} wallets
           </span>
         </div>
       </div>
