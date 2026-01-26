@@ -220,10 +220,14 @@ async function main() {
     trades = generateSampleData();
   }
   
-  // Save trades
+  // Save trades to both data/ and public/ directories
   const dataPath = join(process.cwd(), 'data', 'congress-trades.json');
-  writeFileSync(dataPath, JSON.stringify(trades, null, 2));
+  const publicPath = join(process.cwd(), 'public', 'congress-trades.json');
+  const tradesJson = JSON.stringify(trades, null, 2);
+  writeFileSync(dataPath, tradesJson);
+  writeFileSync(publicPath, tradesJson);
   console.log(`\nSaved ${trades.length} trades to ${dataPath}`);
+  console.log(`Copied to ${publicPath} for client-side access`);
 }
 
 main().catch(console.error);

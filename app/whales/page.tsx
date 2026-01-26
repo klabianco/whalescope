@@ -296,7 +296,7 @@ export default function WhalesPage() {
                   </span>
                 </div>
                 <p style={{ color: '#888', fontSize: '13px', margin: '4px 0' }}>
-                  {pol.chamber} · {pol.tradeCount} trades
+                  {pol.chamber} · {pol.tradeCount} {pol.tradeCount === 1 ? 'trade' : 'trades'}
                 </p>
               </div>
               
