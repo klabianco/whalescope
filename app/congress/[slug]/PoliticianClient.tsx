@@ -4,6 +4,9 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 interface Trade {
+  politician: string;
+  party: 'D' | 'R' | 'I';
+  chamber: 'House' | 'Senate';
   ticker: string;
   company: string;
   type: 'Purchase' | 'Sale';
@@ -12,82 +15,52 @@ interface Trade {
   traded: string;
 }
 
-interface Politician {
-  name: string;
-  party: 'D' | 'R';
-  chamber: 'House' | 'Senate';
-  state: string;
-  trades: Trade[];
-  stats: {
-    totalTrades: number;
-    totalVolume: string;
-    topHolding: string;
-  };
-}
-
-// Sample data - will replace with real API
-const POLITICIANS: Record<string, Politician> = {
-  'nancy-pelosi': {
-    name: 'Nancy Pelosi',
-    party: 'D',
-    chamber: 'House',
-    state: 'CA-11',
-    stats: {
-      totalTrades: 47,
-      totalVolume: '$12.5M',
-      topHolding: 'NVDA'
-    },
-    trades: [
-      { ticker: 'NVDA', company: 'NVIDIA Corp', type: 'Purchase', amount: '$1,000,001 - $5,000,000', filed: '2026-01-20', traded: '2026-01-15' },
-      { ticker: 'AAPL', company: 'Apple Inc', type: 'Purchase', amount: '$500,001 - $1,000,000', filed: '2026-01-12', traded: '2026-01-05' },
-      { ticker: 'GOOGL', company: 'Alphabet Inc', type: 'Purchase', amount: '$250,001 - $500,000', filed: '2025-12-20', traded: '2025-12-14' },
-      { ticker: 'MSFT', company: 'Microsoft Corp', type: 'Sale', amount: '$100,001 - $250,000', filed: '2025-12-05', traded: '2025-11-28' },
-      { ticker: 'TSLA', company: 'Tesla Inc', type: 'Purchase', amount: '$500,001 - $1,000,000', filed: '2025-11-15', traded: '2025-11-08' },
-    ]
-  },
-  'tommy-tuberville': {
-    name: 'Tommy Tuberville',
-    party: 'R',
-    chamber: 'Senate',
-    state: 'AL',
-    stats: {
-      totalTrades: 132,
-      totalVolume: '$8.2M',
-      topHolding: 'Various'
-    },
-    trades: [
-      { ticker: 'TSLA', company: 'Tesla Inc', type: 'Sale', amount: '$250,001 - $500,000', filed: '2026-01-18', traded: '2026-01-10' },
-      { ticker: 'META', company: 'Meta Platforms', type: 'Purchase', amount: '$50,001 - $100,000', filed: '2026-01-10', traded: '2026-01-03' },
-      { ticker: 'AMZN', company: 'Amazon.com', type: 'Purchase', amount: '$100,001 - $250,000', filed: '2025-12-28', traded: '2025-12-20' },
-    ]
-  },
-  'dan-crenshaw': {
-    name: 'Dan Crenshaw',
-    party: 'R',
-    chamber: 'House',
-    state: 'TX-2',
-    stats: {
-      totalTrades: 28,
-      totalVolume: '$3.1M',
-      topHolding: 'MSFT'
-    },
-    trades: [
-      { ticker: 'MSFT', company: 'Microsoft Corp', type: 'Purchase', amount: '$15,001 - $50,000', filed: '2026-01-15', traded: '2026-01-08' },
-      { ticker: 'AAPL', company: 'Apple Inc', type: 'Purchase', amount: '$15,001 - $50,000', filed: '2025-12-20', traded: '2025-12-12' },
-    ]
-  }
-};
-
 export default function PoliticianClient({ slug }: { slug: string }) {
+  const [trades, setTrades] = useState<Trade[]>([]);
+  const [loading, setLoading] = useState(true);
   const [following, setFollowing] = useState(false);
-  
-  const politician = POLITICIANS[slug];
+  const [politicianInfo, setPoliticianInfo] = useState<{name: string; party: string; chamber: string} | null>(null);
 
   useEffect(() => {
+    // Check if following
     const saved = localStorage.getItem('followedPoliticians');
     const list = saved ? JSON.parse(saved) : [];
     setFollowing(list.includes(slug));
+    
+    // Fetch all trades and filter for this politician
+    fetchTrades();
   }, [slug]);
+
+  async function fetchTrades() {
+    try {
+      // Fetch the congress-trades.json from public folder
+      const res = await fetch('/congress-trades.json');
+      if (!res.ok) throw new Error('Failed to fetch');
+      
+      const allTrades: Trade[] = await res.json();
+      
+      // Convert slug back to name (e.g., "nancy-pelosi" -> match "Nancy Pelosi")
+      const slugLower = slug.toLowerCase();
+      const filtered = allTrades.filter(t => {
+        const nameSlug = t.politician.toLowerCase().replace(/ /g, '-');
+        return nameSlug === slugLower;
+      });
+      
+      if (filtered.length > 0) {
+        setPoliticianInfo({
+          name: filtered[0].politician,
+          party: filtered[0].party,
+          chamber: filtered[0].chamber
+        });
+      }
+      
+      setTrades(filtered);
+    } catch (err) {
+      console.error('Failed to fetch trades:', err);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   function toggleFollow() {
     const saved = localStorage.getItem('followedPoliticians');
@@ -99,18 +72,16 @@ export default function PoliticianClient({ slug }: { slug: string }) {
     setFollowing(!following);
   }
 
-  if (!politician) {
-    return (
-      <main style={{ maxWidth: '900px', margin: '0 auto', padding: '40px 20px' }}>
-        <Link href="/congress" style={{ color: '#60a5fa', textDecoration: 'none' }}>
-          ← Back to Congress Tracker
-        </Link>
-        <div style={{ marginTop: '40px', color: '#888' }}>
-          Politician not found. Data coming soon.
-        </div>
-      </main>
-    );
-  }
+  // Calculate stats
+  const stats = {
+    totalTrades: trades.length,
+    buys: trades.filter(t => t.type === 'Purchase').length,
+    sells: trades.filter(t => t.type === 'Sale').length,
+    topTicker: trades.length > 0 
+      ? Object.entries(trades.reduce((acc, t) => { acc[t.ticker] = (acc[t.ticker] || 0) + 1; return acc; }, {} as Record<string, number>))
+          .sort((a, b) => b[1] - a[1])[0]?.[0] || 'N/A'
+      : 'N/A'
+  };
 
   return (
     <main style={{ maxWidth: '900px', margin: '0 auto', padding: '40px 20px' }}>
@@ -121,106 +92,128 @@ export default function PoliticianClient({ slug }: { slug: string }) {
         </Link>
       </div>
 
-      {/* Politician Info */}
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'space-between', 
-        alignItems: 'flex-start',
-        marginBottom: '40px' 
-      }}>
+      {loading ? (
+        <div style={{ color: '#888' }}>Loading...</div>
+      ) : !politicianInfo ? (
         <div>
-          <h1 style={{ fontSize: '36px', marginBottom: '8px' }}>
-            {politician.name}
-          </h1>
-          <p style={{ color: '#888' }}>
-            <span style={{ 
-              color: politician.party === 'D' ? '#60a5fa' : '#f87171',
-              fontWeight: '600'
-            }}>
-              {politician.party === 'D' ? 'Democrat' : 'Republican'}
-            </span>
-            {' · '}
-            {politician.chamber}
-            {' · '}
-            {politician.state}
-          </p>
+          <h1 style={{ fontSize: '36px', marginBottom: '16px' }}>Politician Not Found</h1>
+          <p style={{ color: '#888' }}>No trades found for this politician.</p>
+          <Link href="/congress" style={{ color: '#60a5fa' }}>← Back to all trades</Link>
         </div>
-        <button
-          onClick={toggleFollow}
-          style={{
-            padding: '12px 24px',
-            background: following ? '#4ade80' : '#333',
-            color: following ? '#000' : '#fff',
-            border: 'none',
-            borderRadius: '8px',
-            fontSize: '14px',
-            fontWeight: '600',
-            cursor: 'pointer'
-          }}
-        >
-          {following ? '✓ Following' : '+ Follow'}
-        </button>
-      </div>
-
-      {/* Stats */}
-      <div style={{ 
-        display: 'grid', 
-        gridTemplateColumns: 'repeat(3, 1fr)', 
-        gap: '16px',
-        marginBottom: '40px'
-      }}>
-        <div style={{ background: '#111118', padding: '20px', borderRadius: '12px' }}>
-          <div style={{ color: '#888', fontSize: '13px', marginBottom: '4px' }}>Total Trades</div>
-          <div style={{ color: '#fff', fontSize: '24px', fontWeight: '600' }}>{politician.stats.totalTrades}</div>
-        </div>
-        <div style={{ background: '#111118', padding: '20px', borderRadius: '12px' }}>
-          <div style={{ color: '#888', fontSize: '13px', marginBottom: '4px' }}>Volume (2024)</div>
-          <div style={{ color: '#fff', fontSize: '24px', fontWeight: '600' }}>{politician.stats.totalVolume}</div>
-        </div>
-        <div style={{ background: '#111118', padding: '20px', borderRadius: '12px' }}>
-          <div style={{ color: '#888', fontSize: '13px', marginBottom: '4px' }}>Top Holding</div>
-          <div style={{ color: '#4ade80', fontSize: '24px', fontWeight: '600' }}>{politician.stats.topHolding}</div>
-        </div>
-      </div>
-
-      {/* Trades */}
-      <h2 style={{ fontSize: '20px', marginBottom: '16px', color: '#fff' }}>
-        Recent Trades
-      </h2>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-        {politician.trades.map((trade, i) => (
-          <div key={i} style={{
-            background: '#111118',
-            border: '1px solid #222',
-            borderRadius: '12px',
-            padding: '16px 20px',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center'
+      ) : (
+        <>
+          {/* Politician Info */}
+          <div style={{ 
+            display: 'flex', 
+            justifyContent: 'space-between', 
+            alignItems: 'flex-start',
+            marginBottom: '40px' 
           }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <span style={{
-                background: trade.type === 'Purchase' ? '#064e3b' : '#7f1d1d',
-                color: trade.type === 'Purchase' ? '#4ade80' : '#f87171',
-                padding: '4px 10px',
-                borderRadius: '6px',
-                fontSize: '12px',
-                fontWeight: '600'
-              }}>
-                {trade.type === 'Purchase' ? 'BUY' : 'SELL'}
-              </span>
-              <div>
-                <span style={{ color: '#4ade80', fontWeight: '600' }}>{trade.ticker}</span>
-                <span style={{ color: '#888', marginLeft: '8px' }}>{trade.company}</span>
-              </div>
+            <div>
+              <h1 style={{ fontSize: '36px', marginBottom: '8px' }}>
+                {politicianInfo.name}
+              </h1>
+              <p style={{ color: '#888' }}>
+                <span style={{ 
+                  color: politicianInfo.party === 'D' ? '#60a5fa' : '#f87171',
+                  fontWeight: '600'
+                }}>
+                  {politicianInfo.party === 'D' ? 'Democrat' : politicianInfo.party === 'R' ? 'Republican' : 'Independent'}
+                </span>
+                {' · '}
+                {politicianInfo.chamber}
+              </p>
             </div>
-            <div style={{ textAlign: 'right' }}>
-              <div style={{ color: '#fff' }}>{trade.amount}</div>
-              <div style={{ color: '#666', fontSize: '12px' }}>Filed {trade.filed}</div>
+            <button
+              onClick={toggleFollow}
+              style={{
+                padding: '12px 24px',
+                background: following ? '#4ade80' : '#333',
+                color: following ? '#000' : '#fff',
+                border: 'none',
+                borderRadius: '8px',
+                fontSize: '14px',
+                fontWeight: '600',
+                cursor: 'pointer'
+              }}
+            >
+              {following ? '✓ Following' : '+ Follow'}
+            </button>
+          </div>
+
+          {/* Stats */}
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(4, 1fr)', 
+            gap: '12px',
+            marginBottom: '40px'
+          }}>
+            <div style={{ background: '#111118', padding: '16px', borderRadius: '12px' }}>
+              <div style={{ color: '#888', fontSize: '12px', marginBottom: '4px' }}>Total Trades</div>
+              <div style={{ color: '#fff', fontSize: '20px', fontWeight: '600' }}>{stats.totalTrades}</div>
+            </div>
+            <div style={{ background: '#111118', padding: '16px', borderRadius: '12px' }}>
+              <div style={{ color: '#888', fontSize: '12px', marginBottom: '4px' }}>Buys</div>
+              <div style={{ color: '#4ade80', fontSize: '20px', fontWeight: '600' }}>{stats.buys}</div>
+            </div>
+            <div style={{ background: '#111118', padding: '16px', borderRadius: '12px' }}>
+              <div style={{ color: '#888', fontSize: '12px', marginBottom: '4px' }}>Sells</div>
+              <div style={{ color: '#f87171', fontSize: '20px', fontWeight: '600' }}>{stats.sells}</div>
+            </div>
+            <div style={{ background: '#111118', padding: '16px', borderRadius: '12px' }}>
+              <div style={{ color: '#888', fontSize: '12px', marginBottom: '4px' }}>Top Ticker</div>
+              <div style={{ color: '#4ade80', fontSize: '20px', fontWeight: '600' }}>{stats.topTicker}</div>
             </div>
           </div>
-        ))}
-      </div>
+
+          {/* Trades */}
+          <h2 style={{ fontSize: '20px', marginBottom: '16px', color: '#fff' }}>
+            Recent Trades
+          </h2>
+          
+          {trades.length === 0 ? (
+            <div style={{ background: '#111118', padding: '40px', borderRadius: '12px', textAlign: 'center', color: '#666' }}>
+              No trades found
+            </div>
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              {trades.map((trade, i) => (
+                <div key={i} style={{
+                  background: '#111118',
+                  border: '1px solid #222',
+                  borderRadius: '12px',
+                  padding: '16px 20px',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center'
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <span style={{
+                      background: trade.type === 'Purchase' ? '#064e3b' : '#7f1d1d',
+                      color: trade.type === 'Purchase' ? '#4ade80' : '#f87171',
+                      padding: '4px 10px',
+                      borderRadius: '6px',
+                      fontSize: '12px',
+                      fontWeight: '600'
+                    }}>
+                      {trade.type === 'Purchase' ? 'BUY' : 'SELL'}
+                    </span>
+                    <div>
+                      <span style={{ color: '#4ade80', fontWeight: '600' }}>{trade.ticker}</span>
+                    </div>
+                  </div>
+                  <div style={{ textAlign: 'right' }}>
+                    <div style={{ color: '#fff' }}>{trade.amount}</div>
+                    <div style={{ color: '#666', fontSize: '12px' }}>
+                      {trade.traded || trade.filed || 'N/A'}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </>
+      )}
 
       {/* Footer */}
       <footer style={{ textAlign: 'center', marginTop: '60px', color: '#666', fontSize: '14px' }}>
