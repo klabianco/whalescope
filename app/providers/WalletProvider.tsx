@@ -14,8 +14,8 @@ interface Props {
 }
 
 export const WalletProvider: FC<Props> = ({ children }) => {
-  // Use mainnet
-  const endpoint = useMemo(() => clusterApiUrl('mainnet-beta'), []);
+  // Use Ankr's free RPC (public Solana RPC rate limits too aggressively)
+  const endpoint = useMemo(() => 'https://rpc.ankr.com/solana', []);
 
   // Configure wallets
   const wallets = useMemo(
