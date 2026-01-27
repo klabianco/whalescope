@@ -12,21 +12,13 @@ interface Props {
   children: ReactNode;
 }
 
-// Free public RPCs to try
-const RPC_ENDPOINTS = [
-  'https://api.mainnet-beta.solana.com',
-  'https://solana-mainnet.g.alchemy.com/v2/demo',
-];
+// Helius free tier RPC (1M credits/month)
+const HELIUS_RPC = 'https://mainnet.helius-rpc.com/?api-key=67cbeef9-62f1-4066-8db0-c0e4102a950c';
 
 export const WalletProvider: FC<Props> = ({ children }) => {
-  // Use environment variable or fallback to public RPC
+  // Use Helius RPC for reliable mainnet access
   const endpoint = useMemo(() => {
-    if (typeof window !== 'undefined') {
-      // Check for custom RPC in localStorage
-      const custom = localStorage.getItem('SOLANA_RPC_URL');
-      if (custom) return custom;
-    }
-    return process.env.NEXT_PUBLIC_SOLANA_RPC_URL || RPC_ENDPOINTS[0];
+    return process.env.NEXT_PUBLIC_SOLANA_RPC_URL || HELIUS_RPC;
   }, []);
 
   // Configure wallets
