@@ -8,7 +8,9 @@
     "start": "next start",
     "fetch-whales": "npx tsx scripts/fetch-whale-trades.ts",
     "fetch-congress": "npx tsx scripts/fetch-congress.ts",
-    "fetch-all": "npm run fetch-whales && npm run fetch-congress"
+    "fetch-all": "npm run fetch-whales && npm run fetch-congress",
+    "notify": "npx tsx scripts/notify-new-trades.ts",
+    "fetch-and-notify": "npm run fetch-congress && npm run notify"
   },
   "dependencies": {
     "@solana/wallet-adapter-base": "^0.9.27",
