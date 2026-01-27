@@ -1,17 +1,70 @@
 'use client';
 
 import { useState } from 'react';
+import { useWallet, useConnection } from '@solana/wallet-adapter-react';
+import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
+import { PublicKey, Transaction } from '@solana/web3.js';
+import { createTransferInstruction, getAssociatedTokenAddress, TOKEN_PROGRAM_ID } from '@solana/spl-token';
 
-const WALLET = 'hyTku9MYUuBtCWPxqmeyWcBvYuUbVKfXtafjBr7eAh3';
+const WALLET = new PublicKey('hyTku9MYUuBtCWPxqmeyWcBvYuUbVKfXtafjBr7eAh3');
+const USDC_MINT = new PublicKey('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v');
+const USDC_DECIMALS = 6;
+const PRICE_USDC = 10;
 
 export default function SubscribePage() {
+  const { publicKey, sendTransaction } = useWallet();
+  const { connection } = useConnection();
   const [email, setEmail] = useState('');
-  const [showPayment, setShowPayment] = useState(false);
+  const [status, setStatus] = useState<'idle' | 'processing' | 'success' | 'error'>('idle');
+  const [errorMsg, setErrorMsg] = useState('');
+  const [txSig, setTxSig] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (email && email.includes('@')) {
-      setShowPayment(true);
+  const handlePay = async () => {
+    if (!publicKey || !email || !email.includes('@')) {
+      setErrorMsg('Enter a valid email first');
+      return;
+    }
+
+    setStatus('processing');
+    setErrorMsg('');
+
+    try {
+      // Get token accounts
+      const fromAta = await getAssociatedTokenAddress(USDC_MINT, publicKey);
+      const toAta = await getAssociatedTokenAddress(USDC_MINT, WALLET);
+
+      // Create transfer instruction
+      const transferIx = createTransferInstruction(
+        fromAta,
+        toAta,
+        publicKey,
+        PRICE_USDC * Math.pow(10, USDC_DECIMALS),
+        [],
+        TOKEN_PROGRAM_ID
+      );
+
+      // Create memo instruction
+      const memoIx = {
+        keys: [],
+        programId: new PublicKey('MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr'),
+        data: Buffer.from(email.trim().toLowerCase())
+      };
+
+      // Build transaction
+      const tx = new Transaction().add(transferIx).add(memoIx);
+      tx.feePayer = publicKey;
+      tx.recentBlockhash = (await connection.getLatestBlockhash()).blockhash;
+
+      // Send
+      const sig = await sendTransaction(tx, connection);
+      await connection.confirmTransaction(sig, 'confirmed');
+
+      setTxSig(sig);
+      setStatus('success');
+    } catch (err: any) {
+      console.error(err);
+      setErrorMsg(err.message || 'Transaction failed');
+      setStatus('error');
     }
   };
 
@@ -45,101 +98,86 @@ export default function SubscribePage() {
         </ul>
       </div>
 
-      {!showPayment ? (
-        <form onSubmit={handleSubmit}>
+      {status === 'success' ? (
+        <div style={{ 
+          background: '#0d2818', 
+          padding: 24, 
+          borderRadius: 12,
+          border: '1px solid #1a4d2e',
+          textAlign: 'center'
+        }}>
+          <div style={{ fontSize: 48, marginBottom: 16 }}>✅</div>
+          <h3 style={{ margin: '0 0 12px 0', color: '#4ade80' }}>
+            Payment Successful!
+          </h3>
+          <p style={{ color: '#aaa', marginBottom: 16 }}>
+            You'll receive a welcome email at <strong>{email}</strong> within 10 minutes.
+          </p>
+          <a 
+            href={`https://solscan.io/tx/${txSig}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: '#60a5fa', fontSize: 14 }}
+          >
+            View transaction →
+          </a>
+        </div>
+      ) : (
+        <>
           <input
             type="email"
             placeholder="Your email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            required
             style={{
               width: '100%',
               padding: '12px 16px',
               fontSize: 16,
               border: '2px solid #333',
               borderRadius: 8,
-              marginBottom: 12,
+              marginBottom: 16,
               boxSizing: 'border-box',
               background: '#111',
               color: '#fff'
             }}
           />
-          <button
-            type="submit"
-            style={{
-              width: '100%',
-              padding: '12px 16px',
-              fontSize: 16,
-              background: '#4ade80',
-              color: '#000',
-              border: 'none',
-              borderRadius: 8,
-              cursor: 'pointer',
-              fontWeight: 600
-            }}
-          >
-            Get Payment Link
-          </button>
-        </form>
-      ) : (
-        <div style={{ 
-          background: '#0d2818', 
-          padding: 24, 
-          borderRadius: 12,
-          border: '1px solid #1a4d2e'
-        }}>
-          <h3 style={{ margin: '0 0 16px 0', color: '#4ade80' }}>
-            ✓ Payment Instructions
-          </h3>
-          <p style={{ margin: '0 0 16px 0', color: '#ccc' }}>
-            Send <strong>$10 USDC</strong> on Solana to:
-          </p>
-          <div style={{
-            background: '#111',
-            padding: 12,
-            borderRadius: 8,
-            marginBottom: 16,
-            wordBreak: 'break-all',
-            fontFamily: 'monospace',
-            fontSize: 14
-          }}>
-            {WALLET}
-          </div>
-          <p style={{ margin: '0 0 8px 0', color: '#ccc' }}>
-            <strong>Important:</strong> Include this exact memo:
-          </p>
-          <div style={{
-            background: '#111',
-            padding: 16,
-            borderRadius: 8,
-            fontSize: 18,
-            textAlign: 'center',
-            fontFamily: 'monospace',
-            color: '#4ade80',
-            border: '2px solid #4ade80'
-          }}>
-            {email}
-          </div>
-          <p style={{ margin: '16px 0 0 0', fontSize: 14, color: '#888' }}>
-            Once payment is confirmed, you'll receive a welcome email within 10 minutes.
-          </p>
-          <button
-            onClick={() => setShowPayment(false)}
-            style={{
-              marginTop: 16,
-              padding: '8px 16px',
-              background: 'transparent',
-              color: '#888',
-              border: '1px solid #333',
-              borderRadius: 6,
-              cursor: 'pointer',
-              fontSize: 14
-            }}
-          >
-            ← Use different email
-          </button>
-        </div>
+
+          {!publicKey ? (
+            <div style={{ textAlign: 'center' }}>
+              <p style={{ color: '#888', marginBottom: 12 }}>Connect your wallet to pay</p>
+              <WalletMultiButton style={{ 
+                background: '#4ade80',
+                color: '#000',
+                borderRadius: 8,
+                fontWeight: 600
+              }} />
+            </div>
+          ) : (
+            <button
+              onClick={handlePay}
+              disabled={status === 'processing' || !email}
+              style={{
+                width: '100%',
+                padding: '14px 16px',
+                fontSize: 16,
+                background: status === 'processing' ? '#333' : '#4ade80',
+                color: status === 'processing' ? '#888' : '#000',
+                border: 'none',
+                borderRadius: 8,
+                cursor: status === 'processing' ? 'wait' : 'pointer',
+                fontWeight: 600
+              }}
+            >
+              {status === 'processing' ? 'Processing...' : `Pay $${PRICE_USDC} USDC`}
+            </button>
+          )}
+
+          {errorMsg && (
+            <p style={{ color: '#f87171', marginTop: 12, textAlign: 'center' }}>
+              {errorMsg}
+            </p>
+          )}
+        </>
       )}
       
       <p style={{ marginTop: 32, fontSize: 14, color: '#666', textAlign: 'center' }}>
