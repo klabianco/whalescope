@@ -27,6 +27,7 @@ const PARTY_LOOKUP: Record<string, 'D' | 'R'> = {
   'Rick Larsen': 'D',
   'Cleo Fields': 'D',
   'Jonathan Jackson': 'D',
+  'Steve Cohen': 'D', // TN-09
   // Republicans
   'Tommy Tuberville': 'R',
   'Dan Crenshaw': 'R',
