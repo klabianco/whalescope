@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { Header } from '../components/Header';
 
 interface LeaderboardEntry {
   name: string;
@@ -68,25 +69,20 @@ export default function LeaderboardClient({ leaderboard }: Props) {
     .slice(0, 3);
 
   return (
-    <main style={{ maxWidth: '1000px', margin: '0 auto', padding: '40px 20px' }}>
-      {/* Header */}
-      <div style={{ marginBottom: '40px' }}>
-        <Link href="/congress" style={{ color: '#60a5fa', textDecoration: 'none', fontSize: '14px' }}>
-          ← Back to Congress Tracker
-        </Link>
-      </div>
-
-      <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-        <h1 style={{ fontSize: '36px', marginBottom: '8px' }}>
-          🏆 Performance Leaderboard
-        </h1>
-        <p style={{ color: '#888', marginBottom: '16px' }}>
-          Estimated returns based on reported congressional trades
-        </p>
-        <p style={{ color: '#666', fontSize: '13px' }}>
-          ⚠️ Returns are estimates based on trade timing. Not financial advice.
-        </p>
-      </div>
+    <>
+      <Header />
+      <main style={{ maxWidth: '900px', margin: '0 auto', padding: '0 20px 40px' }}>
+        <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+          <h1 style={{ fontSize: '36px', marginBottom: '8px' }}>
+            🏆 Performance Leaderboard
+          </h1>
+          <p style={{ color: '#888', marginBottom: '16px' }}>
+            Estimated returns based on reported congressional trades
+          </p>
+          <p style={{ color: '#666', fontSize: '13px' }}>
+            ⚠️ Returns are estimates based on trade timing. Not financial advice.
+          </p>
+        </div>
 
       {/* Podium - Top 3 */}
       {topPerformers.length >= 3 && (
@@ -363,5 +359,6 @@ export default function LeaderboardClient({ leaderboard }: Props) {
         Built by <a href="https://x.com/WrenTheAI" style={{ color: '#60a5fa' }}>@WrenTheAI</a> 🪶
       </footer>
     </main>
+    </>
   );
 }

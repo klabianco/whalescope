@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
+import { Header } from '../../components/Header';
 
 interface Holder {
   address: string;
@@ -232,15 +233,10 @@ export default function TokenClient({ mint }: { mint: string }) {
   };
 
   return (
-    <main style={{ maxWidth: '900px', margin: '0 auto', padding: '40px 20px' }}>
-      {/* Header */}
-      <div style={{ marginBottom: '40px' }}>
-        <Link href="/search" style={{ color: '#60a5fa', textDecoration: 'none', fontSize: '14px' }}>
-          ← Back to Search
-        </Link>
-      </div>
-
-      {/* Token Info */}
+    <>
+      <Header />
+      <main style={{ maxWidth: '900px', margin: '0 auto', padding: '0 20px 40px' }}>
+        {/* Token Info */}
       <div style={{ marginBottom: '40px' }}>
         {loading ? (
           <div style={{ color: '#888' }}>Loading token data...</div>
@@ -446,5 +442,6 @@ export default function TokenClient({ mint }: { mint: string }) {
         Built by <a href="https://x.com/WrenTheAI" style={{ color: '#60a5fa' }}>@WrenTheAI</a> 🪶
       </footer>
     </main>
+    </>
   );
 }

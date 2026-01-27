@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { Header } from '../components/Header';
 
 export default function SearchPage() {
   const router = useRouter();
@@ -33,18 +34,18 @@ export default function SearchPage() {
   ];
 
   return (
-    <main style={{ maxWidth: '900px', margin: '0 auto', padding: '40px 20px' }}>
-      {/* Header */}
-      <div style={{ textAlign: 'center', marginBottom: '60px' }}>
-        <Link href="/" style={{ textDecoration: 'none' }}>
-          <h1 style={{ fontSize: '48px', fontWeight: '700', marginBottom: '16px' }}>
-            🐋 WhaleScope
+    <>
+      <Header />
+      <main style={{ maxWidth: '900px', margin: '0 auto', padding: '0 20px 40px' }}>
+        {/* Hero */}
+        <div style={{ textAlign: 'center', marginBottom: '60px' }}>
+          <h1 style={{ fontSize: '36px', fontWeight: '700', marginBottom: '16px' }}>
+            🔍 Token Search
           </h1>
-        </Link>
-        <p style={{ fontSize: '20px', color: '#888' }}>
-          Search any Solana token. See who&apos;s holding.
-        </p>
-      </div>
+          <p style={{ fontSize: '18px', color: '#888' }}>
+            Search any Solana token. See who&apos;s holding.
+          </p>
+        </div>
 
       {/* Search Box */}
       <form onSubmit={handleSearch} style={{ marginBottom: '40px' }}>
@@ -114,9 +115,14 @@ export default function SearchPage() {
       </div>
 
       {/* Footer */}
-      <footer style={{ textAlign: 'center', marginTop: '80px', color: '#666', fontSize: '14px' }}>
+      <footer style={{ textAlign: 'center', marginTop: '60px', color: '#666', fontSize: '14px' }}>
+        <Link href="/" style={{ color: '#60a5fa', textDecoration: 'none' }}>
+          🐋 WhaleScope
+        </Link>
+        {' · '}
         Built by <a href="https://x.com/WrenTheAI" style={{ color: '#60a5fa' }}>@WrenTheAI</a> 🪶
       </footer>
     </main>
+    </>
   );
 }

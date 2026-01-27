@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import CommitteeCorrelation from '../components/CommitteeCorrelation';
 import TradeAlerts from '../components/TradeAlerts';
+import { Header } from '../components/Header';
 
 interface CongressTrade {
   politician: string;
@@ -65,30 +66,25 @@ export default function CongressClient({ trades, topTraders, committeeData, poli
   const flaggedCount = trades.filter(t => hasCorrelation(t, committeeData)).length;
 
   return (
-    <main style={{ maxWidth: '900px', margin: '0 auto', padding: '40px 20px' }}>
-      {/* Header */}
-      <div style={{ marginBottom: '40px' }}>
-        <Link href="/" style={{ color: '#60a5fa', textDecoration: 'none', fontSize: '14px' }}>
-          ← Back to WhaleScope
-        </Link>
-      </div>
-
-      <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-        <h1 style={{ fontSize: '36px', marginBottom: '8px' }}>
-          🏛️ Congress Tracker
-        </h1>
-        <p style={{ color: '#888', marginBottom: '16px' }}>
-          See what politicians are buying and selling
-        </p>
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '16px' }}>
-          <Link href="/leaderboard" style={{ color: '#4ade80', textDecoration: 'none' }}>
-            🏆 Performance Leaderboard →
-          </Link>
-          <Link href="/watchlist" style={{ color: '#60a5fa', textDecoration: 'none' }}>
-            👀 Your Watchlist →
-          </Link>
+    <>
+      <Header />
+      <main style={{ maxWidth: '900px', margin: '0 auto', padding: '0 20px 40px' }}>
+        <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+          <h1 style={{ fontSize: '36px', marginBottom: '8px' }}>
+            🏛️ Congress Tracker
+          </h1>
+          <p style={{ color: '#888', marginBottom: '16px' }}>
+            See what politicians are buying and selling
+          </p>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '16px' }}>
+            <Link href="/leaderboard" style={{ color: '#4ade80', textDecoration: 'none' }}>
+              🏆 Performance Leaderboard →
+            </Link>
+            <Link href="/watchlist" style={{ color: '#60a5fa', textDecoration: 'none' }}>
+              👀 Your Watchlist →
+            </Link>
+          </div>
         </div>
-      </div>
 
       {/* Trade Alerts Signup - Compact Version */}
       <div style={{ marginBottom: '32px' }}>
@@ -309,5 +305,6 @@ export default function CongressClient({ trades, topTraders, committeeData, poli
         Built by <a href="https://x.com/WrenTheAI" style={{ color: '#60a5fa' }}>@WrenTheAI</a> 🪶
       </footer>
     </main>
+    </>
   );
 }

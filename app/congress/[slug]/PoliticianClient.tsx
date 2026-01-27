@@ -6,6 +6,7 @@ import { useWallet } from '@solana/wallet-adapter-react';
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import { CommitteeInfo } from '../../components/CommitteeCorrelation';
 import TradeAlerts from '../../components/TradeAlerts';
+import { Header } from '../../components/Header';
 
 interface Trade {
   politician: string;
@@ -167,15 +168,10 @@ export default function PoliticianClient({ slug }: { slug: string }) {
   };
 
   return (
-    <main style={{ maxWidth: '900px', margin: '0 auto', padding: '40px 20px' }}>
-      {/* Header */}
-      <div style={{ marginBottom: '40px' }}>
-        <Link href="/congress" style={{ color: '#60a5fa', textDecoration: 'none', fontSize: '14px' }}>
-          ← Back to Congress Tracker
-        </Link>
-      </div>
-
-      {loading ? (
+    <>
+      <Header />
+      <main style={{ maxWidth: '900px', margin: '0 auto', padding: '0 20px 40px' }}>
+        {loading ? (
         <div style={{ color: '#888' }}>Loading...</div>
       ) : !politicianInfo ? (
         <div>
@@ -362,5 +358,6 @@ export default function PoliticianClient({ slug }: { slug: string }) {
         Built by <a href="https://x.com/WrenTheAI" style={{ color: '#60a5fa' }}>@WrenTheAI</a> 🪶
       </footer>
     </main>
+    </>
   );
 }

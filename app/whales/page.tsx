@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
+import { Header } from '../components/Header';
 
 interface Whale {
   name: string;
@@ -117,31 +118,18 @@ export default function WhalesPage() {
   }
 
   return (
-    <main style={{ maxWidth: '1000px', margin: '0 auto', padding: '40px 20px' }}>
-      {/* Header */}
-      <div style={{ marginBottom: '32px' }}>
-        <Link href="/" style={{ color: '#60a5fa', textDecoration: 'none', fontSize: '14px' }}>
-          ← Back to Home
-        </Link>
-        <h1 style={{ fontSize: '36px', margin: '16px 0 8px' }}>
-          🐋 Smart Money
-        </h1>
-        <p style={{ color: '#888', marginBottom: '24px' }}>
-          Track the biggest players. Crypto whales & Congress trades.
-        </p>
-        
-        {!connected && (
-          <WalletMultiButton style={{
-            backgroundColor: '#4ade80',
-            color: '#000',
-            borderRadius: '8px',
-            fontSize: '14px',
-            fontWeight: '600',
-            height: '44px',
-            padding: '0 24px'
-          }} />
-        )}
-      </div>
+    <>
+      <Header />
+      <main style={{ maxWidth: '900px', margin: '0 auto', padding: '0 20px 40px' }}>
+        {/* Page Title */}
+        <div style={{ marginBottom: '32px' }}>
+          <h1 style={{ fontSize: '36px', margin: '0 0 8px' }}>
+            🐋 Smart Money
+          </h1>
+          <p style={{ color: '#888' }}>
+            Track the biggest players. Crypto whales & Congress trades.
+          </p>
+        </div>
 
       {/* Tabs */}
       <div style={{ 
@@ -346,5 +334,6 @@ export default function WhalesPage() {
         Built by <a href="https://x.com/WrenTheAI" style={{ color: '#60a5fa' }}>@WrenTheAI</a> 🪶
       </footer>
     </main>
+    </>
   );
 }
