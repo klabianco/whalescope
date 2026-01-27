@@ -5,10 +5,16 @@ import WalletClient from './WalletClient';
 // Pre-generate pages for known whale wallets
 export function generateStaticParams() {
   return [
-    { address: 'AKnL4NNf3DGWZJS6cPknBuEGnVsV4A4m5tgebLHaRSZ9' },
-    { address: '5Q544fKrFoe6tsEbD7S8EmxGTJYAKtTVhAW5Q5pge4j1' },
-    { address: 'HN7cABqLq46Es1jh92dQQisAq662SmxELLLsHHe4YWrH' },
-    { address: 'CuieVDEDtLo7FypA9SbLM9saXFdb1dsshEkyErMqkRQq' },
+    { address: '5Q544fKrFoe6tsEbD7S8EmxGTJYAKtTVhAW5Q5pge4j1' }, // Jump Crypto / Raydium Top Trader
+    { address: 'CuieVDEDtLo7FypA9SbLM9saXFdb1dsshEkyErMqkRQq' }, // Wintermute
+    { address: '5tzFkiKscXHK5ZXCGbXZxdw7gTjjD1mBwuoFbhUvuAi9' }, // Binance
+    { address: 'GJRs4FwHtemZ5ZE9x3FNvJ8TMwitKTh21yxdRPqn7npE' }, // Coinbase Prime
+    { address: 'GK2zqSsXLA2rwVZk347RYhh6jJpRsCA69FjLW93ZGi3B' }, // Solana Foundation
+    { address: 'AKnL4NNf3DGWZJS6cPknBuEGnVsV4A4m5tgebLHaRSZ9' }, // Multicoin Capital
+    { address: 'HN7cABqLq46Es1jh92dQQisAq662SmxELLLsHHe4YWrH' }, // Paradigm
+    { address: 'FWznbcNXWQuHTawe9RxvQ2LdCENssh12dsznf4RiouN5' }, // Kraken
+    { address: 'E6aTzkZKdCECgpDtBZtVpqiHwfoxx3XpEfH4yjnBPMNE' }, // Galaxy Digital
+    { address: 'FYSvSgMqmPEhNWHQkdehrPQdrb6WVSzMBLRNV6aHMFJN' }, // Polychain Capital
   ];
 }
 
@@ -37,21 +43,45 @@ function getTrades(): WhaleTrade[] {
 
 function getWalletData(): Record<string, { label: string; description: string }> {
   return {
+    '5Q544fKrFoe6tsEbD7S8EmxGTJYAKtTVhAW5Q5pge4j1': {
+      label: 'Jump Crypto',
+      description: 'Major crypto trading firm'
+    },
+    'CuieVDEDtLo7FypA9SbLM9saXFdb1dsshEkyErMqkRQq': {
+      label: 'Wintermute',
+      description: 'Algorithmic trading firm'
+    },
+    '5tzFkiKscXHK5ZXCGbXZxdw7gTjjD1mBwuoFbhUvuAi9': {
+      label: 'Binance',
+      description: 'Binance hot wallet'
+    },
+    'GJRs4FwHtemZ5ZE9x3FNvJ8TMwitKTh21yxdRPqn7npE': {
+      label: 'Coinbase Prime',
+      description: 'Institutional custody'
+    },
+    'GK2zqSsXLA2rwVZk347RYhh6jJpRsCA69FjLW93ZGi3B': {
+      label: 'Solana Foundation',
+      description: 'Official foundation wallet'
+    },
     'AKnL4NNf3DGWZJS6cPknBuEGnVsV4A4m5tgebLHaRSZ9': {
       label: 'Multicoin Capital',
       description: 'Crypto VC fund'
-    },
-    '5Q544fKrFoe6tsEbD7S8EmxGTJYAKtTVhAW5Q5pge4j1': {
-      label: 'Raydium Top Trader',
-      description: 'Major trading firm on Raydium'
     },
     'HN7cABqLq46Es1jh92dQQisAq662SmxELLLsHHe4YWrH': {
       label: 'Paradigm',
       description: 'Major crypto VC'
     },
-    'CuieVDEDtLo7FypA9SbLM9saXFdb1dsshEkyErMqkRQq': {
-      label: 'Wintermute',
-      description: 'Algorithmic trading firm'
+    'FWznbcNXWQuHTawe9RxvQ2LdCENssh12dsznf4RiouN5': {
+      label: 'Kraken',
+      description: 'Kraken exchange'
+    },
+    'E6aTzkZKdCECgpDtBZtVpqiHwfoxx3XpEfH4yjnBPMNE': {
+      label: 'Galaxy Digital',
+      description: "Novogratz's fund"
+    },
+    'FYSvSgMqmPEhNWHQkdehrPQdrb6WVSzMBLRNV6aHMFJN': {
+      label: 'Polychain Capital',
+      description: 'Major crypto VC'
     }
   };
 }
