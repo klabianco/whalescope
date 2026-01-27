@@ -3,7 +3,7 @@ import { readFileSync, writeFileSync, existsSync } from 'fs';
 import { join } from 'path';
 
 const PENDING_FILE = join(process.cwd(), 'data', 'pending-subscriptions.json');
-const WALLET = process.env.WHALESCOPE_WALLET || 'YOUR_SOLANA_WALLET_HERE';
+const WALLET = process.env.WHALESCOPE_WALLET || 'hyTku9MYUuBtCWPxqmeyWcBvYuUbVKfXtafjBr7eAh3';
 
 function generateCode(): string {
   // 6 character alphanumeric code
