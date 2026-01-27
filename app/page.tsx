@@ -183,12 +183,13 @@ export default function Home() {
           textAlign: 'center',
         }}>
           <h3 style={{ fontSize: '24px', marginBottom: '12px' }}>
-            Get alerts when whales move
+            Get alerts when Congress trades
           </h3>
           <p style={{ color: '#888', marginBottom: '20px' }}>
-            Real-time notifications. $15/month. Cancel anytime.
+            Real-time email notifications. $10/month in USDC. Cancel anytime.
           </p>
-          <button style={{
+          <Link href="/subscribe" style={{
+            display: 'inline-block',
             background: '#4ade80',
             color: '#000',
             border: 'none',
@@ -196,10 +197,11 @@ export default function Home() {
             borderRadius: '8px',
             fontSize: '16px',
             fontWeight: '600',
-            cursor: 'pointer'
+            cursor: 'pointer',
+            textDecoration: 'none'
           }}>
-            Coming Soon
-          </button>
+            Subscribe Now
+          </Link>
         </div>
 
         {/* Footer */}
