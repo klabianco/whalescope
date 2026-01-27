@@ -1,10 +1,9 @@
-// Detect new trades and send Telegram alerts
+// Detect new trades and send alerts to subscribers
 // Run with: npx tsx scripts/notify-new-trades.ts
-// Config: ~/.config/whalescope/config.json needs:
-//   { "quiver_api_key": "...", "telegram_bot_token": "...", "telegram_chat_id": "..." }
 
 import { readFileSync, writeFileSync, existsSync } from 'fs';
 import { join } from 'path';
+import { execSync } from 'child_process';
 
 interface CongressTrade {
   politician: string;
@@ -17,8 +16,13 @@ interface CongressTrade {
   traded: string;
 }
 
+interface Subscriber {
+  email: string;
+  subscribedAt: string;
+  expiresAt: string;
+}
+
 interface Config {
-  quiver_api_key?: string;
   telegram_bot_token?: string;
   telegram_chat_id?: string;
 }
@@ -34,7 +38,6 @@ function getConfig(): Config {
 }
 
 function getTradeId(trade: CongressTrade): string {
-  // Create unique ID for a trade
   return `${trade.politician}-${trade.ticker}-${trade.traded}-${trade.type}-${trade.amount}`;
 }
 
@@ -42,8 +45,7 @@ function loadSeenTrades(): Set<string> {
   try {
     const seenPath = join(process.cwd(), 'data', 'seen-trades.json');
     if (existsSync(seenPath)) {
-      const data = JSON.parse(readFileSync(seenPath, 'utf-8'));
-      return new Set(data);
+      return new Set(JSON.parse(readFileSync(seenPath, 'utf-8')));
     }
   } catch {}
   return new Set();
@@ -62,9 +64,64 @@ function loadCurrentTrades(): CongressTrade[] {
   return [];
 }
 
+function loadActiveSubscribers(): Subscriber[] {
+  const subsPath = join(process.cwd(), 'data', 'subscribers.json');
+  if (!existsSync(subsPath)) return [];
+  
+  try {
+    const all: Subscriber[] = JSON.parse(readFileSync(subsPath, 'utf-8'));
+    const now = new Date();
+    return all.filter(s => new Date(s.expiresAt) > now);
+  } catch {
+    return [];
+  }
+}
+
+function formatTradeForEmail(trade: CongressTrade): string {
+  const emoji = trade.type === 'Purchase' ? '🟢' : '🔴';
+  return `${emoji} ${trade.politician} (${trade.party}) - ${trade.type} $${trade.ticker}
+   Amount: ${trade.amount}
+   Traded: ${trade.traded}`;
+}
+
+async function sendEmailAlerts(subscribers: Subscriber[], trades: CongressTrade[]): Promise<number> {
+  if (subscribers.length === 0) {
+    console.log('  [SKIP] No active subscribers');
+    return 0;
+  }
+
+  const subject = `🐋 WhaleScope Alert: ${trades.length} new Congress trade${trades.length > 1 ? 's' : ''}`;
+  
+  const body = `New congressional trading activity detected:
+
+${trades.map(formatTradeForEmail).join('\n\n')}
+
+---
+View all trades: https://whalescope.app/congress
+
+To unsubscribe, reply to this email.`;
+
+  let sent = 0;
+  
+  for (const sub of subscribers) {
+    try {
+      // Escape quotes in body for shell
+      const escapedBody = body.replace(/"/g, '\\"');
+      execSync(`gog gmail send --to "${sub.email}" --subject "${subject}" --body "${escapedBody}"`, {
+        stdio: 'pipe'
+      });
+      console.log(`  ✉️  Email sent to ${sub.email}`);
+      sent++;
+    } catch (err) {
+      console.error(`  ❌ Failed to email ${sub.email}`);
+    }
+  }
+  
+  return sent;
+}
+
 async function sendTelegramAlert(config: Config, trade: CongressTrade): Promise<boolean> {
   if (!config.telegram_bot_token || !config.telegram_chat_id) {
-    console.log('  [SKIP] No Telegram config');
     return false;
   }
 
@@ -78,9 +135,7 @@ ${partyEmoji} *${trade.politician}* (${trade.party}-${trade.chamber})
 📈 Ticker: *$${trade.ticker}*
 💰 Amount: ${trade.amount}
 📅 Traded: ${trade.traded}
-📋 Filed: ${trade.filed}
-
-[View on WhaleScope](https://whalescope.app/congress)`;
+📋 Filed: ${trade.filed}`;
 
   try {
     const res = await fetch(
@@ -91,19 +146,12 @@ ${partyEmoji} *${trade.politician}* (${trade.party}-${trade.chamber})
         body: JSON.stringify({
           chat_id: config.telegram_chat_id,
           text: message,
-          parse_mode: 'Markdown',
-          disable_web_page_preview: true
+          parse_mode: 'Markdown'
         })
       }
     );
-    
-    if (!res.ok) {
-      console.error('  Telegram error:', await res.text());
-      return false;
-    }
-    return true;
-  } catch (err) {
-    console.error('  Telegram error:', err);
+    return res.ok;
+  } catch {
     return false;
   }
 }
@@ -114,9 +162,11 @@ async function main() {
   const config = getConfig();
   const seenTrades = loadSeenTrades();
   const currentTrades = loadCurrentTrades();
+  const subscribers = loadActiveSubscribers();
   
   console.log(`📊 Current trades: ${currentTrades.length}`);
-  console.log(`📝 Previously seen: ${seenTrades.size}\n`);
+  console.log(`📝 Previously seen: ${seenTrades.size}`);
+  console.log(`👥 Active subscribers: ${subscribers.length}\n`);
   
   // Find new trades
   const newTrades: CongressTrade[] = [];
@@ -132,30 +182,39 @@ async function main() {
   
   if (newTrades.length === 0) {
     console.log('No new trades to alert.');
+    saveSeenTrades(seenTrades);
     return;
   }
   
-  // Send alerts for new trades (limit to 10 most recent to avoid spam)
+  // Limit to 10 most recent trades
   const tradesToAlert = newTrades.slice(0, 10);
-  let alertsSent = 0;
   
+  // Log what we're alerting
   for (const trade of tradesToAlert) {
-    console.log(`📢 Alerting: ${trade.politician} ${trade.type} $${trade.ticker}`);
-    const sent = await sendTelegramAlert(config, trade);
-    if (sent) {
-      alertsSent++;
-      // Rate limit: wait 1 second between messages
-      await new Promise(r => setTimeout(r, 1000));
+    console.log(`📢 ${trade.politician} ${trade.type} $${trade.ticker}`);
+  }
+  console.log('');
+  
+  // Send email alerts (batched - one email with all trades)
+  const emailsSent = await sendEmailAlerts(subscribers, tradesToAlert);
+  
+  // Send Telegram alerts (if configured)
+  let telegramSent = 0;
+  if (config.telegram_bot_token && config.telegram_chat_id) {
+    for (const trade of tradesToAlert) {
+      if (await sendTelegramAlert(config, trade)) {
+        telegramSent++;
+        await new Promise(r => setTimeout(r, 1000));
+      }
     }
   }
   
   // Save seen trades
   saveSeenTrades(seenTrades);
   
-  console.log(`\n✅ Done! Sent ${alertsSent} alerts.`);
-  if (newTrades.length > 10) {
-    console.log(`   (${newTrades.length - 10} more trades not alerted to avoid spam)`);
-  }
+  console.log(`\n✅ Done!`);
+  console.log(`   Emails sent: ${emailsSent}`);
+  if (telegramSent > 0) console.log(`   Telegram alerts: ${telegramSent}`);
 }
 
 main().catch(console.error);
