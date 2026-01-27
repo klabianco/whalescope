@@ -47,6 +47,17 @@ function isValidEmail(str: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(str.trim());
 }
 
+function notifyKevin(email: string, amount: number) {
+  try {
+    execSync(`gog gmail send --to "klabianco@gmail.com" --subject "🐋 New WhaleScope subscriber!" --body "New payment received!\n\nEmail: ${email}\nAmount: $${amount.toFixed(2)} USDC\n\nTotal active subscribers updated."`, {
+      stdio: 'pipe'
+    });
+    console.log(`  📱 Kevin notified`);
+  } catch (err) {
+    console.error(`  ❌ Failed to notify Kevin`);
+  }
+}
+
 function sendWelcomeEmail(email: string) {
   const subject = 'Welcome to WhaleScope Pro! 🐋';
   const body = `Your subscription is now active!
@@ -169,6 +180,7 @@ async function main() {
         console.log(`   Expires: ${expires.toLocaleDateString()}`);
 
         sendWelcomeEmail(email);
+        notifyKevin(email, received);
         newSubscribers++;
       }
 
