@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
+import { CommitteeInfo } from '../../components/CommitteeCorrelation';
+import TradeAlerts from '../../components/TradeAlerts';
 
 interface Trade {
   politician: string;
@@ -17,9 +19,18 @@ interface Trade {
   traded: string;
 }
 
+interface CommitteeData {
+  committees: Record<string, {
+    sectors: string[];
+    tickers: string[];
+  }>;
+  members: Record<string, string[]>;
+}
+
 export default function PoliticianClient({ slug }: { slug: string }) {
   const { publicKey, connected } = useWallet();
   const [trades, setTrades] = useState<Trade[]>([]);
+  const [committeeData, setCommitteeData] = useState<CommitteeData>({ committees: {}, members: {} });
   const [loading, setLoading] = useState(true);
   const [following, setFollowing] = useState(false);
   const [politicianInfo, setPoliticianInfo] = useState<{name: string; party: string; chamber: string} | null>(null);
@@ -36,15 +47,16 @@ export default function PoliticianClient({ slug }: { slug: string }) {
         setFollowing(false);
       }
     }
-    fetchTrades();
+    fetchData();
   }, [slug, storageKey]);
 
-  async function fetchTrades() {
+  async function fetchData() {
     try {
-      const res = await fetch('/congress-trades.json');
-      if (!res.ok) throw new Error('Failed to fetch');
+      // Fetch trades
+      const tradesRes = await fetch('/congress-trades.json');
+      if (!tradesRes.ok) throw new Error('Failed to fetch');
       
-      const allTrades: Trade[] = await res.json();
+      const allTrades: Trade[] = await tradesRes.json();
       
       const slugLower = slug.toLowerCase();
       const filtered = allTrades.filter(t => {
@@ -61,6 +73,17 @@ export default function PoliticianClient({ slug }: { slug: string }) {
       }
       
       setTrades(filtered);
+
+      // Fetch committee data
+      try {
+        const committeeRes = await fetch('/committee-data.json');
+        if (committeeRes.ok) {
+          const data = await committeeRes.json();
+          setCommitteeData(data);
+        }
+      } catch {
+        // Committee data is optional
+      }
     } catch (err) {
       console.error('Failed to fetch trades:', err);
     } finally {
@@ -84,11 +107,24 @@ export default function PoliticianClient({ slug }: { slug: string }) {
     }
   }
 
+  // Check if a trade has committee correlation
+  function hasCorrelation(trade: Trade): boolean {
+    const memberCommittees = committeeData.members[trade.politician] || [];
+    for (const committee of memberCommittees) {
+      const committeeInfo = committeeData.committees[committee];
+      if (committeeInfo?.tickers.includes(trade.ticker)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   // Calculate stats
   const stats = {
     totalTrades: trades.length,
     buys: trades.filter(t => t.type === 'Purchase').length,
     sells: trades.filter(t => t.type === 'Sale').length,
+    flagged: trades.filter(t => hasCorrelation(t)).length,
     topTicker: trades.length > 0 
       ? Object.entries(trades.reduce((acc, t) => { acc[t.ticker] = (acc[t.ticker] || 0) + 1; return acc; }, {} as Record<string, number>))
           .sort((a, b) => b[1] - a[1])[0]?.[0] || 'N/A'
@@ -154,7 +190,7 @@ export default function PoliticianClient({ slug }: { slug: string }) {
             display: 'flex', 
             justifyContent: 'space-between', 
             alignItems: 'flex-start',
-            marginBottom: '40px' 
+            marginBottom: '24px' 
           }}>
             <div>
               <h1 style={{ fontSize: '36px', marginBottom: '8px' }}>
@@ -174,12 +210,19 @@ export default function PoliticianClient({ slug }: { slug: string }) {
             <FollowButton />
           </div>
 
+          {/* Committee Info */}
+          {politicianInfo && (
+            <div style={{ marginBottom: '24px' }}>
+              <CommitteeInfo politician={politicianInfo.name} committeeData={committeeData} />
+            </div>
+          )}
+
           {/* Stats */}
           <div style={{ 
             display: 'grid', 
-            gridTemplateColumns: 'repeat(4, 1fr)', 
+            gridTemplateColumns: 'repeat(5, 1fr)', 
             gap: '12px',
-            marginBottom: '40px'
+            marginBottom: '24px'
           }}>
             <div style={{ background: '#111118', padding: '16px', borderRadius: '12px' }}>
               <div style={{ color: '#888', fontSize: '12px', marginBottom: '4px' }}>Total Trades</div>
@@ -193,10 +236,32 @@ export default function PoliticianClient({ slug }: { slug: string }) {
               <div style={{ color: '#888', fontSize: '12px', marginBottom: '4px' }}>Sells</div>
               <div style={{ color: '#f87171', fontSize: '20px', fontWeight: '600' }}>{stats.sells}</div>
             </div>
+            <div style={{ 
+              background: stats.flagged > 0 
+                ? 'linear-gradient(135deg, rgba(251, 191, 36, 0.1) 0%, #111118 100%)'
+                : '#111118', 
+              padding: '16px', 
+              borderRadius: '12px',
+              border: stats.flagged > 0 ? '1px solid rgba(251, 191, 36, 0.3)' : 'none'
+            }}>
+              <div style={{ color: '#888', fontSize: '12px', marginBottom: '4px' }}>⚠️ Flagged</div>
+              <div style={{ color: stats.flagged > 0 ? '#fbbf24' : '#fff', fontSize: '20px', fontWeight: '600' }}>
+                {stats.flagged}
+              </div>
+            </div>
             <div style={{ background: '#111118', padding: '16px', borderRadius: '12px' }}>
               <div style={{ color: '#888', fontSize: '12px', marginBottom: '4px' }}>Top Ticker</div>
               <div style={{ color: '#4ade80', fontSize: '20px', fontWeight: '600' }}>{stats.topTicker}</div>
             </div>
+          </div>
+
+          {/* Trade Alerts for this politician */}
+          <div style={{ marginBottom: '32px' }}>
+            <TradeAlerts 
+              politicians={[politicianInfo.name]} 
+              defaultPolitician={politicianInfo.name}
+              compact={true} 
+            />
           </div>
 
           {/* Trades */}
@@ -210,39 +275,75 @@ export default function PoliticianClient({ slug }: { slug: string }) {
             </div>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              {trades.map((trade, i) => (
-                <div key={i} style={{
-                  background: '#111118',
-                  border: '1px solid #222',
-                  borderRadius: '12px',
-                  padding: '16px 20px',
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center'
-                }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    <span style={{
-                      background: trade.type === 'Purchase' ? '#064e3b' : '#7f1d1d',
-                      color: trade.type === 'Purchase' ? '#4ade80' : '#f87171',
-                      padding: '4px 10px',
-                      borderRadius: '6px',
-                      fontSize: '12px',
-                      fontWeight: '600'
-                    }}>
-                      {trade.type === 'Purchase' ? 'BUY' : 'SELL'}
-                    </span>
-                    <div>
-                      <span style={{ color: '#4ade80', fontWeight: '600' }}>{trade.ticker}</span>
+              {trades.map((trade, i) => {
+                const isFlagged = hasCorrelation(trade);
+                
+                return (
+                  <div key={i} style={{
+                    background: isFlagged 
+                      ? 'linear-gradient(135deg, rgba(251, 191, 36, 0.05) 0%, #111118 100%)'
+                      : '#111118',
+                    border: isFlagged ? '1px solid rgba(251, 191, 36, 0.3)' : '1px solid #222',
+                    borderRadius: '12px',
+                    padding: '16px 20px',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center'
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                      <span style={{
+                        background: trade.type === 'Purchase' ? '#064e3b' : '#7f1d1d',
+                        color: trade.type === 'Purchase' ? '#4ade80' : '#f87171',
+                        padding: '4px 10px',
+                        borderRadius: '6px',
+                        fontSize: '12px',
+                        fontWeight: '600'
+                      }}>
+                        {trade.type === 'Purchase' ? 'BUY' : 'SELL'}
+                      </span>
+                      <div>
+                        <span style={{ color: '#4ade80', fontWeight: '600' }}>{trade.ticker}</span>
+                        {isFlagged && (
+                          <span style={{
+                            background: '#fbbf24',
+                            color: '#000',
+                            padding: '2px 6px',
+                            borderRadius: '4px',
+                            fontSize: '10px',
+                            fontWeight: '700',
+                            marginLeft: '8px'
+                          }}>
+                            ⚠️ COMMITTEE
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <div style={{ textAlign: 'right' }}>
+                      <div style={{ color: '#fff' }}>{trade.amount}</div>
+                      <div style={{ color: '#666', fontSize: '12px' }}>
+                        {trade.traded || trade.filed || 'N/A'}
+                      </div>
                     </div>
                   </div>
-                  <div style={{ textAlign: 'right' }}>
-                    <div style={{ color: '#fff' }}>{trade.amount}</div>
-                    <div style={{ color: '#666', fontSize: '12px' }}>
-                      {trade.traded || trade.filed || 'N/A'}
-                    </div>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
+            </div>
+          )}
+
+          {/* Flagged Explanation */}
+          {stats.flagged > 0 && (
+            <div style={{
+              background: 'linear-gradient(135deg, rgba(251, 191, 36, 0.1) 0%, rgba(245, 158, 11, 0.05) 100%)',
+              border: '1px solid rgba(251, 191, 36, 0.3)',
+              borderRadius: '12px',
+              padding: '16px 20px',
+              marginTop: '24px'
+            }}>
+              <p style={{ color: '#fbbf24', fontSize: '13px', margin: 0, lineHeight: '1.6' }}>
+                ⚠️ <strong>Committee Correlation Alert:</strong> {stats.flagged} of this politician&apos;s trades 
+                involve stocks that fall under the oversight of committees they serve on. This could indicate 
+                a potential conflict of interest, though it&apos;s not necessarily illegal.
+              </p>
             </div>
           )}
         </>
@@ -252,6 +353,10 @@ export default function PoliticianClient({ slug }: { slug: string }) {
       <footer style={{ textAlign: 'center', marginTop: '60px', color: '#666', fontSize: '14px' }}>
         <Link href="/" style={{ color: '#60a5fa', textDecoration: 'none' }}>
           🐋 WhaleScope
+        </Link>
+        {' · '}
+        <Link href="/leaderboard" style={{ color: '#60a5fa', textDecoration: 'none' }}>
+          🏆 Leaderboard
         </Link>
         {' · '}
         Built by <a href="https://x.com/WrenTheAI" style={{ color: '#60a5fa' }}>@WrenTheAI</a> 🪶

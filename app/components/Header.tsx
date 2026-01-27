@@ -27,6 +27,12 @@ export const Header: FC = () => {
         <Link href="/whales" style={{ color: '#888', textDecoration: 'none', fontSize: '14px' }}>
           Smart Money
         </Link>
+        <Link href="/congress" style={{ color: '#888', textDecoration: 'none', fontSize: '14px' }}>
+          Congress
+        </Link>
+        <Link href="/leaderboard" style={{ color: '#888', textDecoration: 'none', fontSize: '14px' }}>
+          Leaderboard
+        </Link>
         <Link href="/search" style={{ color: '#888', textDecoration: 'none', fontSize: '14px' }}>
           Tokens
         </Link>

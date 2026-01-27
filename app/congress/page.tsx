@@ -15,6 +15,14 @@ interface CongressTrade {
   traded: string;
 }
 
+interface CommitteeData {
+  committees: Record<string, {
+    sectors: string[];
+    tickers: string[];
+  }>;
+  members: Record<string, string[]>;
+}
+
 function getTrades(): CongressTrade[] {
   try {
     const dataPath = join(process.cwd(), 'data', 'congress-trades.json');
@@ -23,6 +31,17 @@ function getTrades(): CongressTrade[] {
     return JSON.parse(data);
   } catch {
     return [];
+  }
+}
+
+function getCommitteeData(): CommitteeData {
+  try {
+    const dataPath = join(process.cwd(), 'data', 'committee-data.json');
+    if (!existsSync(dataPath)) return { committees: {}, members: {} };
+    const data = readFileSync(dataPath, 'utf-8');
+    return JSON.parse(data);
+  } catch {
+    return { committees: {}, members: {} };
   }
 }
 
@@ -44,6 +63,8 @@ function calculateTopTraders(trades: CongressTrade[]) {
 export default function CongressPage() {
   const trades = getTrades();
   const topTraders = calculateTopTraders(trades);
+  const committeeData = getCommitteeData();
+  const politicians = Array.from(new Set(trades.map(t => t.politician)));
   
-  return <CongressClient trades={trades} topTraders={topTraders} />;
+  return <CongressClient trades={trades} topTraders={topTraders} committeeData={committeeData} politicians={politicians} />;
 }
