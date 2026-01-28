@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',
+  // Remove 'export' for Vercel deployment with API routes
+  // output: 'export',
   images: { unoptimized: true },
   reactStrictMode: true,
 }

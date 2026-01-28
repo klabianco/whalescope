@@ -22,9 +22,9 @@ const XIcon = () => (
 export default function PricingClient() {
   const [billing, setBilling] = useState<BillingPeriod>('yearly');
   
-  const proPrice = billing === 'yearly' ? 29 : 39;
-  const yearlyTotal = 29 * 12;
-  const monthlySavings = (39 * 12) - yearlyTotal;
+  const proPrice = billing === 'yearly' ? 20 : 25; // USDC pricing (half of Nansen)
+  const yearlyTotal = 240; // $240/year = $20/mo
+  const monthlySavings = (25 * 12) - yearlyTotal; // Save $60/year
 
   return (
     <>
@@ -239,21 +239,23 @@ export default function PricingClient() {
               )}
             </div>
 
-            <button style={{
-              width: '100%',
-              padding: '14px 24px',
-              background: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)',
-              color: '#fff',
-              border: 'none',
-              borderRadius: '10px',
-              fontSize: '15px',
-              fontWeight: '600',
-              cursor: 'pointer',
-              marginBottom: '32px',
-              transition: 'all 0.15s'
-            }}>
-              Start Pro Trial →
-            </button>
+            <Link href={`/checkout?plan=${billing === 'yearly' ? 'pro_yearly' : 'pro_monthly'}`} style={{ textDecoration: 'none' }}>
+              <button style={{
+                width: '100%',
+                padding: '14px 24px',
+                background: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)',
+                color: '#fff',
+                border: 'none',
+                borderRadius: '10px',
+                fontSize: '15px',
+                fontWeight: '600',
+                cursor: 'pointer',
+                marginBottom: '32px',
+                transition: 'all 0.15s'
+              }}>
+                Pay with Crypto →
+              </button>
+            </Link>
 
             <div style={{ borderTop: '1px solid #27272a', paddingTop: '24px' }}>
               <p style={{ color: '#71717a', fontSize: '13px', fontWeight: '600', marginBottom: '16px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
@@ -480,7 +482,7 @@ export default function PricingClient() {
               },
               {
                 q: 'What payment methods do you accept?',
-                a: 'We accept all major credit cards and crypto payments (USDC, SOL, ETH).'
+                a: 'We accept USDC and SOL on Solana. Pay directly from your wallet — no credit card needed.'
               },
               {
                 q: 'Can I cancel anytime?',

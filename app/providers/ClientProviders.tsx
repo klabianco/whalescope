@@ -2,6 +2,7 @@
 
 import { FC, ReactNode } from 'react';
 import { WalletProvider } from './WalletProvider';
+import { AuthProvider } from './AuthProvider';
 
 interface Props {
   children: ReactNode;
@@ -9,8 +10,10 @@ interface Props {
 
 export const ClientProviders: FC<Props> = ({ children }) => {
   return (
-    <WalletProvider>
-      {children}
-    </WalletProvider>
+    <AuthProvider>
+      <WalletProvider>
+        {children}
+      </WalletProvider>
+    </AuthProvider>
   );
 };

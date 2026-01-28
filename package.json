@@ -13,7 +13,8 @@
     "notify": "npx tsx scripts/notify-new-trades.ts",
     "fetch-and-notify": "npm run fetch-congress && npm run notify",
     "watch-payments": "npx tsx scripts/watch-payments.ts",
-    "cron": "npm run fetch-and-notify && npm run watch-payments"
+    "cron": "npm run fetch-and-notify && npm run watch-payments",
+    "telegram-bot": "npx tsx scripts/telegram-bot.ts"
   },
   "dependencies": {
     "@solana/spl-token": "^0.4.14",
@@ -22,12 +23,15 @@
     "@solana/wallet-adapter-react-ui": "^0.9.39",
     "@solana/wallet-adapter-wallets": "^0.19.37",
     "@solana/web3.js": "^1.98.4",
+    "@supabase/auth-helpers-nextjs": "^0.15.0",
+    "@supabase/supabase-js": "^2.93.2",
     "next": "^14.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "yahoo-finance2": "^3.13.0"
   },
   "devDependencies": {
+    "@netlify/plugin-nextjs": "^5.15.7",
     "@types/node": "^20.0.0",
     "@types/react": "^18.2.0",
     "ethers": "^6.16.0",
