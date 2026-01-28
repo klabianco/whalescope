@@ -13,10 +13,9 @@ const WALLET = new PublicKey('hyTku9MYUuBtCWPxqmeyWcBvYuUbVKfXtafjBr7eAh3');
 const USDC_MINT = new PublicKey('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v');
 const USDC_DECIMALS = 6;
 
-const PRICES = {
-  pro_monthly: 19,
-  pro_yearly: 150,
-};
+import { PLAN_PRICES, PRICING } from '../config/pricing';
+
+const PRICES = PLAN_PRICES;
 
 function SubscribeContent() {
   const searchParams = useSearchParams();
@@ -104,7 +103,7 @@ function SubscribeContent() {
 
         {isYearly && (
           <p style={{ color: '#22c55e', fontSize: '14px', marginBottom: '24px' }}>
-            That's just $12.50/month — save $78 vs monthly
+            That's just ${(PRICING.pro.yearly / 12).toFixed(0)}/month — save ${(PRICING.pro.monthly * 12) - PRICING.pro.yearly} vs monthly
           </p>
         )}
 

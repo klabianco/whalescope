@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
+import { PRICING, PRICING_DISPLAY } from '../config/pricing';
 
 type BillingPeriod = 'monthly' | 'yearly';
 
@@ -188,13 +189,13 @@ export default function PricingClient() {
             <div style={{ marginBottom: '24px' }}>
               <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
                 <span style={{ fontSize: '48px', fontWeight: '700', color: '#fff' }}>
-                  $24
+                  ${PRICING.pro.monthly}
                 </span>
                 <span style={{ color: '#71717a', fontSize: '16px' }}>/month</span>
               </div>
               {billing === 'yearly' && (
                 <p style={{ color: '#22c55e', fontSize: '13px', marginTop: '4px' }}>
-                  $240/year billed annually (2 months free)
+                  ${PRICING.pro.yearly}/year billed annually ({PRICING_DISPLAY.pro.monthsFree} months free)
                 </p>
               )}
             </div>
@@ -266,12 +267,12 @@ export default function PricingClient() {
             
             {/* Price */}
             <div style={{ color: '#a1a1aa', fontSize: '14px', padding: '12px 0', borderTop: '1px solid #27272a' }}>Monthly price</div>
-            <div style={{ color: '#22c55e', fontSize: '14px', fontWeight: '600', textAlign: 'center', padding: '12px 0', borderTop: '1px solid #27272a' }}>$24/mo</div>
+            <div style={{ color: '#22c55e', fontSize: '14px', fontWeight: '600', textAlign: 'center', padding: '12px 0', borderTop: '1px solid #27272a' }}>${PRICING.pro.monthly}/mo</div>
             <div style={{ color: '#71717a', fontSize: '14px', textAlign: 'center', padding: '12px 0', borderTop: '1px solid #27272a' }}>$49/mo</div>
             
             {/* Annual */}
             <div style={{ color: '#a1a1aa', fontSize: '14px', padding: '12px 0', borderTop: '1px solid #27272a' }}>Annual price</div>
-            <div style={{ color: '#22c55e', fontSize: '14px', fontWeight: '600', textAlign: 'center', padding: '12px 0', borderTop: '1px solid #27272a' }}>$240/yr</div>
+            <div style={{ color: '#22c55e', fontSize: '14px', fontWeight: '600', textAlign: 'center', padding: '12px 0', borderTop: '1px solid #27272a' }}>${PRICING.pro.yearly}/yr</div>
             <div style={{ color: '#71717a', fontSize: '14px', textAlign: 'center', padding: '12px 0', borderTop: '1px solid #27272a' }}>$588/yr</div>
 
             {/* Features */}
@@ -313,7 +314,7 @@ export default function PricingClient() {
 
             {/* Savings */}
             <div style={{ color: '#fff', fontSize: '14px', fontWeight: '600', padding: '12px 0', borderTop: '1px solid #27272a' }}>Your savings</div>
-            <div style={{ color: '#22c55e', fontSize: '14px', fontWeight: '700', textAlign: 'center', padding: '12px 0', borderTop: '1px solid #27272a' }}>$348/yr</div>
+            <div style={{ color: '#22c55e', fontSize: '14px', fontWeight: '700', textAlign: 'center', padding: '12px 0', borderTop: '1px solid #27272a' }}>${588 - PRICING.pro.yearly}/yr</div>
             <div style={{ color: '#71717a', fontSize: '14px', textAlign: 'center', padding: '12px 0', borderTop: '1px solid #27272a' }}>—</div>
           </div>
         </div>
