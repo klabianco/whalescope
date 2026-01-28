@@ -222,30 +222,27 @@ export default function WhalesPage() {
                 >
                   View
                 </Link>
-                {connected ? (
-                  <button
-                    onClick={() => toggleFollowWallet(whale.address)}
-                    style={{
-                      padding: '10px 20px',
-                      background: followingWallets.includes(whale.address) ? '#4ade80' : '#333',
-                      color: followingWallets.includes(whale.address) ? '#000' : '#fff',
-                      border: 'none',
-                      borderRadius: '8px',
-                      fontSize: '14px',
-                      fontWeight: '600',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    {followingWallets.includes(whale.address) ? '✓' : '+'}
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => document.querySelector<HTMLButtonElement>('.wallet-adapter-button')?.click()}
-                    style={{ padding: '10px 20px', background: '#333', color: '#888', border: 'none', borderRadius: '8px', fontSize: '13px', cursor: 'pointer' }}
-                  >
-                    Connect to +
-                  </button>
-                )}
+                <button
+                  onClick={() => {
+                    if (connected) {
+                      toggleFollowWallet(whale.address);
+                    } else {
+                      document.querySelector<HTMLButtonElement>('.wallet-adapter-button')?.click();
+                    }
+                  }}
+                  style={{
+                    padding: '10px 20px',
+                    background: followingWallets.includes(whale.address) ? '#4ade80' : '#333',
+                    color: followingWallets.includes(whale.address) ? '#000' : '#fff',
+                    border: 'none',
+                    borderRadius: '8px',
+                    fontSize: '14px',
+                    fontWeight: '600',
+                    cursor: 'pointer'
+                  }}
+                >
+                  {followingWallets.includes(whale.address) ? 'Following' : 'Follow'}
+                </button>
               </div>
             </div>
           ))}
@@ -295,30 +292,27 @@ export default function WhalesPage() {
                 >
                   View Trades
                 </Link>
-                {connected ? (
-                  <button
-                    onClick={() => toggleFollowPolitician(pol.slug)}
-                    style={{
-                      padding: '10px 20px',
-                      background: followingPoliticians.includes(pol.slug) ? '#4ade80' : '#333',
-                      color: followingPoliticians.includes(pol.slug) ? '#000' : '#fff',
-                      border: 'none',
-                      borderRadius: '8px',
-                      fontSize: '14px',
-                      fontWeight: '600',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    {followingPoliticians.includes(pol.slug) ? '✓' : '+'}
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => document.querySelector<HTMLButtonElement>('.wallet-adapter-button')?.click()}
-                    style={{ padding: '10px 20px', background: '#333', color: '#888', border: 'none', borderRadius: '8px', fontSize: '13px', cursor: 'pointer' }}
-                  >
-                    Connect to +
-                  </button>
-                )}
+                <button
+                  onClick={() => {
+                    if (connected) {
+                      toggleFollowPolitician(pol.slug);
+                    } else {
+                      document.querySelector<HTMLButtonElement>('.wallet-adapter-button')?.click();
+                    }
+                  }}
+                  style={{
+                    padding: '10px 20px',
+                    background: followingPoliticians.includes(pol.slug) ? '#4ade80' : '#333',
+                    color: followingPoliticians.includes(pol.slug) ? '#000' : '#fff',
+                    border: 'none',
+                    borderRadius: '8px',
+                    fontSize: '14px',
+                    fontWeight: '600',
+                    cursor: 'pointer'
+                  }}
+                >
+                  {followingPoliticians.includes(pol.slug) ? 'Following' : 'Follow'}
+                </button>
               </div>
             </div>
           ))}

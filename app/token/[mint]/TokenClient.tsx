@@ -227,7 +227,7 @@ export default function TokenClient({ mint }: { mint: string }) {
           cursor: 'pointer'
         }}
       >
-        {isFollowing ? '✓ Following' : '+ Follow'}
+        {isFollowing ? 'Following' : 'Follow'}
       </button>
     );
   };

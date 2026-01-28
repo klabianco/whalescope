@@ -162,7 +162,7 @@ export default function PoliticianClient({ slug }: { slug: string }) {
           cursor: 'pointer'
         }}
       >
-        {following ? '✓ Following' : '+ Follow'}
+        {following ? 'Following' : 'Follow'}
       </button>
     );
   };
