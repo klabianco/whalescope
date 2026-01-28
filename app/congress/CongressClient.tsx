@@ -285,7 +285,7 @@ export default function CongressClient({ trades, topTraders, committeeData, poli
         textAlign: 'center'
       }}>
         <p style={{ color: '#888', fontSize: '13px' }}>
-          📊 Data from STOCK Act disclosures. Politicians must report trades within 45 days.
+          Data from STOCK Act disclosures. Politicians must report trades within 45 days.
           <br />
           <span style={{ color: '#4ade80' }}>Live data • Updated daily</span>
           {' • '}
