@@ -6,16 +6,16 @@ export const TREASURY_WALLET = process.env.NEXT_PUBLIC_TREASURY_WALLET || '';
 // USDC on Solana mainnet
 export const USDC_MINT = 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v';
 
-// Pricing in USDC (half of Nansen's $49/mo)
+// Pricing in USDC — must match app/config/pricing.ts
 export const PRICES = {
-  PRO_MONTHLY: 25, // $25 USDC
-  PRO_YEARLY: 240, // $240 USDC ($20/mo, 2 months free)
+  PRO_MONTHLY: 24, // $24 USDC/mo
+  PRO_YEARLY: 240, // $240 USDC/yr ($20/mo, 2 months free)
 };
 
 // Alternative SOL pricing (approximate, would need live price feed)
 export const SOL_PRICES = {
-  PRO_MONTHLY: 0.12, // ~$25 at $200/SOL
-  PRO_YEARLY: 1.2,   // ~$240 at $200/SOL
+  PRO_MONTHLY: 0.11, // ~$24 at ~$220/SOL
+  PRO_YEARLY: 1.1,   // ~$240 at ~$220/SOL
 };
 
 export interface PaymentIntent {
