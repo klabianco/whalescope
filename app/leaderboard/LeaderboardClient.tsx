@@ -75,7 +75,7 @@ export default function LeaderboardClient({ leaderboard }: Props) {
       <main style={{ maxWidth: '900px', margin: '0 auto', padding: '0 20px 40px' }}>
         <div style={{ textAlign: 'center', marginBottom: '40px' }}>
           <h1 style={{ fontSize: '36px', marginBottom: '8px' }}>
-            🏆 Performance Leaderboard
+            Performance Leaderboard
           </h1>
           <p style={{ color: '#888', marginBottom: '16px' }}>
             Estimated returns based on reported congressional trades
@@ -132,7 +132,7 @@ export default function LeaderboardClient({ leaderboard }: Props) {
             textAlign: 'center',
             transform: 'translateY(-16px)'
           }}>
-            <div style={{ fontSize: '40px', marginBottom: '8px' }}>🏆</div>
+            
             <div style={{ color: '#000', fontWeight: '700', fontSize: '18px', marginBottom: '4px' }}>
               {topPerformers[0].name}
             </div>

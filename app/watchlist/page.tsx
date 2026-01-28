@@ -197,7 +197,7 @@ export default function WatchlistPage() {
                   cursor: 'pointer'
                 }}
               >
-                {tab === 'all' ? '🌐 All' : tab === 'crypto' ? '🐋 Crypto' : 'Congress'}
+                {tab === 'all' ? 'All' : tab === 'crypto' ? 'Crypto' : 'Congress'}
               </button>
             ))}
           </div>
@@ -212,7 +212,7 @@ export default function WatchlistPage() {
             borderRadius: '12px',
             textAlign: 'center'
           }}>
-            <div style={{ fontSize: '48px', marginBottom: '16px' }}>👀</div>
+            
             <h3 style={{ color: '#fff', marginBottom: '8px' }}>Your watchlist is empty</h3>
             <p style={{ color: '#888', marginBottom: '24px' }}>
               Follow crypto wallets or politicians to track their moves.
@@ -220,14 +220,14 @@ export default function WatchlistPage() {
             <div style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
               <Link href="/search" style={{
                 display: 'inline-block',
-                background: '#4ade80',
+                background: '#fff',
                 color: '#000',
                 padding: '12px 24px',
                 borderRadius: '8px',
                 fontWeight: '600',
                 textDecoration: 'none'
               }}>
-                🐋 Search Tokens
+                Search Tokens
               </Link>
               <Link href="/congress" style={{
                 display: 'inline-block',
@@ -258,7 +258,7 @@ export default function WatchlistPage() {
                   alignItems: 'center'
                 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    <span style={{ fontSize: '20px' }}>🐋</span>
+                    
                     <div>
                       <a 
                         href={`https://solscan.io/account/${address}`}
@@ -308,7 +308,7 @@ export default function WatchlistPage() {
                   marginBottom: pol.recentTrades.length > 0 ? '12px' : '0'
                 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    <span style={{ fontSize: '20px' }}>🏛️</span>
+                    
                     <Link 
                       href={`/congress/${pol.slug}`}
                       style={{ textDecoration: 'none' }}
@@ -376,7 +376,7 @@ export default function WatchlistPage() {
               🔔 Want alerts when your watchlist makes moves?
             </p>
             <button style={{
-              background: '#4ade80',
+              background: '#fff',
               color: '#000',
               padding: '12px 24px',
               borderRadius: '8px',

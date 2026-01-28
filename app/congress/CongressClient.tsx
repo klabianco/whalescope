@@ -79,7 +79,7 @@ export default function CongressClient({ trades, topTraders, committeeData, poli
           </p>
           <div style={{ display: 'flex', justifyContent: 'center', gap: '16px' }}>
             <Link href="/leaderboard" style={{ color: '#4ade80', textDecoration: 'none' }}>
-              🏆 Performance Leaderboard →
+              Performance Leaderboard →
             </Link>
             <Link href="/watchlist" style={{ color: '#60a5fa', textDecoration: 'none' }}>
               👀 Your Watchlist →
