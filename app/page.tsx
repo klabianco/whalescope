@@ -190,7 +190,7 @@ export default function Home() {
             Get alerts when Congress trades
           </h3>
           <p style={{ color: '#666', marginBottom: '24px', fontSize: '16px' }}>
-            Real-time alerts via Telegram & Discord. From $15/month.
+            Real-time alerts via Telegram & Discord. From $19/month.
           </p>
           <Link href="/pricing" style={{
             display: 'inline-block',
