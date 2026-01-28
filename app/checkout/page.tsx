@@ -10,8 +10,8 @@ import { Footer } from '../components/Footer';
 import { useAuth } from '../providers/AuthProvider';
 
 const PRICES = {
-  pro_monthly: { usdc: 25, sol: 0.12, label: 'Pro Monthly' },
-  pro_yearly: { usdc: 240, sol: 1.2, label: 'Pro Yearly' },
+  pro_monthly: { usdc: 24, sol: 0.11, label: 'Pro Monthly' },
+  pro_yearly: { usdc: 240, sol: 1.1, label: 'Pro Yearly' },
 };
 
 function CheckoutContent() {

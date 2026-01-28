@@ -9,7 +9,7 @@ import { createTransferInstruction, getAssociatedTokenAddress, TOKEN_PROGRAM_ID 
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
 
-const WALLET = new PublicKey('hyTku9MYUuBtCWPxqmeyWcBvYuUbVKfXtafjBr7eAh3');
+const WALLET = new PublicKey(process.env.NEXT_PUBLIC_TREASURY_WALLET || 'CPcrV6UeL8CcEvC7rCV6iyUDxbkT5bkJifbz5PUs6zfg');
 const USDC_MINT = new PublicKey('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v');
 const USDC_DECIMALS = 6;
 
@@ -67,6 +67,23 @@ function SubscribeContent() {
       await connection.confirmTransaction(sig, 'confirmed');
 
       setTxSig(sig);
+
+      // Record the subscription in our backend
+      try {
+        await fetch('/api/subscribe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            walletAddress: publicKey.toBase58(),
+            plan,
+            txSignature: sig,
+          }),
+        });
+      } catch (e) {
+        // Payment already confirmed on-chain, backend recording is best-effort
+        console.warn('Failed to record subscription:', e);
+      }
+
       setStatus('success');
     } catch (err: any) {
       console.error(err);
