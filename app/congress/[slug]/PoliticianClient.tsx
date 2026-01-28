@@ -241,7 +241,7 @@ export default function PoliticianClient({ slug }: { slug: string }) {
               borderRadius: '12px',
               border: stats.flagged > 0 ? '1px solid rgba(251, 191, 36, 0.3)' : 'none'
             }}>
-              <div style={{ color: '#888', fontSize: '12px', marginBottom: '4px' }}>⚠️ Flagged</div>
+              <div style={{ color: '#888', fontSize: '12px', marginBottom: '4px' }}>Flagged</div>
               <div style={{ color: stats.flagged > 0 ? '#fbbf24' : '#fff', fontSize: '20px', fontWeight: '600' }}>
                 {stats.flagged}
               </div>
@@ -310,7 +310,7 @@ export default function PoliticianClient({ slug }: { slug: string }) {
                             fontWeight: '700',
                             marginLeft: '8px'
                           }}>
-                            ⚠️ COMMITTEE
+                            COMMITTEE
                           </span>
                         )}
                       </div>
@@ -337,7 +337,7 @@ export default function PoliticianClient({ slug }: { slug: string }) {
               marginTop: '24px'
             }}>
               <p style={{ color: '#fbbf24', fontSize: '13px', margin: 0, lineHeight: '1.6' }}>
-                ⚠️ <strong>Committee Correlation Alert:</strong> {stats.flagged} of this politician&apos;s trades 
+                Note: <strong>Committee Correlation Alert:</strong> {stats.flagged} of this politician&apos;s trades 
                 involve stocks that fall under the oversight of committees they serve on. This could indicate 
                 a potential conflict of interest, though it&apos;s not necessarily illegal.
               </p>

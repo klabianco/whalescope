@@ -173,7 +173,7 @@ export default function WatchlistPage() {
       <main style={{ maxWidth: '900px', margin: '0 auto', padding: '0 20px 40px' }}>
         <div style={{ marginBottom: '40px' }}>
           <h1 style={{ fontSize: '36px', marginBottom: '8px' }}>
-            👀 Your Watchlist
+            Your Watchlist
           </h1>
           <p style={{ color: '#888' }}>
             Track crypto wallets and politicians in one place.

@@ -81,7 +81,7 @@ export default function LeaderboardClient({ leaderboard }: Props) {
             Estimated returns based on reported congressional trades
           </p>
           <p style={{ color: '#666', fontSize: '13px' }}>
-            ⚠️ Returns are estimates based on trade timing. Not financial advice.
+            Note: Returns are estimates based on trade timing. Not financial advice.
           </p>
         </div>
 
@@ -337,7 +337,7 @@ export default function LeaderboardClient({ leaderboard }: Props) {
         marginTop: '32px'
       }}>
         <h4 style={{ color: '#fbbf24', marginBottom: '8px', fontSize: '14px' }}>
-          ⚠️ Methodology & Disclaimer
+          Methodology & Disclaimer
         </h4>
         <p style={{ color: '#888', fontSize: '13px', lineHeight: '1.6' }}>
           Returns are estimated based on trade filing dates and general market performance for traded securities.

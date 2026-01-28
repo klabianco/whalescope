@@ -82,7 +82,7 @@ export default function CongressClient({ trades, topTraders, committeeData, poli
               Performance Leaderboard →
             </Link>
             <Link href="/watchlist" style={{ color: '#60a5fa', textDecoration: 'none' }}>
-              👀 Your Watchlist →
+              Your Watchlist →
             </Link>
           </div>
         </div>
@@ -158,7 +158,7 @@ export default function CongressClient({ trades, topTraders, committeeData, poli
             {f === 'all' ? 'All Trades' : 
              f === 'buy' ? '🟢 Buys' : 
              f === 'sell' ? '🔴 Sells' :
-             <>⚠️ Flagged <span style={{ 
+             <>Flagged <span style={{ 
                background: filter === f ? 'rgba(0,0,0,0.2)' : '#333',
                padding: '2px 6px',
                borderRadius: '4px',
@@ -178,7 +178,7 @@ export default function CongressClient({ trades, topTraders, committeeData, poli
           marginBottom: '20px'
         }}>
           <p style={{ color: '#fbbf24', fontSize: '13px', margin: 0 }}>
-            ⚠️ <strong>Committee Correlation:</strong> These trades involve stocks that fall under the
+            Note: <strong>Committee Correlation:</strong> These trades involve stocks that fall under the
             oversight of committees the politician sits on. This could indicate a potential conflict of interest.
           </p>
         </div>
