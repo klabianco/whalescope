@@ -28,6 +28,7 @@ export function generateStaticParams() {
   }
 }
 
-export default function PoliticianPage({ params }: { params: { slug: string } }) {
-  return <PoliticianClient slug={params.slug} />;
+export default async function PoliticianPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  return <PoliticianClient slug={slug} />;
 }

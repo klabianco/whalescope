@@ -1,7 +1,12 @@
+import { setupDevPlatform } from '@cloudflare/next-on-pages/next-dev';
+
+// Setup Cloudflare bindings in dev
+if (process.env.NODE_ENV === 'development') {
+  setupDevPlatform();
+}
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Remove 'export' for Vercel deployment with API routes
-  // output: 'export',
   images: { unoptimized: true },
   reactStrictMode: true,
   async headers() {
@@ -18,4 +23,4 @@ const nextConfig = {
     ]
   },
 }
-module.exports = nextConfig
+export default nextConfig

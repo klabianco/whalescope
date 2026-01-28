@@ -98,8 +98,8 @@ function timeAgo(timestamp: number): string {
   return `${Math.floor(seconds / 86400)}d ago`;
 }
 
-export default function WalletPage({ params }: { params: { address: string } }) {
-  const { address } = params;
+export default async function WalletPage({ params }: { params: Promise<{ address: string }> }) {
+  const { address } = await params;
   const allTrades = getTrades();
   const walletData = getWalletData();
   

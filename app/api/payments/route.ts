@@ -1,4 +1,6 @@
 import { NextResponse } from 'next/server';
+
+export const runtime = 'edge';
 import { createClient } from '@supabase/supabase-js';
 import { 
   generatePaymentMemo, 

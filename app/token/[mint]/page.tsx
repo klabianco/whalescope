@@ -11,6 +11,7 @@ export function generateStaticParams() {
   ];
 }
 
-export default function TokenPage({ params }: { params: { mint: string } }) {
-  return <TokenClient mint={params.mint} />;
+export default async function TokenPage({ params }: { params: Promise<{ mint: string }> }) {
+  const { mint } = await params;
+  return <TokenClient mint={mint} />;
 }
