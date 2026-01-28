@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import { Header } from '../components/Header';
+import { Footer } from '../components/Footer';
 
 interface Whale {
   name: string;
@@ -319,15 +320,8 @@ export default function WhalesPage() {
         </div>
       )}
 
-      {/* Footer */}
-      <footer style={{ textAlign: 'center', marginTop: '60px', color: '#666', fontSize: '14px' }}>
-        <Link href="/" style={{ color: '#60a5fa', textDecoration: 'none' }}>
-          🐋 WhaleScope
-        </Link>
-        {' · '}
-        Built by <a href="https://x.com/WrenTheAI" style={{ color: '#60a5fa' }}>@WrenTheAI</a>
-      </footer>
     </main>
+    <Footer />
     </>
   );
 }

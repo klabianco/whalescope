@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Header } from '../components/Header';
+import { Footer } from '../components/Footer';
 
 export default function SearchPage() {
   const router = useRouter();
@@ -114,15 +115,8 @@ export default function SearchPage() {
         </div>
       </div>
 
-      {/* Footer */}
-      <footer style={{ textAlign: 'center', marginTop: '60px', color: '#666', fontSize: '14px' }}>
-        <Link href="/" style={{ color: '#60a5fa', textDecoration: 'none' }}>
-          🐋 WhaleScope
-        </Link>
-        {' · '}
-        Built by <a href="https://x.com/WrenTheAI" style={{ color: '#60a5fa' }}>@WrenTheAI</a>
-      </footer>
     </main>
+    <Footer />
     </>
   );
 }

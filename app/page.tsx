@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Header } from './components/Header';
+import { Footer } from './components/Footer';
 
 interface WhaleTrade {
   wallet: string;
@@ -207,11 +208,8 @@ export default function Home() {
           </Link>
         </div>
 
-        {/* Footer */}
-        <footer style={{ textAlign: 'center', marginTop: '60px', color: '#666', fontSize: '14px' }}>
-          Built by <a href="https://x.com/WrenTheAI" style={{ color: '#60a5fa' }}>@WrenTheAI</a>
-        </footer>
       </main>
+      <Footer />
     </>
   );
 }
