@@ -5,6 +5,17 @@ import Link from 'next/link';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 
+interface CongressTrade {
+  politician: string;
+  party: 'D' | 'R' | 'I';
+  chamber: 'House' | 'Senate';
+  ticker: string;
+  type: 'Purchase' | 'Sale';
+  amount: string;
+  filed: string;
+  traded: string;
+}
+
 interface WhaleTrade {
   wallet: string;
   walletLabel: string;
@@ -27,12 +38,17 @@ function timeAgo(timestamp: number): string {
 
 export default function Home() {
   const [trades, setTrades] = useState<WhaleTrade[]>([]);
+  const [congressTrades, setCongressTrades] = useState<CongressTrade[]>([]);
 
   useEffect(() => {
     fetch('/whale-trades.json')
       .then(res => res.ok ? res.json() : [])
       .then(setTrades)
       .catch(() => setTrades([]));
+    fetch('/congress-trades.json')
+      .then(res => res.ok ? res.json() : [])
+      .then(setCongressTrades)
+      .catch(() => setCongressTrades([]));
   }, []);
   
   return (
@@ -78,6 +94,103 @@ export default function Home() {
             <div style={{ color: '#888', fontSize: '14px' }}>Find top holders for any token</div>
           </Link>
         </div>
+
+        {/* Congress Trades Preview */}
+        {congressTrades.length > 0 && (
+          <>
+            <div style={{ 
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginBottom: '16px'
+            }}>
+              <h2 style={{ fontSize: '24px', color: '#fff' }}>
+                🏛️ Latest Congress Trades
+              </h2>
+              <Link href="/congress" style={{ color: '#60a5fa', fontSize: '14px', textDecoration: 'none' }}>
+                View all →
+              </Link>
+            </div>
+            <div style={{ 
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+              gap: '12px',
+              marginBottom: '32px'
+            }}>
+              {congressTrades.slice(0, 4).map((trade, i) => (
+                <Link key={i} href={`/congress/${trade.politician.toLowerCase().replace(/ /g, '-')}`} style={{ textDecoration: 'none' }}>
+                  <div style={{
+                    background: '#111118',
+                    border: '1px solid #222',
+                    borderRadius: '12px',
+                    padding: '16px',
+                  }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                      <span style={{ color: '#fff', fontWeight: '600', fontSize: '15px' }}>
+                        {trade.politician}
+                      </span>
+                      <span style={{
+                        background: trade.type === 'Purchase' ? '#064e3b' : '#7f1d1d',
+                        color: trade.type === 'Purchase' ? '#4ade80' : '#f87171',
+                        padding: '2px 8px',
+                        borderRadius: '4px',
+                        fontSize: '11px',
+                        fontWeight: '600'
+                      }}>
+                        {trade.type === 'Purchase' ? 'BUY' : 'SELL'}
+                      </span>
+                    </div>
+                    <div style={{ color: '#ccc', fontSize: '16px', fontWeight: '600', marginBottom: '4px' }}>
+                      {trade.ticker}
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: '#666' }}>
+                      <span>{trade.amount}</span>
+                      <span>{trade.party === 'D' ? '🔵' : trade.party === 'R' ? '🔴' : '⚪'} {trade.chamber}</span>
+                    </div>
+                    <div style={{ fontSize: '12px', color: '#555', marginTop: '6px' }}>
+                      Traded {trade.traded} · Filed {trade.filed}
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+
+            {/* Urgency CTA */}
+            <div style={{
+              background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)',
+              border: '1px solid #1e3a5f',
+              borderRadius: '12px',
+              padding: '20px 24px',
+              marginBottom: '32px',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              flexWrap: 'wrap',
+              gap: '12px'
+            }}>
+              <div>
+                <div style={{ color: '#fbbf24', fontSize: '14px', fontWeight: '600', marginBottom: '4px' }}>
+                  ⚡ Pro members got these alerts instantly
+                </div>
+                <div style={{ color: '#94a3b8', fontSize: '13px' }}>
+                  Don&apos;t miss the next big move. Get real-time alerts.
+                </div>
+              </div>
+              <Link href="/pricing" style={{
+                background: '#fbbf24',
+                color: '#000',
+                padding: '10px 20px',
+                borderRadius: '8px',
+                fontSize: '14px',
+                fontWeight: '600',
+                textDecoration: 'none',
+                whiteSpace: 'nowrap'
+              }}>
+                Get Alerts →
+              </Link>
+            </div>
+          </>
+        )}
 
         {/* Live Feed Header */}
         <div style={{ 
@@ -190,7 +303,7 @@ export default function Home() {
             Get alerts when Congress trades
           </h3>
           <p style={{ color: '#666', marginBottom: '24px', fontSize: '16px' }}>
-            Real-time alerts via Telegram & Discord. From $19/month.
+            Real-time alerts via Telegram & Discord. From $24/month.
           </p>
           <Link href="/pricing" style={{
             display: 'inline-block',
