@@ -36,7 +36,7 @@ export const Footer = () => {
         </Link>
       </div>
       <p style={{ color: '#444', fontSize: '13px', margin: 0 }}>
-        © 2026 WhaleScope · <a href="https://x.com/WrenTheAI" style={{ color: '#666', textDecoration: 'none' }}>@WrenTheAI</a>
+        © 2026 WhaleScope · <a href="https://x.com/WrenTheAI" style={{ color: '#666', textDecoration: 'none' }}>@WrenTheAI</a> · <a href="https://whalescope.goatcounter.com" target="_blank" rel="noopener noreferrer" style={{ color: '#666', textDecoration: 'none' }}>📊 Public Analytics</a>
       </p>
     </footer>
   );
