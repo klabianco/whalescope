@@ -53,8 +53,11 @@ function hasCorrelation(trade: CongressTrade, committeeData: CommitteeData): boo
   return false;
 }
 
+const TRADES_PER_PAGE = 25;
+
 export default function CongressClient({ trades, topTraders, committeeData, politicians }: Props) {
   const [filter, setFilter] = useState<'all' | 'buy' | 'sell' | 'flagged'>('all');
+  const [visibleCount, setVisibleCount] = useState(TRADES_PER_PAGE);
   
   const filteredTrades = trades.filter(t => {
     if (filter === 'buy') return t.type === 'Purchase';
@@ -140,7 +143,7 @@ export default function CongressClient({ trades, topTraders, committeeData, poli
         {(['all', 'buy', 'sell', 'flagged'] as const).map((f) => (
           <button
             key={f}
-            onClick={() => setFilter(f)}
+            onClick={() => { setFilter(f); setVisibleCount(TRADES_PER_PAGE); }}
             style={{
               padding: '8px 16px',
               background: filter === f ? (f === 'flagged' ? '#fbbf24' : '#4ade80') : '#222',
@@ -199,7 +202,7 @@ export default function CongressClient({ trades, topTraders, committeeData, poli
         </div>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          {filteredTrades.map((trade, i) => {
+          {filteredTrades.slice(0, visibleCount).map((trade, i) => {
             const isFlagged = hasCorrelation(trade, committeeData);
             
             return (
@@ -273,6 +276,25 @@ export default function CongressClient({ trades, topTraders, committeeData, poli
               </div>
             );
           })}
+          {visibleCount < filteredTrades.length && (
+            <button
+              onClick={() => setVisibleCount(v => v + TRADES_PER_PAGE)}
+              style={{
+                background: '#1a1a2e',
+                border: '1px solid #333',
+                borderRadius: '12px',
+                padding: '14px',
+                color: '#4ade80',
+                fontSize: '15px',
+                fontWeight: '600',
+                cursor: 'pointer',
+                marginTop: '8px',
+                width: '100%',
+              }}
+            >
+              Show More ({filteredTrades.length - visibleCount} remaining)
+            </button>
+          )}
         </div>
       )}
 

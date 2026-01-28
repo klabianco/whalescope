@@ -61,7 +61,7 @@ export default function Home() {
             🐋 WhaleScope
           </h1>
           <p style={{ fontSize: '20px', color: '#888', marginBottom: '24px' }}>
-            See what smart money is buying on Solana
+            Track smart money — crypto whales & Congress trades
           </p>
         </div>
 
