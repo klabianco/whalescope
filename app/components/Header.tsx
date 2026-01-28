@@ -36,6 +36,9 @@ export const Header: FC = () => {
         <Link href="/search" style={{ color: '#888', textDecoration: 'none', fontSize: '14px' }}>
           Tokens
         </Link>
+        <Link href="/pricing" style={{ color: '#888', textDecoration: 'none', fontSize: '14px' }}>
+          Pricing
+        </Link>
         {publicKey && (
           <Link href="/watchlist" style={{ color: '#888', textDecoration: 'none', fontSize: '14px' }}>
             Watchlist
