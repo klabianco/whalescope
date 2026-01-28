@@ -128,8 +128,11 @@ async function main() {
   // Save to file
   const fs = await import("fs");
   const outputPath = "./data/whale-trades.json";
+  const publicPath = "./public/whale-trades.json";
   fs.writeFileSync(outputPath, JSON.stringify(trades, null, 2));
+  fs.writeFileSync(publicPath, JSON.stringify(trades, null, 2));
   console.log(`💾 Saved to ${outputPath}`);
+  console.log(`📂 Copied to ${publicPath} for client-side access`);
   
   // Print recent trades
   console.log("\n📊 Recent trades:");
