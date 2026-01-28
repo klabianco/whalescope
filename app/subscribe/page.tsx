@@ -78,7 +78,7 @@ export default function SubscribePage() {
       minHeight: '100vh',
       background: '#0a0a0a'
     }}>
-      <h1 style={{ marginBottom: 8 }}>🐋 WhaleScope Pro</h1>
+      <h1 style={{ marginBottom: 8 }}>WhaleScope Pro</h1>
       <p style={{ color: '#888', marginBottom: 32 }}>
         Get instant email alerts when Congress members trade stocks.
       </p>

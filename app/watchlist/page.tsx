@@ -197,7 +197,7 @@ export default function WatchlistPage() {
                   cursor: 'pointer'
                 }}
               >
-                {tab === 'all' ? '🌐 All' : tab === 'crypto' ? '🐋 Crypto' : '🏛️ Congress'}
+                {tab === 'all' ? '🌐 All' : tab === 'crypto' ? '🐋 Crypto' : 'Congress'}
               </button>
             ))}
           </div>
@@ -238,7 +238,7 @@ export default function WatchlistPage() {
                 fontWeight: '600',
                 textDecoration: 'none'
               }}>
-                🏛️ Congress Trades
+                Congress Trades
               </Link>
             </div>
           </div>

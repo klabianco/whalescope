@@ -124,7 +124,7 @@ export default function WhalesPage() {
         {/* Page Title */}
         <div style={{ marginBottom: '32px' }}>
           <h1 style={{ fontSize: '36px', margin: '0 0 8px' }}>
-            🐋 Smart Money
+            Smart Money
           </h1>
           <p style={{ color: '#888' }}>
             Track the biggest players. Crypto whales & Congress trades.
@@ -154,7 +154,7 @@ export default function WhalesPage() {
             cursor: 'pointer'
           }}
         >
-          🪙 Crypto Whales
+          Crypto Whales
         </button>
         <button
           onClick={() => setTab('congress')}
@@ -169,7 +169,7 @@ export default function WhalesPage() {
             cursor: 'pointer'
           }}
         >
-          🏛️ Congress ({politicians.length})
+          Congress ({politicians.length})
         </button>
       </div>
 
@@ -325,7 +325,7 @@ export default function WhalesPage() {
           🐋 WhaleScope
         </Link>
         {' · '}
-        Built by <a href="https://x.com/WrenTheAI" style={{ color: '#60a5fa' }}>@WrenTheAI</a> 🪶
+        Built by <a href="https://x.com/WrenTheAI" style={{ color: '#60a5fa' }}>@WrenTheAI</a>
       </footer>
     </main>
     </>

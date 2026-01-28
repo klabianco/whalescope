@@ -78,7 +78,7 @@ export default function CommitteeCorrelation({ trade, committeeData, showBadge =
         }}
         title={`${trade.politician} sits on ${analysis.correlatedCommittee} committee`}
       >
-        ⚠️ Committee
+        Committee Conflict
       </span>
     );
   }
@@ -100,7 +100,7 @@ export default function CommitteeCorrelation({ trade, committeeData, showBadge =
         gap: '8px',
         marginBottom: '12px'
       }}>
-        <span style={{ fontSize: '18px' }}>🏛️</span>
+        
         <h4 style={{ color: '#fff', fontSize: '14px', fontWeight: '600', margin: 0 }}>
           Committee Assignments
         </h4>
@@ -143,7 +143,7 @@ export default function CommitteeCorrelation({ trade, committeeData, showBadge =
           padding: '12px 16px'
         }}>
           <p style={{ color: '#fbbf24', fontSize: '13px', margin: 0, lineHeight: '1.5' }}>
-            ⚠️ <strong>{trade.politician}</strong> sits on the <strong>{analysis.correlatedCommittee}</strong> committee 
+            Note: <strong>{trade.politician}</strong> sits on the <strong>{analysis.correlatedCommittee}</strong> committee 
             and traded <strong>{trade.ticker}</strong>, which falls under that committee&apos;s oversight. 
             This could represent a potential conflict of interest.
           </p>
@@ -172,7 +172,7 @@ export function CommitteeInfo({
         padding: '16px 20px'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-          <span style={{ fontSize: '18px' }}>🏛️</span>
+          
           <h4 style={{ color: '#fff', fontSize: '14px', fontWeight: '600', margin: 0 }}>
             Committee Assignments
           </h4>
@@ -192,7 +192,7 @@ export function CommitteeInfo({
       padding: '16px 20px'
     }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
-        <span style={{ fontSize: '18px' }}>🏛️</span>
+        
         <h4 style={{ color: '#fff', fontSize: '14px', fontWeight: '600', margin: 0 }}>
           Committee Assignments
         </h4>

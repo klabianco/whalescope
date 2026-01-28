@@ -56,27 +56,25 @@ export default function Home() {
           marginBottom: '40px'
         }}>
           <Link href="/whales" style={{
-            background: 'linear-gradient(135deg, #1e3a5f 0%, #1a1a2e 100%)',
+            background: '#111118',
+            border: '1px solid #222',
             padding: '24px',
             borderRadius: '12px',
             textDecoration: 'none',
-            textAlign: 'center'
           }}>
-            <div style={{ fontSize: '32px', marginBottom: '8px' }}>🐋</div>
-            <div style={{ color: '#fff', fontWeight: '600' }}>Smart Money</div>
-            <div style={{ color: '#888', fontSize: '13px' }}>Crypto whales & Congress trades</div>
+            <div style={{ color: '#fff', fontWeight: '600', fontSize: '18px', marginBottom: '8px' }}>Smart Money</div>
+            <div style={{ color: '#888', fontSize: '14px' }}>Track crypto whales & Congress trades</div>
           </Link>
           
           <Link href="/search" style={{
-            background: 'linear-gradient(135deg, #1e3a5f 0%, #1a1a2e 100%)',
+            background: '#111118',
+            border: '1px solid #222',
             padding: '24px',
             borderRadius: '12px',
             textDecoration: 'none',
-            textAlign: 'center'
           }}>
-            <div style={{ fontSize: '32px', marginBottom: '8px' }}>🔍</div>
-            <div style={{ color: '#fff', fontWeight: '600' }}>Token Search</div>
-            <div style={{ color: '#888', fontSize: '13px' }}>Find top holders</div>
+            <div style={{ color: '#fff', fontWeight: '600', fontSize: '18px', marginBottom: '8px' }}>Token Search</div>
+            <div style={{ color: '#888', fontSize: '14px' }}>Find top holders for any token</div>
           </Link>
         </div>
 
@@ -91,13 +89,17 @@ export default function Home() {
             Recent Whale Trades
           </h2>
           <div style={{ 
-            background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)',
+            background: '#111118',
+            border: '1px solid #222',
             padding: '8px 16px',
             borderRadius: '8px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px'
           }}>
-            <span style={{ color: '#4ade80' }}>● Live</span>
-            <span style={{ marginLeft: '12px', color: '#888', fontSize: '14px' }}>
-              Tracking 20 wallets
+            <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#4ade80' }}></span>
+            <span style={{ color: '#888', fontSize: '14px' }}>
+              Live · Tracking 20 wallets
             </span>
           </div>
         </div>
@@ -177,20 +179,21 @@ export default function Home() {
 
         {/* CTA */}
         <div style={{
-          background: 'linear-gradient(135deg, #1e3a5f 0%, #1a1a2e 100%)',
-          padding: '32px',
-          borderRadius: '16px',
+          background: '#111118',
+          border: '1px solid #222',
+          padding: '40px',
+          borderRadius: '12px',
           textAlign: 'center',
         }}>
-          <h3 style={{ fontSize: '24px', marginBottom: '12px' }}>
+          <h3 style={{ fontSize: '24px', marginBottom: '12px', fontWeight: '600' }}>
             Get alerts when Congress trades
           </h3>
-          <p style={{ color: '#888', marginBottom: '20px' }}>
-            Real-time email notifications. $10/month in USDC. Cancel anytime.
+          <p style={{ color: '#666', marginBottom: '24px', fontSize: '16px' }}>
+            Real-time email notifications. $10/month. Cancel anytime.
           </p>
           <Link href="/subscribe" style={{
             display: 'inline-block',
-            background: '#4ade80',
+            background: '#fff',
             color: '#000',
             border: 'none',
             padding: '14px 32px',
@@ -200,13 +203,13 @@ export default function Home() {
             cursor: 'pointer',
             textDecoration: 'none'
           }}>
-            Subscribe Now
+            Subscribe
           </Link>
         </div>
 
         {/* Footer */}
         <footer style={{ textAlign: 'center', marginTop: '60px', color: '#666', fontSize: '14px' }}>
-          Built by <a href="https://x.com/WrenTheAI" style={{ color: '#60a5fa' }}>@WrenTheAI</a> 🪶
+          Built by <a href="https://x.com/WrenTheAI" style={{ color: '#60a5fa' }}>@WrenTheAI</a>
         </footer>
       </main>
     </>

@@ -54,7 +54,7 @@ export default function WalletClient({ address, walletInfo, walletTrades, stats 
           marginBottom: '32px'
         }}>
           <h1 style={{ fontSize: '32px', fontWeight: '700', marginBottom: '8px' }}>
-            🐋 {walletInfo.label}
+            {walletInfo.label}
           </h1>
           <p style={{ color: '#888', marginBottom: '16px' }}>
             {walletInfo.description}
@@ -193,7 +193,7 @@ export default function WalletClient({ address, walletInfo, walletTrades, stats 
             🐋 WhaleScope
           </Link>
           {' · '}
-          Built by <a href="https://x.com/WrenTheAI" style={{ color: '#60a5fa' }}>@WrenTheAI</a> 🪶
+          Built by <a href="https://x.com/WrenTheAI" style={{ color: '#60a5fa' }}>@WrenTheAI</a>
         </footer>
       </main>
     </>

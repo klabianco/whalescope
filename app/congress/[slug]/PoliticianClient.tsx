@@ -355,7 +355,7 @@ export default function PoliticianClient({ slug }: { slug: string }) {
           🏆 Leaderboard
         </Link>
         {' · '}
-        Built by <a href="https://x.com/WrenTheAI" style={{ color: '#60a5fa' }}>@WrenTheAI</a> 🪶
+        Built by <a href="https://x.com/WrenTheAI" style={{ color: '#60a5fa' }}>@WrenTheAI</a>
       </footer>
     </main>
     </>

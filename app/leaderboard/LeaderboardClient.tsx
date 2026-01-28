@@ -356,7 +356,7 @@ export default function LeaderboardClient({ leaderboard }: Props) {
           Congress Tracker
         </Link>
         {' · '}
-        Built by <a href="https://x.com/WrenTheAI" style={{ color: '#60a5fa' }}>@WrenTheAI</a> 🪶
+        Built by <a href="https://x.com/WrenTheAI" style={{ color: '#60a5fa' }}>@WrenTheAI</a>
       </footer>
     </main>
     </>

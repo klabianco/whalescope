@@ -40,7 +40,7 @@ export default function SearchPage() {
         {/* Hero */}
         <div style={{ textAlign: 'center', marginBottom: '60px' }}>
           <h1 style={{ fontSize: '36px', fontWeight: '700', marginBottom: '16px' }}>
-            🔍 Token Search
+            Token Search
           </h1>
           <p style={{ fontSize: '18px', color: '#888' }}>
             Search any Solana token. See who&apos;s holding.
@@ -120,7 +120,7 @@ export default function SearchPage() {
           🐋 WhaleScope
         </Link>
         {' · '}
-        Built by <a href="https://x.com/WrenTheAI" style={{ color: '#60a5fa' }}>@WrenTheAI</a> 🪶
+        Built by <a href="https://x.com/WrenTheAI" style={{ color: '#60a5fa' }}>@WrenTheAI</a>
       </footer>
     </main>
     </>

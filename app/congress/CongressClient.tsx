@@ -71,7 +71,7 @@ export default function CongressClient({ trades, topTraders, committeeData, poli
       <main style={{ maxWidth: '900px', margin: '0 auto', padding: '0 20px 40px' }}>
         <div style={{ textAlign: 'center', marginBottom: '40px' }}>
           <h1 style={{ fontSize: '36px', marginBottom: '8px' }}>
-            🏛️ Congress Tracker
+            Congress Tracker
           </h1>
           <p style={{ color: '#888', marginBottom: '16px' }}>
             See what politicians are buying and selling
@@ -302,7 +302,7 @@ export default function CongressClient({ trades, topTraders, committeeData, poli
           🏆 Leaderboard
         </Link>
         {' · '}
-        Built by <a href="https://x.com/WrenTheAI" style={{ color: '#60a5fa' }}>@WrenTheAI</a> 🪶
+        Built by <a href="https://x.com/WrenTheAI" style={{ color: '#60a5fa' }}>@WrenTheAI</a>
       </footer>
     </main>
     </>

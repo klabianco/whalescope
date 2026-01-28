@@ -278,7 +278,7 @@ export default function TokenClient({ mint }: { mint: string }) {
             cursor: 'pointer'
           }}
         >
-          🐋 Top Holders
+          Top Holders
         </button>
         <button
           onClick={() => setActiveTab('early')}
@@ -439,7 +439,7 @@ export default function TokenClient({ mint }: { mint: string }) {
           🐋 WhaleScope
         </Link>
         {' · '}
-        Built by <a href="https://x.com/WrenTheAI" style={{ color: '#60a5fa' }}>@WrenTheAI</a> 🪶
+        Built by <a href="https://x.com/WrenTheAI" style={{ color: '#60a5fa' }}>@WrenTheAI</a>
       </footer>
     </main>
     </>
