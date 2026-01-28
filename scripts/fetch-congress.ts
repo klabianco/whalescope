@@ -6,7 +6,8 @@ import { writeFileSync, readFileSync, existsSync } from 'fs';
 import { join } from 'path';
 
 interface QuiverTrade {
-  Representative: string;
+  Representative?: string;
+  Senator?: string;
   BioGuideID: string;
   Transaction: string;
   Ticker: string;
@@ -15,6 +16,37 @@ interface QuiverTrade {
   Amount: string;
   last_modified: string;
 }
+
+// Ticker → Company name lookup for common stocks
+const COMPANY_LOOKUP: Record<string, string> = {
+  'AAPL': 'Apple Inc', 'MSFT': 'Microsoft Corp', 'GOOGL': 'Alphabet Inc',
+  'AMZN': 'Amazon.com', 'NVDA': 'NVIDIA Corp', 'META': 'Meta Platforms',
+  'TSLA': 'Tesla Inc', 'AMD': 'Advanced Micro Devices', 'NFLX': 'Netflix Inc',
+  'AVGO': 'Broadcom Inc', 'CRM': 'Salesforce Inc', 'INTC': 'Intel Corp',
+  'QCOM': 'Qualcomm Inc', 'CSCO': 'Cisco Systems', 'ADBE': 'Adobe Inc',
+  'TXN': 'Texas Instruments', 'IBM': 'IBM Corp', 'ORCL': 'Oracle Corp',
+  'BA': 'Boeing Co', 'CAT': 'Caterpillar Inc', 'GS': 'Goldman Sachs',
+  'JPM': 'JPMorgan Chase', 'V': 'Visa Inc', 'MA': 'Mastercard Inc',
+  'UNH': 'UnitedHealth Group', 'JNJ': 'Johnson & Johnson', 'PFE': 'Pfizer Inc',
+  'MRK': 'Merck & Co', 'ABBV': 'AbbVie Inc', 'LLY': 'Eli Lilly',
+  'WMT': 'Walmart Inc', 'HD': 'Home Depot', 'KO': 'Coca-Cola Co',
+  'PEP': 'PepsiCo Inc', 'MCD': "McDonald's Corp", 'DIS': 'Walt Disney Co',
+  'PYPL': 'PayPal Holdings', 'SQ': 'Block Inc', 'SHOP': 'Shopify Inc',
+  'COIN': 'Coinbase Global', 'PLTR': 'Palantir Technologies',
+  'T': 'AT&T Inc', 'VZ': 'Verizon Communications', 'CMCSA': 'Comcast Corp',
+  'NOC': 'Northrop Grumman', 'LMT': 'Lockheed Martin', 'RTX': 'RTX Corp',
+  'GD': 'General Dynamics', 'GE': 'GE Aerospace', 'HON': 'Honeywell',
+  'MMM': '3M Company', 'XOM': 'Exxon Mobil', 'CVX': 'Chevron Corp',
+  'COP': 'ConocoPhillips', 'NEE': 'NextEra Energy', 'SO': 'Southern Co',
+  'VST': 'Vistra Corp', 'GEV': 'GE Vernova', 'FLR': 'Fluor Corp',
+  'CLX': 'Clorox Co', 'GIS': 'General Mills', 'UAL': 'United Airlines',
+  'DASH': 'DoorDash Inc', 'CBOE': 'Cboe Global Markets',
+  'BRK.B': 'Berkshire Hathaway', 'SPY': 'SPDR S&P 500 ETF',
+  'QQQ': 'Invesco QQQ Trust', 'IWM': 'iShares Russell 2000',
+  'BMY': 'Bristol-Myers Squibb', 'ARE': 'Alexandria Real Estate',
+  'WPC': 'W.P. Carey Inc', 'SWK': 'Stanley Black & Decker',
+  'BSCQ': 'Invesco BulletShares 2026',
+};
 
 // Party lookup by BioGuideID or name (known politicians)
 const PARTY_LOOKUP: Record<string, 'D' | 'R'> = {
@@ -51,6 +83,36 @@ const PARTY_LOOKUP: Record<string, 'D' | 'R'> = {
   'Dan Newhouse': 'R',
   'Virginia Foxx': 'R',
   'Robert E. Latta': 'R',
+  // Senators
+  'Gary Peters': 'D',
+  'Lindsey Graham': 'R',
+  'Tommy Tuberville': 'R',
+  'John Hoeven': 'R',
+  'Shelley Moore Capito': 'R',
+  'Markwayne Mullin': 'R',
+  'Bill Hagerty': 'R',
+  'Mark Kelly': 'D',
+  'Jacky Rosen': 'D',
+  'John Fetterman': 'D',
+  'Kyrsten Sinema': 'I',
+  'Joe Manchin': 'D',
+  'Susan Collins': 'R',
+  'Mitt Romney': 'R',
+  'John Thune': 'R',
+  'Mike Crapo': 'R',
+  'Tim Scott': 'R',
+  'Ted Cruz': 'R',
+  'Marco Rubio': 'R',
+  'Rand Paul': 'R',
+  'Pete Ricketts': 'R',
+  'Katie Britt': 'R',
+  'John Boozman': 'R',
+  'Angus King': 'I',
+  'A. Mitchell Jr. McConnell': 'R',
+  'John Hickenlooper': 'D',
+  'David H. McCormick': 'R',
+  'Sheldon Whitehouse': 'D',
+  'Tina Smith': 'D',
   // Add more as needed
 };
 
@@ -95,13 +157,17 @@ async function fetchFromQuiver(apiKey: string): Promise<CongressTrade[]> {
   
   for (const t of houseTrades.slice(0, 100)) {
     if (!t.Representative || !t.Ticker) continue;
+    const party = PARTY_LOOKUP[t.Representative];
+    if (!party) {
+      console.warn(`  ⚠️  Unknown party for House member: ${t.Representative} — defaulting to unknown`);
+    }
     trades.push({
       politician: t.Representative,
-      party: PARTY_LOOKUP[t.Representative] || 'R', // Default to R if unknown
+      party: party || 'R',
       chamber: 'House',
       state: '',
       ticker: t.Ticker,
-      company: '',
+      company: COMPANY_LOOKUP[t.Ticker] || '',
       type: t.Transaction?.toLowerCase()?.includes('sale') ? 'Sale' : 'Purchase',
       amount: t.Range || 'Unknown',
       filed: t.last_modified || '',
@@ -123,14 +189,19 @@ async function fetchFromQuiver(apiKey: string): Promise<CongressTrade[]> {
   console.log(`  Got ${senateTrades.length} Senate trades`);
   
   for (const t of senateTrades.slice(0, 100)) {
-    if (!t.Representative || !t.Ticker) continue;
+    const name = t.Senator || t.Representative;
+    if (!name || !t.Ticker) continue;
+    const party = PARTY_LOOKUP[name];
+    if (!party) {
+      console.warn(`  ⚠️  Unknown party for Senator: ${name} — defaulting to unknown`);
+    }
     trades.push({
-      politician: t.Representative,
-      party: PARTY_LOOKUP[t.Representative] || 'R', // Default to R if unknown
+      politician: name,
+      party: party || 'R',
       chamber: 'Senate',
       state: '',
       ticker: t.Ticker,
-      company: '',
+      company: COMPANY_LOOKUP[t.Ticker] || '',
       type: t.Transaction?.toLowerCase()?.includes('sale') ? 'Sale' : 'Purchase',
       amount: t.Range || 'Unknown',
       filed: t.last_modified || '',
