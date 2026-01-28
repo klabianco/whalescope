@@ -8,7 +8,8 @@
     "start": "next start",
     "fetch-whales": "npx tsx scripts/fetch-whale-trades.ts",
     "fetch-congress": "npx tsx scripts/fetch-congress.ts",
-    "fetch-all": "npm run fetch-whales && npm run fetch-congress",
+    "fetch-prices": "npx tsx scripts/fetch-stock-prices.ts",
+    "fetch-all": "npm run fetch-whales && npm run fetch-congress && npm run fetch-prices",
     "notify": "npx tsx scripts/notify-new-trades.ts",
     "fetch-and-notify": "npm run fetch-congress && npm run notify",
     "watch-payments": "npx tsx scripts/watch-payments.ts",
@@ -23,7 +24,8 @@
     "@solana/web3.js": "^1.98.4",
     "next": "^14.0.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "yahoo-finance2": "^3.13.0"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",

@@ -15,6 +15,26 @@ interface CongressTrade {
   traded: string;
 }
 
+interface PriceCache {
+  [ticker: string]: {
+    prices: { [date: string]: number };
+    lastUpdated: string;
+  };
+}
+
+// Load stock price cache
+function loadPriceCache(): PriceCache {
+  try {
+    const cachePath = join(process.cwd(), 'data', 'stock-prices.json');
+    if (existsSync(cachePath)) {
+      return JSON.parse(readFileSync(cachePath, 'utf-8'));
+    }
+  } catch (e) {
+    console.log('No price cache available');
+  }
+  return {};
+}
+
 // Parse amount range to get midpoint estimate
 function parseAmount(amount: string): number {
   if (!amount) return 0;
@@ -36,26 +56,28 @@ function parseAmount(amount: string): number {
   return 0;
 }
 
-// Generate deterministic "returns" based on ticker and trade date for demo purposes
-// In production, you'd use actual price data from an API
-function estimateReturn(ticker: string, tradeDate: string, type: 'Purchase' | 'Sale'): number {
-  // Use a simple hash of ticker + date to generate a pseudo-random but consistent return
-  const hash = (ticker + tradeDate).split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+// Calculate actual return from price cache
+function calculateReturn(ticker: string, tradeDate: string, type: 'Purchase' | 'Sale', priceCache: PriceCache): number | null {
+  const tickerData = priceCache[ticker];
+  if (!tickerData || !tickerData.prices) return null;
   
-  // Tech stocks generally performed well
-  const techTickers = ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'NVDA', 'META', 'AVGO', 'AMD', 'PLTR', 'COIN'];
-  const isTech = techTickers.includes(ticker);
+  const tradeDateKey = new Date(tradeDate).toISOString().split('T')[0];
+  const today = new Date().toISOString().split('T')[0];
   
-  // Base return between -15% and +40%, skewed positive for tech
-  const baseReturn = isTech 
-    ? ((hash % 45) - 5) / 100  // -5% to +40%
-    : ((hash % 40) - 15) / 100; // -15% to +25%
+  const buyPrice = tickerData.prices[tradeDateKey];
+  const currentPrice = tickerData.prices[today] || tickerData.prices[tickerData.lastUpdated];
   
-  // Purchases gain when price goes up, sales "gain" when sold before drop
-  return type === 'Purchase' ? baseReturn : -baseReturn * 0.3;
+  if (!buyPrice || !currentPrice) return null;
+  
+  // Calculate percentage return
+  const returnPct = (currentPrice - buyPrice) / buyPrice;
+  
+  // For purchases: gain when price goes up
+  // For sales: we measure if they sold before a drop (inverted)
+  return type === 'Purchase' ? returnPct : -returnPct;
 }
 
-function calculateLeaderboard(trades: CongressTrade[]) {
+function calculateLeaderboard(trades: CongressTrade[], priceCache: PriceCache) {
   const now = new Date();
   const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
   const ninetyDaysAgo = new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000);
@@ -64,13 +86,13 @@ function calculateLeaderboard(trades: CongressTrade[]) {
   const politicianData = new Map<string, {
     party: string;
     chamber: string;
-    trades: { amount: number; return: number; date: Date }[];
+    trades: { amount: number; return: number | null; date: Date }[];
   }>();
   
   for (const trade of trades) {
     const tradeDate = new Date(trade.traded || trade.filed);
     const amount = parseAmount(trade.amount);
-    const returnPct = estimateReturn(trade.ticker, trade.traded, trade.type);
+    const returnPct = calculateReturn(trade.ticker, trade.traded || trade.filed, trade.type, priceCache);
     
     if (!politicianData.has(trade.politician)) {
       politicianData.set(trade.politician, {
@@ -90,13 +112,13 @@ function calculateLeaderboard(trades: CongressTrade[]) {
   const leaderboard = Array.from(politicianData.entries()).map(([name, data]) => {
     // Calculate weighted average return for different periods
     const calcReturn = (trades: typeof data.trades, cutoff: Date) => {
-      const filtered = trades.filter(t => t.date >= cutoff);
+      const filtered = trades.filter(t => t.date >= cutoff && t.return !== null);
       if (filtered.length === 0) return null;
       
       const totalAmount = filtered.reduce((sum, t) => sum + t.amount, 0);
       if (totalAmount === 0) return null;
       
-      const weightedReturn = filtered.reduce((sum, t) => sum + t.return * t.amount, 0) / totalAmount;
+      const weightedReturn = filtered.reduce((sum, t) => sum + (t.return || 0) * t.amount, 0) / totalAmount;
       return weightedReturn;
     };
     
@@ -142,7 +164,8 @@ function getTrades(): CongressTrade[] {
 
 export default function LeaderboardPage() {
   const trades = getTrades();
-  const leaderboard = calculateLeaderboard(trades);
+  const priceCache = loadPriceCache();
+  const leaderboard = calculateLeaderboard(trades, priceCache);
   
   return <LeaderboardClient leaderboard={leaderboard} />;
 }
