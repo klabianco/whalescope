@@ -1,27 +1,39 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { useWallet, useConnection } from '@solana/wallet-adapter-react';
-import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
+import { useWalletModal } from '@solana/wallet-adapter-react-ui';
 import { PublicKey, Transaction } from '@solana/web3.js';
 import { createTransferInstruction, getAssociatedTokenAddress, TOKEN_PROGRAM_ID } from '@solana/spl-token';
+import { Header } from '../components/Header';
+import { Footer } from '../components/Footer';
 
 const WALLET = new PublicKey('hyTku9MYUuBtCWPxqmeyWcBvYuUbVKfXtafjBr7eAh3');
 const USDC_MINT = new PublicKey('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v');
 const USDC_DECIMALS = 6;
-const PRICE_USDC = 10;
 
-export default function SubscribePage() {
-  const { publicKey, sendTransaction } = useWallet();
+const PRICES = {
+  pro_monthly: 19,
+  pro_yearly: 150,
+};
+
+function SubscribeContent() {
+  const searchParams = useSearchParams();
+  const plan = searchParams.get('plan') || 'pro_monthly';
+  const price = PRICES[plan as keyof typeof PRICES] || PRICES.pro_monthly;
+  const isYearly = plan === 'pro_yearly';
+
+  const { publicKey, sendTransaction, connected } = useWallet();
+  const { setVisible } = useWalletModal();
   const { connection } = useConnection();
-  const [email, setEmail] = useState('');
   const [status, setStatus] = useState<'idle' | 'processing' | 'success' | 'error'>('idle');
   const [errorMsg, setErrorMsg] = useState('');
   const [txSig, setTxSig] = useState('');
 
   const handlePay = async () => {
-    if (!publicKey || !email || !email.includes('@')) {
-      setErrorMsg('Enter a valid email first');
+    if (!publicKey) {
+      setVisible(true);
       return;
     }
 
@@ -29,33 +41,29 @@ export default function SubscribePage() {
     setErrorMsg('');
 
     try {
-      // Get token accounts
       const fromAta = await getAssociatedTokenAddress(USDC_MINT, publicKey);
       const toAta = await getAssociatedTokenAddress(USDC_MINT, WALLET);
 
-      // Create transfer instruction
       const transferIx = createTransferInstruction(
         fromAta,
         toAta,
         publicKey,
-        PRICE_USDC * Math.pow(10, USDC_DECIMALS),
+        price * Math.pow(10, USDC_DECIMALS),
         [],
         TOKEN_PROGRAM_ID
       );
 
-      // Create memo instruction
+      const memoData = JSON.stringify({ wallet: publicKey.toBase58(), plan });
       const memoIx = {
         keys: [],
         programId: new PublicKey('MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr'),
-        data: Buffer.from(email.trim().toLowerCase())
+        data: Buffer.from(memoData)
       };
 
-      // Build transaction
       const tx = new Transaction().add(transferIx).add(memoIx);
       tx.feePayer = publicKey;
       tx.recentBlockhash = (await connection.getLatestBlockhash()).blockhash;
 
-      // Send
       const sig = await sendTransaction(tx, connection);
       await connection.confirmTransaction(sig, 'confirmed');
 
@@ -69,120 +77,142 @@ export default function SubscribePage() {
   };
 
   return (
-    <div style={{ 
-      maxWidth: 600, 
-      margin: '0 auto', 
-      padding: '40px 20px',
-      fontFamily: 'system-ui, sans-serif',
-      color: '#fff',
-      minHeight: '100vh',
-      background: '#0a0a0a'
-    }}>
-      <h1 style={{ marginBottom: 8 }}>WhaleScope Pro</h1>
-      <p style={{ color: '#888', marginBottom: 32 }}>
-        Get instant email alerts when Congress members trade stocks.
-      </p>
-      
-      <div style={{ 
-        background: '#161618', 
-        padding: 24, 
-        borderRadius: 12,
-        marginBottom: 24,
-        border: '1px solid #222'
-      }}>
-        <h3 style={{ margin: '0 0 8px 0' }}>$10/month in USDC</h3>
-        <ul style={{ margin: 0, paddingLeft: 20, color: '#aaa' }}>
-          <li>Real-time trade alerts via email</li>
-          <li>Filter by politician or sector</li>
-          <li>Cancel anytime</li>
-        </ul>
+    <main style={{ maxWidth: '500px', margin: '0 auto', padding: '40px 24px 80px' }}>
+      <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+        <h1 style={{ fontSize: '28px', fontWeight: '700', color: '#fff', marginBottom: '8px' }}>
+          WhaleScope Pro
+        </h1>
+        <p style={{ color: '#71717a', fontSize: '15px' }}>
+          {isYearly ? 'Annual subscription' : 'Monthly subscription'}
+        </p>
       </div>
 
-      {status === 'success' ? (
-        <div style={{ 
-          background: '#0d2818', 
-          padding: 24, 
-          borderRadius: 12,
-          border: '1px solid #1a4d2e',
-          textAlign: 'center'
-        }}>
-          <div style={{ fontSize: 48, marginBottom: 16 }}>✅</div>
-          <h3 style={{ margin: '0 0 12px 0', color: '#fff' }}>
-            Payment Successful!
-          </h3>
-          <p style={{ color: '#aaa', marginBottom: 16 }}>
-            You'll receive a welcome email at <strong>{email}</strong> within 10 minutes.
-          </p>
-          <a 
-            href={`https://solscan.io/tx/${txSig}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ color: '#60a5fa', fontSize: 14 }}
-          >
-            View transaction →
-          </a>
+      <div style={{
+        background: '#18181b',
+        border: '1px solid #27272a',
+        borderRadius: '16px',
+        padding: '32px',
+        marginBottom: '24px',
+        textAlign: 'center'
+      }}>
+        <div style={{ marginBottom: '24px' }}>
+          <span style={{ fontSize: '48px', fontWeight: '700', color: '#fff' }}>${price}</span>
+          <span style={{ color: '#71717a', fontSize: '18px', marginLeft: '4px' }}>
+            {isYearly ? '/year' : '/month'}
+          </span>
         </div>
-      ) : (
-        <>
-          <input
-            type="email"
-            placeholder="Your email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            style={{
-              width: '100%',
-              padding: '12px 16px',
-              fontSize: 16,
-              border: '2px solid #333',
-              borderRadius: 8,
-              marginBottom: 16,
-              boxSizing: 'border-box',
-              background: '#111',
-              color: '#fff'
-            }}
-          />
 
-          {!publicKey ? (
-            <div style={{ textAlign: 'center' }}>
-              <p style={{ color: '#888', marginBottom: 12 }}>Connect your wallet to pay</p>
-              <WalletMultiButton style={{ 
-                background: '#fff',
-                color: '#000',
-                borderRadius: 8,
-                fontWeight: 600
-              }} />
-            </div>
-          ) : (
+        {isYearly && (
+          <p style={{ color: '#22c55e', fontSize: '14px', marginBottom: '24px' }}>
+            That's just $12.50/month — save $78 vs monthly
+          </p>
+        )}
+
+        <ul style={{ 
+          listStyle: 'none', 
+          padding: 0, 
+          margin: '0 0 32px 0',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '12px',
+          textAlign: 'left'
+        }}>
+          {[
+            'Real-time trade alerts',
+            'Congress trades (instant)',
+            'Full Smart Money labels',
+            'Unlimited watchlist',
+            'Multi-chain support',
+          ].map((item, i) => (
+            <li key={i} style={{ 
+              color: '#a1a1aa', 
+              fontSize: '14px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10px'
+            }}>
+              <span style={{ color: '#22c55e' }}>✓</span>
+              {item}
+            </li>
+          ))}
+        </ul>
+
+        {status === 'success' ? (
+          <div style={{
+            background: 'rgba(34, 197, 94, 0.1)',
+            border: '1px solid rgba(34, 197, 94, 0.3)',
+            borderRadius: '12px',
+            padding: '24px'
+          }}>
+            <div style={{ fontSize: '32px', marginBottom: '12px' }}>✓</div>
+            <h3 style={{ color: '#22c55e', fontSize: '18px', fontWeight: '600', marginBottom: '8px' }}>
+              Payment Successful!
+            </h3>
+            <p style={{ color: '#a1a1aa', fontSize: '14px', marginBottom: '16px' }}>
+              Your Pro subscription is now active.
+            </p>
+            <a
+              href={`https://solscan.io/tx/${txSig}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: '#60a5fa', fontSize: '14px' }}
+            >
+              View transaction →
+            </a>
+          </div>
+        ) : (
+          <>
             <button
               onClick={handlePay}
-              disabled={status === 'processing' || !email}
+              disabled={status === 'processing'}
               style={{
                 width: '100%',
-                padding: '14px 16px',
-                fontSize: 16,
-                background: status === 'processing' ? '#333' : '#fff',
-                color: status === 'processing' ? '#888' : '#000',
+                padding: '16px 24px',
+                background: status === 'processing' ? '#27272a' : '#fff',
+                color: status === 'processing' ? '#71717a' : '#000',
                 border: 'none',
-                borderRadius: 8,
-                cursor: status === 'processing' ? 'wait' : 'pointer',
-                fontWeight: 600
+                borderRadius: '12px',
+                fontSize: '16px',
+                fontWeight: '600',
+                cursor: status === 'processing' ? 'wait' : 'pointer'
               }}
             >
-              {status === 'processing' ? 'Processing...' : `Pay $${PRICE_USDC} USDC`}
+              {status === 'processing' 
+                ? 'Processing...' 
+                : connected 
+                  ? `Pay ${price} USDC`
+                  : 'Connect Wallet to Pay'
+              }
             </button>
-          )}
 
-          {errorMsg && (
-            <p style={{ color: '#f87171', marginTop: 12, textAlign: 'center' }}>
-              {errorMsg}
-            </p>
-          )}
-        </>
-      )}
-      
-      <p style={{ marginTop: 32, fontSize: 14, color: '#666', textAlign: 'center' }}>
-        <a href="/" style={{ color: '#888' }}>← Back to WhaleScope</a>
+            {errorMsg && (
+              <p style={{ color: '#f87171', marginTop: '16px', fontSize: '14px' }}>
+                {errorMsg}
+              </p>
+            )}
+          </>
+        )}
+      </div>
+
+      <p style={{ color: '#52525b', fontSize: '13px', textAlign: 'center' }}>
+        Payments are processed on Solana. USDC only.
       </p>
-    </div>
+    </main>
+  );
+}
+
+export default function SubscribePage() {
+  return (
+    <>
+      <Header />
+      <Suspense fallback={
+        <main style={{ maxWidth: '500px', margin: '0 auto', padding: '40px 24px 80px', textAlign: 'center' }}>
+          <p style={{ color: '#71717a' }}>Loading...</p>
+        </main>
+      }>
+        <SubscribeContent />
+      </Suspense>
+      <Footer />
+    </>
   );
 }
