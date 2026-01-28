@@ -190,9 +190,9 @@ export default function Home() {
             Get alerts when Congress trades
           </h3>
           <p style={{ color: '#666', marginBottom: '24px', fontSize: '16px' }}>
-            Real-time email notifications. $10/month. Cancel anytime.
+            Real-time alerts via Telegram & Discord. From $15/month.
           </p>
-          <Link href="/subscribe" style={{
+          <Link href="/pricing" style={{
             display: 'inline-block',
             background: '#fff',
             color: '#000',
@@ -204,7 +204,7 @@ export default function Home() {
             cursor: 'pointer',
             textDecoration: 'none'
           }}>
-            Subscribe
+            View Pricing
           </Link>
         </div>
 

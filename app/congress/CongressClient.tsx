@@ -156,8 +156,8 @@ export default function CongressClient({ trades, topTraders, committeeData, poli
             }}
           >
             {f === 'all' ? 'All Trades' : 
-             f === 'buy' ? '🟢 Buys' : 
-             f === 'sell' ? '🔴 Sells' :
+             f === 'buy' ? 'Buys' : 
+             f === 'sell' ? 'Sells' :
              <>Flagged <span style={{ 
                background: filter === f ? 'rgba(0,0,0,0.2)' : '#333',
                padding: '2px 6px',

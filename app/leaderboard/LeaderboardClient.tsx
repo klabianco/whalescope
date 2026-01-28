@@ -83,7 +83,7 @@ export default function LeaderboardClient({ leaderboard }: Props) {
             marginBottom: '16px'
           }}>
             <span style={{ color: '#fbbf24', fontSize: '13px', fontWeight: '500', letterSpacing: '0.5px' }}>
-              📊 PERFORMANCE RANKINGS
+              PERFORMANCE RANKINGS
             </span>
           </div>
           <h1 style={{ 
@@ -194,10 +194,13 @@ export default function LeaderboardClient({ leaderboard }: Props) {
                 background: 'linear-gradient(90deg, transparent, #fbbf24, transparent)'
               }} />
               <div style={{ 
-                fontSize: '36px', 
-                marginBottom: '8px'
+                fontSize: '14px', 
+                marginBottom: '8px',
+                color: '#fbbf24',
+                fontWeight: '700',
+                letterSpacing: '3px'
               }}>
-                👑
+                #1
               </div>
               <div style={{ 
                 fontSize: '13px', 
@@ -471,7 +474,6 @@ export default function LeaderboardClient({ leaderboard }: Props) {
           border: '1px solid rgba(251, 191, 36, 0.15)'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
-            <span style={{ fontSize: '16px' }}>⚠️</span>
             <h4 style={{ color: '#fbbf24', fontSize: '14px', fontWeight: '600', margin: 0 }}>
               Methodology & Disclaimer
             </h4>
