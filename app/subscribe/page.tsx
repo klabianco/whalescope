@@ -107,7 +107,7 @@ export default function SubscribePage() {
           textAlign: 'center'
         }}>
           <div style={{ fontSize: 48, marginBottom: 16 }}>✅</div>
-          <h3 style={{ margin: '0 0 12px 0', color: '#4ade80' }}>
+          <h3 style={{ margin: '0 0 12px 0', color: '#fff' }}>
             Payment Successful!
           </h3>
           <p style={{ color: '#aaa', marginBottom: 16 }}>
@@ -146,7 +146,7 @@ export default function SubscribePage() {
             <div style={{ textAlign: 'center' }}>
               <p style={{ color: '#888', marginBottom: 12 }}>Connect your wallet to pay</p>
               <WalletMultiButton style={{ 
-                background: '#4ade80',
+                background: '#fff',
                 color: '#000',
                 borderRadius: 8,
                 fontWeight: 600
@@ -160,7 +160,7 @@ export default function SubscribePage() {
                 width: '100%',
                 padding: '14px 16px',
                 fontSize: 16,
-                background: status === 'processing' ? '#333' : '#4ade80',
+                background: status === 'processing' ? '#333' : '#fff',
                 color: status === 'processing' ? '#888' : '#000',
                 border: 'none',
                 borderRadius: 8,

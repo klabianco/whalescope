@@ -204,8 +204,8 @@ export default function LeaderboardClient({ leaderboard }: Props) {
               onClick={() => setTimeFrame(tf)}
               style={{
                 padding: '8px 16px',
-                background: timeFrame === tf ? '#4ade80' : '#222',
-                color: timeFrame === tf ? '#000' : '#888',
+                background: timeFrame === tf ? '#333' : '#222',
+                color: timeFrame === tf ? '#fff' : '#888',
                 border: 'none',
                 borderRadius: '6px',
                 fontSize: '14px',

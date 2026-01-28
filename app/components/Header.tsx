@@ -42,7 +42,7 @@ export const Header: FC = () => {
           </Link>
         )}
         <WalletMultiButton style={{
-          backgroundColor: '#4ade80',
+          backgroundColor: '#fff',
           color: '#000',
           borderRadius: '8px',
           fontSize: '14px',

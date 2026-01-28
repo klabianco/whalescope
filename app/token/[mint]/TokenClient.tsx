@@ -219,8 +219,8 @@ export default function TokenClient({ mint }: { mint: string }) {
         onClick={() => handleFollow(address)}
         style={{
           padding: '6px 12px',
-          background: isFollowing ? '#4ade80' : '#333',
-          color: isFollowing ? '#000' : '#fff',
+          background: isFollowing ? '#333' : '#222',
+          color: '#fff',
           border: 'none',
           borderRadius: '6px',
           fontSize: '12px',
@@ -269,8 +269,8 @@ export default function TokenClient({ mint }: { mint: string }) {
           onClick={() => setActiveTab('holders')}
           style={{
             padding: '10px 20px',
-            background: activeTab === 'holders' ? '#4ade80' : 'transparent',
-            color: activeTab === 'holders' ? '#000' : '#888',
+            background: activeTab === 'holders' ? '#333' : 'transparent',
+            color: activeTab === 'holders' ? '#fff' : '#888',
             border: 'none',
             borderRadius: '8px',
             fontSize: '14px',
@@ -284,8 +284,8 @@ export default function TokenClient({ mint }: { mint: string }) {
           onClick={() => setActiveTab('early')}
           style={{
             padding: '10px 20px',
-            background: activeTab === 'early' ? '#4ade80' : 'transparent',
-            color: activeTab === 'early' ? '#000' : '#888',
+            background: activeTab === 'early' ? '#333' : 'transparent',
+            color: activeTab === 'early' ? '#fff' : '#888',
             border: 'none',
             borderRadius: '8px',
             fontSize: '14px',

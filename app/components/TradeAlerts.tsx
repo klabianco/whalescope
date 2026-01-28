@@ -133,7 +133,7 @@ export default function TradeAlerts({ politicians = [], defaultPolitician, compa
         textAlign: 'center'
       }}>
         <div style={{ fontSize: '24px', marginBottom: '8px' }}>✅</div>
-        <p style={{ color: '#4ade80', fontWeight: '600', marginBottom: '8px' }}>
+        <p style={{ color: '#fff', fontWeight: '600', marginBottom: '8px' }}>
           You&apos;re subscribed!
         </p>
         <p style={{ color: '#86efac', fontSize: '13px' }}>
@@ -144,8 +144,8 @@ export default function TradeAlerts({ politicians = [], defaultPolitician, compa
           style={{
             marginTop: '12px',
             background: 'transparent',
-            border: '1px solid #4ade80',
-            color: '#4ade80',
+            border: '1px solid #444',
+            color: '#fff',
             padding: '8px 16px',
             borderRadius: '6px',
             fontSize: '13px',
@@ -229,7 +229,7 @@ export default function TradeAlerts({ politicians = [], defaultPolitician, compa
                       onClick={() => togglePolitician(name)}
                       style={{
                         padding: '6px 12px',
-                        background: selectedPoliticians.includes(name) ? '#4ade80' : '#222',
+                        background: selectedPoliticians.includes(name) ? '#333' : '#222',
                         color: selectedPoliticians.includes(name) ? '#000' : '#888',
                         border: 'none',
                         borderRadius: '6px',
@@ -312,7 +312,7 @@ export default function TradeAlerts({ politicians = [], defaultPolitician, compa
                 type="checkbox"
                 checked={unusualActivity}
                 onChange={(e) => setUnusualActivity(e.target.checked)}
-                style={{ width: '18px', height: '18px', accentColor: '#4ade80' }}
+                style={{ width: '18px', height: '18px', accentColor: '#666' }}
               />
               <span style={{ color: '#ccc', fontSize: '14px' }}>
                 Alert me about unusual trading activity
@@ -334,7 +334,7 @@ export default function TradeAlerts({ politicians = [], defaultPolitician, compa
           style={{
             width: '100%',
             padding: '14px',
-            background: '#4ade80',
+            background: '#fff',
             color: '#000',
             border: 'none',
             borderRadius: '8px',

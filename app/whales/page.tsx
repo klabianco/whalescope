@@ -232,8 +232,8 @@ export default function WhalesPage() {
                   }}
                   style={{
                     padding: '10px 20px',
-                    background: followingWallets.includes(whale.address) ? '#4ade80' : '#333',
-                    color: followingWallets.includes(whale.address) ? '#000' : '#fff',
+                    background: followingWallets.includes(whale.address) ? '#333' : '#222',
+                    color: '#fff',
                     border: 'none',
                     borderRadius: '8px',
                     fontSize: '14px',
@@ -302,8 +302,8 @@ export default function WhalesPage() {
                   }}
                   style={{
                     padding: '10px 20px',
-                    background: followingPoliticians.includes(pol.slug) ? '#4ade80' : '#333',
-                    color: followingPoliticians.includes(pol.slug) ? '#000' : '#fff',
+                    background: followingPoliticians.includes(pol.slug) ? '#333' : '#222',
+                    color: '#fff',
                     border: 'none',
                     borderRadius: '8px',
                     fontSize: '14px',

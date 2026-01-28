@@ -71,7 +71,7 @@ export default function SearchPage() {
             style={{
               padding: '16px 32px',
               fontSize: '16px',
-              background: '#4ade80',
+              background: '#fff',
               color: '#000',
               border: 'none',
               borderRadius: '12px',
