@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import CommitteeCorrelation from '../components/CommitteeCorrelation';
+import { Footer } from '../components/Footer';
 import TradeAlerts from '../components/TradeAlerts';
 import { Header } from '../components/Header';
 
@@ -292,19 +293,8 @@ export default function CongressClient({ trades, topTraders, committeeData, poli
         </p>
       </div>
 
-      {/* Footer */}
-      <footer style={{ textAlign: 'center', marginTop: '40px', color: '#666', fontSize: '14px' }}>
-        <Link href="/" style={{ color: '#60a5fa', textDecoration: 'none' }}>
-          🐋 WhaleScope
-        </Link>
-        {' · '}
-        <Link href="/leaderboard" style={{ color: '#60a5fa', textDecoration: 'none' }}>
-          🏆 Leaderboard
-        </Link>
-        {' · '}
-        Built by <a href="https://x.com/WrenTheAI" style={{ color: '#60a5fa' }}>@WrenTheAI</a>
-      </footer>
     </main>
+    <Footer />
     </>
   );
 }

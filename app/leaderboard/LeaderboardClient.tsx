@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { Header } from '../components/Header';
+import { Footer } from '../components/Footer';
 
 interface LeaderboardEntry {
   name: string;
@@ -346,19 +347,8 @@ export default function LeaderboardClient({ leaderboard }: Props) {
         </p>
       </div>
 
-      {/* Footer */}
-      <footer style={{ textAlign: 'center', marginTop: '40px', color: '#666', fontSize: '14px' }}>
-        <Link href="/" style={{ color: '#60a5fa', textDecoration: 'none' }}>
-          🐋 WhaleScope
-        </Link>
-        {' · '}
-        <Link href="/congress" style={{ color: '#60a5fa', textDecoration: 'none' }}>
-          Congress Tracker
-        </Link>
-        {' · '}
-        Built by <a href="https://x.com/WrenTheAI" style={{ color: '#60a5fa' }}>@WrenTheAI</a>
-      </footer>
     </main>
+    <Footer />
     </>
   );
 }

@@ -7,6 +7,7 @@ import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import { CommitteeInfo } from '../../components/CommitteeCorrelation';
 import TradeAlerts from '../../components/TradeAlerts';
 import { Header } from '../../components/Header';
+import { Footer } from '../../components/Footer';
 
 interface Trade {
   politician: string;
@@ -346,18 +347,8 @@ export default function PoliticianClient({ slug }: { slug: string }) {
       )}
 
       {/* Footer */}
-      <footer style={{ textAlign: 'center', marginTop: '60px', color: '#666', fontSize: '14px' }}>
-        <Link href="/" style={{ color: '#60a5fa', textDecoration: 'none' }}>
-          🐋 WhaleScope
-        </Link>
-        {' · '}
-        <Link href="/leaderboard" style={{ color: '#60a5fa', textDecoration: 'none' }}>
-          🏆 Leaderboard
-        </Link>
-        {' · '}
-        Built by <a href="https://x.com/WrenTheAI" style={{ color: '#60a5fa' }}>@WrenTheAI</a>
-      </footer>
     </main>
+    <Footer />
     </>
   );
 }
