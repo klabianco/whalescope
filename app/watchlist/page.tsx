@@ -160,7 +160,7 @@ export default function WatchlistPage() {
               fontWeight: '600',
               height: '48px',
               padding: '0 32px'
-            }} />
+            }}>Connect Wallet</WalletMultiButton>
           </div>
         </main>
       </>

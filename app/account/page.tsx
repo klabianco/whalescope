@@ -125,7 +125,7 @@ export default function AccountPage() {
               fontWeight: '600',
               height: '48px',
               padding: '0 32px',
-            }} />
+            }}>Connect Wallet</WalletMultiButton>
           </div>
         </main>
         <Footer />

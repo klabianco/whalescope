@@ -235,7 +235,7 @@ function CheckoutContent() {
                   justifyContent: 'center',
                   backgroundColor: '#27272a',
                   borderRadius: '10px'
-                }} />
+                }}>Connect Wallet</WalletMultiButton>
               </div>
             )}
 
