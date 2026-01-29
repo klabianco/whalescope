@@ -110,6 +110,7 @@ export default function PricingClient() {
             .ws-compare-grid { grid-template-columns: 1fr 90px 90px 90px !important; font-size: 12px !important; }
             .ws-compare-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
           }
+          .ws-compare-link:hover { text-decoration: underline !important; }
         `}</style>
         <div className="ws-pricing-grid" style={{ 
           display: 'grid',
@@ -200,16 +201,28 @@ export default function PricingClient() {
             </div>
 
             <div style={{ marginBottom: '24px' }}>
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
-                <span style={{ fontSize: '48px', fontWeight: '700', color: '#fff' }}>
-                  ${PRICING.pro.monthly}
-                </span>
-                <span style={{ color: '#71717a', fontSize: '16px' }}>/month</span>
-              </div>
-              {billing === 'yearly' && (
-                <p style={{ color: '#22c55e', fontSize: '13px', marginTop: '4px' }}>
-                  ${PRICING.pro.yearly}/year — one-time payment ({PRICING_DISPLAY.pro.monthsFree} months free)
-                </p>
+              {billing === 'monthly' ? (
+                <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
+                  <span style={{ fontSize: '48px', fontWeight: '700', color: '#fff' }}>
+                    ${PRICING.pro.monthly}
+                  </span>
+                  <span style={{ color: '#71717a', fontSize: '16px' }}>/month</span>
+                </div>
+              ) : (
+                <>
+                  <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
+                    <span style={{ fontSize: '24px', fontWeight: '600', color: '#71717a', textDecoration: 'line-through' }}>
+                      ${PRICING.pro.monthly}
+                    </span>
+                    <span style={{ fontSize: '48px', fontWeight: '700', color: '#fff' }}>
+                      ${PRICING_DISPLAY.pro.monthlyEquivalent}
+                    </span>
+                    <span style={{ color: '#71717a', fontSize: '16px' }}>/month</span>
+                  </div>
+                  <p style={{ color: '#22c55e', fontSize: '13px', marginTop: '4px' }}>
+                    ${PRICING.pro.yearly}/year — one-time payment ({PRICING_DISPLAY.pro.monthsFree} months free)
+                  </p>
+                </>
               )}
             </div>
 
@@ -279,8 +292,12 @@ export default function PricingClient() {
             {/* Header */}
             <div style={{ color: '#71717a', fontSize: '13px', fontWeight: '600' }}></div>
             <div style={{ color: '#22c55e', fontSize: '13px', fontWeight: '600', textAlign: 'center' }}>WhaleScope Pro</div>
-            <div style={{ color: '#71717a', fontSize: '13px', fontWeight: '600', textAlign: 'center' }}>Unusual Whales</div>
-            <div style={{ color: '#71717a', fontSize: '13px', fontWeight: '600', textAlign: 'center' }}>Nansen Pro</div>
+            <div style={{ fontSize: '13px', fontWeight: '600', textAlign: 'center' }}>
+              <a href="https://unusualwhales.com/pricing" target="_blank" rel="noopener noreferrer" className="ws-compare-link" style={{ color: '#71717a', textDecoration: 'none' }}>Unusual Whales</a>
+            </div>
+            <div style={{ fontSize: '13px', fontWeight: '600', textAlign: 'center' }}>
+              <a href="https://www.nansen.ai/pricing" target="_blank" rel="noopener noreferrer" className="ws-compare-link" style={{ color: '#71717a', textDecoration: 'none' }}>Nansen Pro</a>
+            </div>
             
             {/* Monthly Price */}
             <div style={{ color: '#a1a1aa', fontSize: '14px', padding: '12px 0', borderTop: '1px solid #27272a' }}>Monthly price</div>
@@ -337,6 +354,9 @@ export default function PricingClient() {
             <div style={{ color: '#22c55e', fontSize: '14px', fontWeight: '700', textAlign: 'center', padding: '12px 0', borderTop: '1px solid #27272a' }}>${348 - PRICING.pro.yearly}/yr</div>
           </div>
           </div>{/* close ws-compare-wrap */}
+          <p style={{ color: '#52525b', fontSize: '12px', textAlign: 'center', marginTop: '16px', marginBottom: 0 }}>
+            Pricing as of January 2026. Check competitor pages directly for current rates.
+          </p>
         </div>
 
         {/* FAQ Section */}
