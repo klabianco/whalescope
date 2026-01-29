@@ -3,6 +3,7 @@
 import { useEffect, useState, useMemo } from 'react';
 import Link from 'next/link';
 import { useWallet } from '@solana/wallet-adapter-react';
+import { WalletReadyState } from '@solana/wallet-adapter-base';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { EmailCapture } from './components/EmailCapture';
@@ -50,7 +51,7 @@ export default function Home() {
   const [followingWallets, setFollowingWallets] = useState<string[]>([]);
   const [limitWarning, setLimitWarning] = useState(false);
   const [connectPrompt, setConnectPrompt] = useState(false);
-  const { publicKey, connected } = useWallet();
+  const { publicKey, connected, wallets, select } = useWallet();
   const storageKey = publicKey?.toBase58();
 
   useEffect(() => {
@@ -343,37 +344,75 @@ export default function Home() {
               background: '#111118',
               border: '1px solid #333',
               borderRadius: '16px',
-              padding: '32px',
-              maxWidth: '400px',
+              padding: '28px',
+              maxWidth: '380px',
               width: '90%',
               textAlign: 'center',
             }}
           >
-            <p style={{ color: '#fff', fontSize: '16px', fontWeight: '600', lineHeight: '1.5', marginBottom: '20px' }}>
+            <p style={{ color: '#fff', fontSize: '15px', fontWeight: '600', lineHeight: '1.5', marginBottom: '20px' }}>
               Your wallet is your account. Connect to save your watchlist and get alerts when whales trade.
             </p>
-            <button
-              onClick={() => {
-                setConnectPrompt(false);
-                setTimeout(() => {
-                  document.querySelector<HTMLButtonElement>('.wallet-adapter-button')?.click();
-                }, 150);
-              }}
-              style={{
-                background: FOLLOW_BUTTON.inactiveBg,
-                color: FOLLOW_BUTTON.inactiveColor,
-                border: FOLLOW_BUTTON.inactiveBorder,
-                padding: '14px 32px',
-                borderRadius: '10px',
-                fontSize: '16px',
-                fontWeight: '700',
-                cursor: 'pointer',
-                width: '100%',
-                marginBottom: '12px',
-              }}
-            >
-              Connect Wallet
-            </button>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              {wallets
+                .filter(w => w.readyState === WalletReadyState.Installed)
+                .map(w => (
+                  <button
+                    key={w.adapter.name}
+                    onClick={() => {
+                      select(w.adapter.name);
+                      setConnectPrompt(false);
+                    }}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '12px',
+                      background: '#1a1a24',
+                      border: '1px solid #333',
+                      borderRadius: '10px',
+                      padding: '12px 16px',
+                      color: '#fff',
+                      fontSize: '15px',
+                      fontWeight: '600',
+                      cursor: 'pointer',
+                      width: '100%',
+                    }}
+                  >
+                    <img src={w.adapter.icon} alt={w.adapter.name} style={{ width: '28px', height: '28px', borderRadius: '6px' }} />
+                    {w.adapter.name}
+                  </button>
+                ))}
+              {wallets.filter(w => w.readyState === WalletReadyState.Installed).length === 0 && (
+                <div>
+                  <p style={{ color: '#888', fontSize: '13px', marginBottom: '12px' }}>
+                    No wallet detected. Install a Solana wallet to get started.
+                  </p>
+                  <a
+                    href="https://phantom.app/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '8px',
+                      background: FOLLOW_BUTTON.inactiveBg,
+                      color: FOLLOW_BUTTON.inactiveColor,
+                      border: FOLLOW_BUTTON.inactiveBorder,
+                      padding: '12px 16px',
+                      borderRadius: '10px',
+                      fontSize: '15px',
+                      fontWeight: '600',
+                      textDecoration: 'none',
+                      width: '100%',
+                      boxSizing: 'border-box',
+                    }}
+                  >
+                    Get Phantom Wallet
+                  </a>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}
