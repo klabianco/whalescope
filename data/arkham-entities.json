@@ -1,0 +1,35 @@
+{
+  "lastUpdated": "2026-01-29T07:20:00Z",
+  "source": "Arkham Intel (intel.arkm.com)",
+  "apiEndpoints": {
+    "entity": "https://api.arkm.com/intelligence/entity/{slug}",
+    "balances": "https://api.arkm.com/balances/entity/{slug}",
+    "transfers": "https://api.arkm.com/transfers?base={slug}",
+    "topAddresses": "https://api.arkm.com/balances/entity_top_address/{slug}",
+    "websocket": "wss://api.arkm.com/ws/transfers"
+  },
+  "entities": [
+    {"slug":"jump-trading","name":"Jump Crypto","type":"fund","totalUSD":"$901.8M","addresses":76,"arkhamUrl":"https://intel.arkm.com/explorer/entity/jump-trading","topHoldings":["BTC $346.9M","WLFI $153M","USDT $131.9M","USDC $87.9M","SOL $59.7M","USD1 $35.7M","STETH $34M","ETH $31M"]},
+    {"slug":"worldlibertyfi","name":"World Liberty Fi","type":"protocol","totalUSD":"$7.4B","addresses":52,"arkhamUrl":"https://intel.arkm.com/explorer/entity/worldlibertyfi","topHoldings":["WLFI $7.35B","USD1 $40.3M","MNT $5.4M","EOS $416K","ONDO $114K"]},
+    {"slug":"vitalik-buterin","name":"Vitalik Buterin","type":"individual","totalUSD":"$719.5M","addresses":null,"arkhamUrl":"https://intel.arkm.com/explorer/entity/vitalik-buterin"},
+    {"slug":"arthur-hayes","name":"Arthur Hayes","type":"individual","totalUSD":"$44M","addresses":null,"arkhamUrl":"https://intel.arkm.com/explorer/entity/arthur-hayes"},
+    {"slug":"justin-sun","name":"Justin Sun","type":"individual","totalUSD":"$1.71B","addresses":null,"arkhamUrl":"https://intel.arkm.com/explorer/entity/justin-sun"},
+    {"slug":"kylesamani","name":"Kyle Samani (Multicoin)","type":"individual","totalUSD":"$24.3M","addresses":null,"arkhamUrl":"https://intel.arkm.com/explorer/entity/kylesamani"},
+    {"slug":"muststopmurad","name":"Murad","type":"individual","totalUSD":"$11.5M","addresses":null,"arkhamUrl":"https://intel.arkm.com/explorer/entity/muststopmurad"},
+    {"slug":"donald-trump","name":"Donald Trump","type":"individual","totalUSD":"$933.6K","addresses":null,"arkhamUrl":"https://intel.arkm.com/explorer/entity/donald-trump"},
+    {"slug":"blackrock","name":"BlackRock","type":"institution","totalUSD":"$78.8B","addresses":null,"arkhamUrl":"https://intel.arkm.com/explorer/entity/blackrock"},
+    {"slug":"grayscale","name":"Grayscale","type":"institution","totalUSD":"$20.2B","addresses":null,"arkhamUrl":"https://intel.arkm.com/explorer/entity/grayscale"},
+    {"slug":"microstrategy","name":"Strategy (MicroStrategy)","type":"institution","totalUSD":"$36.6B","addresses":null,"arkhamUrl":"https://intel.arkm.com/explorer/entity/microstrategy"},
+    {"slug":"ark-invest","name":"ARK Invest","type":"institution","totalUSD":"$3.25B","addresses":null,"arkhamUrl":"https://intel.arkm.com/explorer/entity/ark-invest"},
+    {"slug":"binance","name":"Binance","type":"exchange","totalUSD":"$182.4B","addresses":null,"arkhamUrl":"https://intel.arkm.com/explorer/entity/binance"},
+    {"slug":"coinbase","name":"Coinbase","type":"exchange","totalUSD":"$97.2B","addresses":null,"arkhamUrl":"https://intel.arkm.com/explorer/entity/coinbase"},
+    {"slug":"ethereum-foundation","name":"Ethereum Foundation","type":"protocol","totalUSD":"$601.2M","addresses":null,"arkhamUrl":"https://intel.arkm.com/explorer/entity/ethereum-foundation"},
+    {"slug":"drift-protocol","name":"Drift Protocol","type":"protocol","totalUSD":"$436.7M","addresses":null,"arkhamUrl":"https://intel.arkm.com/explorer/entity/drift-protocol"},
+    {"slug":"kamino-finance","name":"Kamino Finance","type":"protocol","totalUSD":"$2.13B","addresses":null,"arkhamUrl":"https://intel.arkm.com/explorer/entity/kamino-finance"},
+    {"slug":"satoshi-nakamoto","name":"Satoshi Nakamoto","type":"individual","totalUSD":"$96.7B","addresses":null,"arkhamUrl":"https://intel.arkm.com/explorer/entity/satoshi-nakamoto"},
+    {"slug":"usg","name":"U.S. Government","type":"government","totalUSD":"$29.5B","addresses":null,"arkhamUrl":"https://intel.arkm.com/explorer/entity/usg"},
+    {"slug":"abraxas-capital-heka-funds","name":"Abraxas Capital","type":"fund","totalUSD":"$2.16B","addresses":null,"arkhamUrl":"https://intel.arkm.com/explorer/entity/abraxas-capital-heka-funds"},
+    {"slug":"trend-research","name":"Trend Research","type":"fund","totalUSD":"$1.92B","addresses":null,"arkhamUrl":"https://intel.arkm.com/explorer/entity/trend-research"},
+    {"slug":"robinhood","name":"Robinhood","type":"exchange","totalUSD":"$26.1B","addresses":null,"arkhamUrl":"https://intel.arkm.com/explorer/entity/robinhood"}
+  ]
+}

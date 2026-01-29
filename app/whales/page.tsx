@@ -7,15 +7,18 @@ import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
 import { useAuth } from '../providers/AuthProvider';
+import arkhamData from '../../data/arkham-entities.json';
 
 const FREE_WATCHLIST_LIMIT = 3;
 
-interface Whale {
+interface ArkhamEntity {
+  slug: string;
   name: string;
   type: string;
-  address: string;
-  description: string;
-  market: 'crypto' | 'tradfi';
+  totalUSD: string;
+  addresses: number | null;
+  arkhamUrl: string;
+  topHoldings?: string[];
 }
 
 interface CongressTrade {
@@ -29,24 +32,39 @@ interface CongressTrade {
   traded: string;
 }
 
-// Wallet labels based on verified on-chain data only. No unverified entity claims.
-const CRYPTO_WHALES: Whale[] = [
-  { name: "Whale #1 (Exchange Pattern)", type: "Exchange", address: "5tzFkiKscXHK5ZXCGbXZxdw7gTjjD1mBwuoFbhUvuAi9", description: "1.1M+ SOL. High-volume daily transfers.", market: 'crypto' },
-  { name: "Whale #2 (Exchange Pattern)", type: "Exchange", address: "AC5RDfQFmDS1deWZos921JfqscXdByf8BKHs5ACWjtW2", description: "286K+ SOL. Active daily transfers.", market: 'crypto' },
-  { name: "Whale #3 (DeFi Trader)", type: "Active Trader", address: "5Q544fKrFoe6tsEbD7S8EmxGTJYAKtTVhAW5Q5pge4j1", description: "Active Raydium DEX trader. High tx volume.", market: 'crypto' },
-  { name: "Whale #4 (Top Holder)", type: "Whale", address: "MJKqp326RZCHnAAbew9MDdui3iCKWco7fsK9sVuZTX2", description: "#1 SOL holder. 5.17M SOL (1.01% supply).", market: 'crypto' },
-  { name: "Whale #5 (Top Holder)", type: "Whale", address: "52C9T2T7JRojtxumYnYZhyUmrN7kqzvCLc4Ksvjk7TxD", description: "#2 SOL holder. 4.37M SOL (0.85% supply).", market: 'crypto' },
-  { name: "Whale #6 (Top Holder)", type: "Whale", address: "8BseXT9EtoEhBTKFFYkwTnjKSUZwhtmdKY2Jrj8j45Rt", description: "#3 SOL holder. 3.93M SOL (0.77% supply).", market: 'crypto' },
-  { name: "Whale #7 (Top Holder)", type: "Whale", address: "GitYucwpNcg6Dx1Y15UQ9TQn8LZMX1uuqQNn8rXxEWNC", description: "#4 SOL holder. 3.63M SOL (0.71% supply).", market: 'crypto' },
-  { name: "Whale #8 (Top Holder)", type: "Whale", address: "9QgXqrgdbVU8KcpfskqJpAXKzbaYQJecgMAruSWoXDkM", description: "#5 SOL holder. 3.14M SOL (0.61% supply).", market: 'crypto' },
-  { name: "Whale #9 (High Volume)", type: "Active Trader", address: "5VCwKtCXgCJ6kit5FybXjvriW3xELsFDhYrPSqtJNmcD", description: "7,359 SOL single transfer. High activity.", market: 'crypto' },
-  { name: "Whale #10 (Top Holder)", type: "Whale", address: "9uRJ5aGgeu2i3J98hsC5FDxd2PmRjVy9fQwNAy7fzLG3", description: "#6 SOL holder. 2.87M SOL (0.56% supply).", market: 'crypto' },
-];
+// Parse "$901.8M" or "$7.4B" to a number for sorting
+function parseUSD(val: string): number {
+  const num = parseFloat(val.replace(/[$,]/g, ''));
+  if (val.includes('B')) return num * 1_000_000_000;
+  if (val.includes('M')) return num * 1_000_000;
+  if (val.includes('K')) return num * 1_000;
+  return num;
+}
+
+const ENTITIES: ArkhamEntity[] = (arkhamData.entities as ArkhamEntity[])
+  .sort((a, b) => parseUSD(b.totalUSD) - parseUSD(a.totalUSD));
+
+type EntityType = 'all' | 'fund' | 'institution' | 'individual' | 'protocol' | 'exchange' | 'government';
+
+const ENTITY_TYPE_LABELS: Record<string, string> = {
+  fund: 'Fund',
+  institution: 'Institution',
+  individual: 'Individual',
+  protocol: 'Protocol',
+  exchange: 'Exchange',
+  government: 'Government',
+};
+
+const ENTITY_TYPE_COLORS: Record<string, string> = {
+  fund: '#4ade80',
+  institution: '#60a5fa',
+  individual: '#a78bfa',
+  protocol: '#22d3ee',
+  exchange: '#fbbf24',
+  government: '#f87171',
+};
 
 const TYPE_COLORS: Record<string, string> = {
-  'Exchange': '#fbbf24',
-  'Active Trader': '#60a5fa',
-  'Whale': '#4ade80',
   'Congress-D': '#60a5fa',
   'Congress-R': '#f87171',
   'Congress-I': '#a78bfa',
@@ -54,9 +72,10 @@ const TYPE_COLORS: Record<string, string> = {
 
 export default function WhalesPage() {
   const { publicKey, connected } = useWallet();
-  const [followingWallets, setFollowingWallets] = useState<string[]>([]);
+  const [followingEntities, setFollowingEntities] = useState<string[]>([]);
   const [followingPoliticians, setFollowingPoliticians] = useState<string[]>([]);
   const [tab, setTab] = useState<'crypto' | 'congress'>('crypto');
+  const [entityFilter, setEntityFilter] = useState<EntityType>('all');
   const [politicians, setPoliticians] = useState<{name: string; party: string; chamber: string; slug: string; tradeCount: number}[]>([]);
   const [limitWarning, setLimitWarning] = useState(false);
   
@@ -68,15 +87,23 @@ export default function WhalesPage() {
 
   const storageKey = publicKey ? publicKey.toBase58() : null;
 
+  const filteredEntities = entityFilter === 'all'
+    ? ENTITIES
+    : ENTITIES.filter(e => e.type === entityFilter);
+
+  // Count entities per type for filter pills
+  const typeCounts: Record<string, number> = {};
+  ENTITIES.forEach(e => { typeCounts[e.type] = (typeCounts[e.type] || 0) + 1; });
+
   useEffect(() => {
     if (storageKey) {
       try {
-        const savedWallets = localStorage.getItem(`wallets_${storageKey}`);
-        setFollowingWallets(savedWallets ? JSON.parse(savedWallets) : []);
+        const savedEntities = localStorage.getItem(`entities_${storageKey}`);
+        setFollowingEntities(savedEntities ? JSON.parse(savedEntities) : []);
         const savedPols = localStorage.getItem(`politicians_${storageKey}`);
         setFollowingPoliticians(savedPols ? JSON.parse(savedPols) : []);
       } catch {
-        setFollowingWallets([]);
+        setFollowingEntities([]);
         setFollowingPoliticians([]);
       }
     }
@@ -85,7 +112,6 @@ export default function WhalesPage() {
     fetch('/api/congress-trades')
       .then(res => res.ok ? res.json().then(d => d.trades || d) : [])
       .then((trades: CongressTrade[]) => {
-        // Get unique politicians with trade counts
         const polMap = new Map<string, {name: string; party: string; chamber: string; count: number}>();
         trades.forEach(t => {
           const key = t.politician;
@@ -110,30 +136,27 @@ export default function WhalesPage() {
       .catch(() => setPoliticians([]));
   }, [storageKey]);
 
-  function toggleFollowWallet(address: string) {
+  function toggleFollowEntity(slug: string) {
     if (!storageKey) return;
-    // Unfollowing is always allowed
-    if (followingWallets.includes(address)) {
-      const newList = followingWallets.filter(a => a !== address);
-      localStorage.setItem(`wallets_${storageKey}`, JSON.stringify(newList));
-      setFollowingWallets(newList);
+    if (followingEntities.includes(slug)) {
+      const newList = followingEntities.filter(s => s !== slug);
+      localStorage.setItem(`entities_${storageKey}`, JSON.stringify(newList));
+      setFollowingEntities(newList);
       setLimitWarning(false);
       return;
     }
-    // Check limit for free users
-    const totalFollowed = followingWallets.length + followingPoliticians.length;
+    const totalFollowed = followingEntities.length + followingPoliticians.length;
     if (!isPro && totalFollowed >= FREE_WATCHLIST_LIMIT) {
       setLimitWarning(true);
       return;
     }
-    const newList = [...followingWallets, address];
-    localStorage.setItem(`wallets_${storageKey}`, JSON.stringify(newList));
-    setFollowingWallets(newList);
+    const newList = [...followingEntities, slug];
+    localStorage.setItem(`entities_${storageKey}`, JSON.stringify(newList));
+    setFollowingEntities(newList);
   }
 
   function toggleFollowPolitician(slug: string) {
     if (!storageKey) return;
-    // Unfollowing is always allowed
     if (followingPoliticians.includes(slug)) {
       const newList = followingPoliticians.filter(s => s !== slug);
       localStorage.setItem(`politicians_${storageKey}`, JSON.stringify(newList));
@@ -141,8 +164,7 @@ export default function WhalesPage() {
       setLimitWarning(false);
       return;
     }
-    // Check limit for free users
-    const totalFollowed = followingWallets.length + followingPoliticians.length;
+    const totalFollowed = followingEntities.length + followingPoliticians.length;
     if (!isPro && totalFollowed >= FREE_WATCHLIST_LIMIT) {
       setLimitWarning(true);
       return;
@@ -242,80 +264,198 @@ export default function WhalesPage() {
         </button>
       </div>
 
-      {/* Crypto Whales */}
+      {/* Crypto Whales — Arkham Entities */}
       {tab === 'crypto' && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          {CRYPTO_WHALES.map((whale) => (
-            <div key={whale.address} style={{
-              background: '#111118',
-              border: '1px solid #222',
-              borderRadius: '12px',
-              padding: '20px',
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              gap: '16px',
-              flexWrap: 'wrap'
-            }}>
-              <div style={{ flex: 1, minWidth: '200px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '4px' }}>
-                  <span style={{ fontSize: '18px', fontWeight: '600', color: '#fff' }}>
-                    {whale.name}
-                  </span>
-                  <span style={{
-                    background: (TYPE_COLORS[whale.type] || '#666') + '20',
-                    color: TYPE_COLORS[whale.type] || '#666',
-                    padding: '2px 8px',
-                    borderRadius: '4px',
-                    fontSize: '11px',
-                    fontWeight: '600'
-                  }}>
-                    {whale.type}
-                  </span>
-                </div>
-                <p style={{ color: '#888', fontSize: '13px', margin: '4px 0 8px' }}>
-                  {whale.description}
-                </p>
-                <Link 
-                  href={`/wallet/${whale.address}`}
-                  style={{ color: '#60a5fa', fontSize: '12px', fontFamily: 'monospace', textDecoration: 'none' }}
-                >
-                  {whale.address.slice(0, 8)}...{whale.address.slice(-8)}
-                </Link>
-              </div>
-              
-              <div style={{ display: 'flex', gap: '8px' }}>
-                <Link 
-                  href={`/wallet/${whale.address}`}
-                  style={{ padding: '10px 20px', background: '#222', color: '#fff', borderRadius: '8px', textDecoration: 'none', fontSize: '14px' }}
-                >
-                  View
-                </Link>
+        <>
+          {/* Filter pills */}
+          <div style={{ 
+            display: 'flex', 
+            gap: '8px', 
+            marginBottom: '20px',
+            flexWrap: 'wrap'
+          }}>
+            <button
+              onClick={() => setEntityFilter('all')}
+              style={{
+                padding: '6px 14px',
+                background: entityFilter === 'all' ? '#fff' : '#1a1a24',
+                color: entityFilter === 'all' ? '#000' : '#888',
+                border: '1px solid ' + (entityFilter === 'all' ? '#fff' : '#333'),
+                borderRadius: '20px',
+                fontSize: '13px',
+                fontWeight: '500',
+                cursor: 'pointer'
+              }}
+            >
+              All ({ENTITIES.length})
+            </button>
+            {Object.entries(ENTITY_TYPE_LABELS).map(([key, label]) => {
+              const count = typeCounts[key] || 0;
+              if (count === 0) return null;
+              const color = ENTITY_TYPE_COLORS[key] || '#888';
+              const isActive = entityFilter === key;
+              return (
                 <button
-                  onClick={() => {
-                    if (connected) {
-                      toggleFollowWallet(whale.address);
-                    } else {
-                      document.querySelector<HTMLButtonElement>('.wallet-adapter-button')?.click();
-                    }
-                  }}
+                  key={key}
+                  onClick={() => setEntityFilter(key as EntityType)}
                   style={{
-                    padding: '10px 20px',
-                    background: followingWallets.includes(whale.address) ? '#333' : '#222',
-                    color: '#fff',
-                    border: 'none',
-                    borderRadius: '8px',
-                    fontSize: '14px',
-                    fontWeight: '600',
+                    padding: '6px 14px',
+                    background: isActive ? color + '20' : '#1a1a24',
+                    color: isActive ? color : '#888',
+                    border: '1px solid ' + (isActive ? color + '60' : '#333'),
+                    borderRadius: '20px',
+                    fontSize: '13px',
+                    fontWeight: '500',
                     cursor: 'pointer'
                   }}
                 >
-                  {followingWallets.includes(whale.address) ? 'Following' : 'Follow'}
+                  {label} ({count})
                 </button>
-              </div>
-            </div>
-          ))}
-        </div>
+              );
+            })}
+          </div>
+
+          {/* Entity cards */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            {filteredEntities.map((entity) => {
+              const typeColor = ENTITY_TYPE_COLORS[entity.type] || '#888';
+              const typeLabel = ENTITY_TYPE_LABELS[entity.type] || entity.type;
+              return (
+                <div key={entity.slug} style={{
+                  background: '#111118',
+                  border: '1px solid #222',
+                  borderRadius: '12px',
+                  padding: '20px',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'flex-start',
+                  gap: '16px',
+                  flexWrap: 'wrap'
+                }}>
+                  <div style={{ flex: 1, minWidth: '200px' }}>
+                    {/* Name + type badge */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px', flexWrap: 'wrap' }}>
+                      <span style={{ fontSize: '18px', fontWeight: '600', color: '#fff' }}>
+                        {entity.name}
+                      </span>
+                      <span style={{
+                        background: typeColor + '20',
+                        color: typeColor,
+                        padding: '2px 8px',
+                        borderRadius: '4px',
+                        fontSize: '11px',
+                        fontWeight: '600',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.5px'
+                      }}>
+                        {typeLabel}
+                      </span>
+                    </div>
+
+                    {/* Portfolio value */}
+                    <div style={{ fontSize: '24px', fontWeight: '700', color: '#fff', marginBottom: '10px' }}>
+                      {entity.totalUSD}
+                      <span style={{ fontSize: '13px', color: '#666', fontWeight: '400', marginLeft: '8px' }}>
+                        portfolio
+                      </span>
+                    </div>
+
+                    {/* Top holdings */}
+                    {entity.topHoldings && entity.topHoldings.length > 0 && (
+                      <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginBottom: '8px' }}>
+                        {entity.topHoldings.slice(0, 5).map((holding, i) => (
+                          <span key={i} style={{
+                            background: '#1a1a24',
+                            border: '1px solid #2a2a3a',
+                            color: '#aaa',
+                            padding: '3px 8px',
+                            borderRadius: '6px',
+                            fontSize: '11px',
+                            fontWeight: '500'
+                          }}>
+                            {holding}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Address count + Arkham link */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '4px' }}>
+                      {entity.addresses && (
+                        <span style={{ color: '#666', fontSize: '12px' }}>
+                          {entity.addresses} addresses tracked
+                        </span>
+                      )}
+                      <a 
+                        href={entity.arkhamUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ color: '#60a5fa', fontSize: '12px', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '4px' }}
+                      >
+                        View on Arkham ↗
+                      </a>
+                    </div>
+                  </div>
+                  
+                  {/* Actions */}
+                  <div style={{ display: 'flex', gap: '8px', flexShrink: 0 }}>
+                    <a 
+                      href={entity.arkhamUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ 
+                        padding: '10px 20px', 
+                        background: '#222', 
+                        color: '#fff', 
+                        borderRadius: '8px', 
+                        textDecoration: 'none', 
+                        fontSize: '14px',
+                        display: 'inline-block'
+                      }}
+                    >
+                      Profile
+                    </a>
+                    <button
+                      onClick={() => {
+                        if (connected) {
+                          toggleFollowEntity(entity.slug);
+                        } else {
+                          document.querySelector<HTMLButtonElement>('.wallet-adapter-button')?.click();
+                        }
+                      }}
+                      style={{
+                        padding: '10px 20px',
+                        background: followingEntities.includes(entity.slug) ? typeColor + '30' : '#222',
+                        color: followingEntities.includes(entity.slug) ? typeColor : '#fff',
+                        border: followingEntities.includes(entity.slug) ? `1px solid ${typeColor}50` : '1px solid transparent',
+                        borderRadius: '8px',
+                        fontSize: '14px',
+                        fontWeight: '600',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      {followingEntities.includes(entity.slug) ? '✓ Following' : 'Follow'}
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Data source attribution */}
+          <div style={{ 
+            textAlign: 'center', 
+            marginTop: '24px', 
+            padding: '12px',
+            color: '#555',
+            fontSize: '12px'
+          }}>
+            Entity data powered by{' '}
+            <a href="https://intel.arkm.com" target="_blank" rel="noopener noreferrer" style={{ color: '#60a5fa', textDecoration: 'none' }}>
+              Arkham Intelligence
+            </a>
+          </div>
+        </>
       )}
 
       {/* Congress */}
