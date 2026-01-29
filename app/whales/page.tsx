@@ -81,9 +81,9 @@ export default function WhalesPage() {
       }
     }
     
-    // Fetch congress data
-    fetch('/congress-trades.json')
-      .then(res => res.ok ? res.json() : [])
+    // Fetch congress data from API (Supabase-backed)
+    fetch('/api/congress-trades')
+      .then(res => res.ok ? res.json().then(d => d.trades || d) : [])
       .then((trades: CongressTrade[]) => {
         // Get unique politicians with trade counts
         const polMap = new Map<string, {name: string; party: string; chamber: string; count: number}>();

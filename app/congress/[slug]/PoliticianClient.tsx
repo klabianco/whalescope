@@ -54,11 +54,12 @@ export default function PoliticianClient({ slug }: { slug: string }) {
 
   async function fetchData() {
     try {
-      // Fetch trades
-      const tradesRes = await fetch('/congress-trades.json');
+      // Fetch trades from API (Supabase-backed)
+      const tradesRes = await fetch('/api/congress-trades');
       if (!tradesRes.ok) throw new Error('Failed to fetch');
       
-      const allTrades: Trade[] = await tradesRes.json();
+      const data = await tradesRes.json();
+      const allTrades: Trade[] = data.trades || data;
       
       const slugLower = slug.toLowerCase();
       const filtered = allTrades.filter(t => {
