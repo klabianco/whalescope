@@ -225,7 +225,7 @@ export default function CongressClient({ trades, topTraders, committeeData, poli
                       flexShrink: 0,
                     }}
                   >
-                    {isFollowing ? '✓' : '+'}
+                    {isFollowing ? '✓ Following' : 'Follow'}
                   </button>
                 }
                 actor={trade.politician}

@@ -219,7 +219,7 @@ export default function WhalesPage() {
                       flexShrink: 0,
                     }}
                   >
-                    {isFollowing ? '✓' : '+'}
+                    {isFollowing ? '✓ Following' : 'Follow'}
                   </button>
                 }
                 actor={displayName}
