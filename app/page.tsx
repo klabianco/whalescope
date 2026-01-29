@@ -62,11 +62,12 @@ export default function Home() {
       <main style={{ maxWidth: '900px', margin: '0 auto', padding: '20px' }}>
         {/* Hero */}
         <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-          <h1 style={{ fontSize: '48px', fontWeight: '700', marginBottom: '16px' }}>
-            🐋 WhaleScope
+          <h1 style={{ fontSize: '42px', fontWeight: '700', marginBottom: '16px', lineHeight: '1.2' }}>
+            Follow the money.<br />
+            <span style={{ color: '#60a5fa' }}>Before everyone else.</span>
           </h1>
-          <p style={{ fontSize: '20px', color: '#888', marginBottom: '24px' }}>
-            Track smart money — crypto whales & Congress trades
+          <p style={{ fontSize: '18px', color: '#888', marginBottom: '24px' }}>
+            Real-time Congress trades & crypto whale tracking — free.
           </p>
         </div>
 
@@ -207,20 +208,20 @@ export default function Home() {
           <h2 style={{ fontSize: '24px', color: '#fff' }}>
             Recent Whale Trades
           </h2>
-          <div style={{ 
+          <Link href="/whales" style={{
             background: '#111118',
             border: '1px solid #222',
             padding: '8px 16px',
             borderRadius: '8px',
             display: 'flex',
             alignItems: 'center',
-            gap: '8px'
+            gap: '8px',
+            textDecoration: 'none'
           }}>
-            <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#4ade80' }}></span>
-            <span style={{ color: '#888', fontSize: '14px' }}>
-              Live · Tracking 20 wallets
+            <span style={{ color: '#60a5fa', fontSize: '14px' }}>
+              View all →
             </span>
-          </div>
+          </Link>
         </div>
 
         {/* Trade Feed */}
