@@ -49,7 +49,6 @@ export default function Home() {
     fetch('/api/congress-trades?limit=4')
       .then(res => res.ok ? res.json() : [])
       .then((data: any) => {
-        // API returns { trades: [...] } or array
         const trades = Array.isArray(data) ? data : (data.trades || []);
         setCongressTrades(trades);
       })
@@ -63,21 +62,32 @@ export default function Home() {
         {/* Hero */}
         <div style={{ textAlign: 'center', marginBottom: '40px' }}>
           <h1 style={{ fontSize: '42px', fontWeight: '700', marginBottom: '16px', lineHeight: '1.2' }}>
-            Follow the money.<br />
-            <span style={{ color: '#60a5fa' }}>Before everyone else.</span>
+            Follow the smart money.<br />
+            <span style={{ color: '#60a5fa' }}>See what they&apos;re buying.</span>
           </h1>
           <p style={{ fontSize: '18px', color: '#888', marginBottom: '24px' }}>
-            Real-time Congress trades & crypto whale tracking — free.
+            Track politician stock trades and crypto whale wallets — all in one place, free.
           </p>
         </div>
 
-        {/* Quick Links */}
+        {/* Quick Links — 3 cards */}
         <div style={{ 
           display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
           gap: '16px',
           marginBottom: '40px'
         }}>
+          <Link href="/congress" style={{
+            background: '#111118',
+            border: '1px solid #222',
+            padding: '24px',
+            borderRadius: '12px',
+            textDecoration: 'none',
+          }}>
+            <div style={{ color: '#fff', fontWeight: '600', fontSize: '18px', marginBottom: '8px' }}>🏛️ Politicians</div>
+            <div style={{ color: '#888', fontSize: '14px' }}>125 members of Congress tracked. See their stock trades as filings drop.</div>
+          </Link>
+
           <Link href="/whales" style={{
             background: '#111118',
             border: '1px solid #222',
@@ -85,20 +95,57 @@ export default function Home() {
             borderRadius: '12px',
             textDecoration: 'none',
           }}>
-            <div style={{ color: '#fff', fontWeight: '600', fontSize: '18px', marginBottom: '8px' }}>Crypto</div>
-            <div style={{ color: '#888', fontSize: '14px' }}>Track crypto whale wallets in real-time</div>
+            <div style={{ color: '#fff', fontWeight: '600', fontSize: '18px', marginBottom: '8px' }}>🐋 Crypto</div>
+            <div style={{ color: '#888', fontSize: '14px' }}>157 whale wallets monitored on Solana. On-chain swaps and transfers.</div>
           </Link>
           
-          <Link href="/search" style={{
+          <Link href="/leaderboard" style={{
             background: '#111118',
             border: '1px solid #222',
             padding: '24px',
             borderRadius: '12px',
             textDecoration: 'none',
           }}>
-            <div style={{ color: '#fff', fontWeight: '600', fontSize: '18px', marginBottom: '8px' }}>Token Search</div>
-            <div style={{ color: '#888', fontSize: '14px' }}>Find top holders for any token</div>
+            <div style={{ color: '#fff', fontWeight: '600', fontSize: '18px', marginBottom: '8px' }}>📊 Leaderboard</div>
+            <div style={{ color: '#888', fontSize: '14px' }}>Who&apos;s beating the market? Ranked by actual returns.</div>
           </Link>
+        </div>
+
+        {/* Follow & Track Value Prop */}
+        <div style={{
+          background: 'linear-gradient(135deg, #0f1a12 0%, #111118 100%)',
+          border: '1px solid #1a3a1a',
+          borderRadius: '12px',
+          padding: '24px',
+          marginBottom: '40px',
+        }}>
+          <h2 style={{ fontSize: '20px', color: '#fff', marginBottom: '16px' }}>
+            Build your watchlist
+          </h2>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+            gap: '16px',
+          }}>
+            <div>
+              <div style={{ color: '#4ade80', fontSize: '14px', fontWeight: '600', marginBottom: '6px' }}>👤 Follow politicians</div>
+              <div style={{ color: '#888', fontSize: '13px', lineHeight: '1.5' }}>
+                Get notified when specific politicians file new trades. See their full history and performance.
+              </div>
+            </div>
+            <div>
+              <div style={{ color: '#4ade80', fontSize: '14px', fontWeight: '600', marginBottom: '6px' }}>💰 Track wallets</div>
+              <div style={{ color: '#888', fontSize: '13px', lineHeight: '1.5' }}>
+                Follow whale wallets on Solana. See every swap, transfer, and position change.
+              </div>
+            </div>
+            <div>
+              <div style={{ color: '#4ade80', fontSize: '14px', fontWeight: '600', marginBottom: '6px' }}>🔔 Get alerts</div>
+              <div style={{ color: '#888', fontSize: '13px', lineHeight: '1.5' }}>
+                Pro members get Telegram and Discord alerts when their followed wallets or politicians make moves.
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Congress Trades Preview */}
@@ -111,7 +158,7 @@ export default function Home() {
               marginBottom: '16px'
             }}>
               <h2 style={{ fontSize: '24px', color: '#fff' }}>
-                🏛️ Latest Congress Trades
+                🏛️ Latest Politician Trades
               </h2>
               <Link href="/congress" style={{ color: '#60a5fa', fontSize: '14px', textDecoration: 'none' }}>
                 View all →
@@ -161,7 +208,7 @@ export default function Home() {
               ))}
             </div>
 
-            {/* Urgency CTA */}
+            {/* Upgrade CTA */}
             <div style={{
               background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)',
               border: '1px solid #1e3a5f',
@@ -176,10 +223,10 @@ export default function Home() {
             }}>
               <div>
                 <div style={{ color: '#fbbf24', fontSize: '14px', fontWeight: '600', marginBottom: '4px' }}>
-                  ⚡ Pro members got these alerts instantly
+                  ⚡ Free users see filings 24h delayed
                 </div>
                 <div style={{ color: '#94a3b8', fontSize: '13px' }}>
-                  Don&apos;t miss the next big move. Get real-time alerts.
+                  Pro members see new filings the moment they drop — plus Telegram &amp; Discord alerts.
                 </div>
               </div>
               <Link href="/pricing" style={{
@@ -198,7 +245,7 @@ export default function Home() {
           </>
         )}
 
-        {/* Live Feed Header */}
+        {/* Whale Feed Header */}
         <div style={{ 
           display: 'flex',
           justifyContent: 'space-between',
@@ -206,7 +253,7 @@ export default function Home() {
           marginBottom: '20px'
         }}>
           <h2 style={{ fontSize: '24px', color: '#fff' }}>
-            Recent Whale Trades
+            🐋 Recent Whale Trades
           </h2>
           <Link href="/whales" style={{
             background: '#111118',
@@ -224,7 +271,7 @@ export default function Home() {
           </Link>
         </div>
 
-        {/* Trade Feed */}
+        {/* Whale Trade Feed */}
         <div style={{ marginBottom: '40px' }}>
           {trades.length === 0 ? (
             <div style={{ 
@@ -302,12 +349,12 @@ export default function Home() {
           <EmailCapture 
             source="homepage"
             headline="Get free weekly trade alerts"
-            subtext="Congress trades + whale moves delivered to your inbox. No spam, no account needed."
+            subtext="Politician stock trades + crypto whale moves delivered to your inbox. No spam, no account needed."
             buttonText="Subscribe Free"
           />
         </div>
 
-        {/* CTA */}
+        {/* Bottom CTA */}
         <div style={{
           background: '#111118',
           border: '1px solid #222',
@@ -316,10 +363,10 @@ export default function Home() {
           textAlign: 'center',
         }}>
           <h3 style={{ fontSize: '24px', marginBottom: '12px', fontWeight: '600' }}>
-            Want real-time alerts?
+            Want faster alerts?
           </h3>
           <p style={{ color: '#666', marginBottom: '24px', fontSize: '16px' }}>
-            Get instant Telegram & Discord alerts when Congress trades. From $24/month.
+            Pro members get Telegram &amp; Discord alerts the moment new filings and whale trades hit. No 24h delay.
           </p>
           <Link href="/pricing" style={{
             display: 'inline-block',
