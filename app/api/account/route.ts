@@ -51,6 +51,7 @@ export async function GET(request: Request) {
     return NextResponse.json({
       plan: profile.plan || 'free',
       email: profile.email || null,
+      alert_email: profile.alert_email || null,
       subscription: subscription ? {
         status: subscription.status,
         plan: subscription.plan,

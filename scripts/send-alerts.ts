@@ -31,6 +31,7 @@ const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://mamjtxguze
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY || '';
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || localConfig.telegram_bot_token || '';
 const DISCORD_WEBHOOK_URL = process.env.DISCORD_WEBHOOK_URL || localConfig.discord_webhook_url || '';
+const RESEND_API_KEY = process.env.RESEND_API_KEY || localConfig.resend_api_key || '';
 
 let supabase: SupabaseClient | null = null;
 if (SUPABASE_KEY) {
@@ -263,7 +264,7 @@ async function sendDiscord(message: object): Promise<boolean> {
 }
 
 // --- Subscriber Lookup ---
-async function getProSubscribers(): Promise<{ telegram_chat_id: string | null; discord_user_id: string | null }[]> {
+async function getProSubscribers(): Promise<{ telegram_chat_id: string | null; discord_user_id: string | null; alert_email: string | null }[]> {
   if (!supabase || !SUPABASE_KEY) {
     console.log('  No Supabase key — skipping subscriber lookup');
     return [];
@@ -271,7 +272,7 @@ async function getProSubscribers(): Promise<{ telegram_chat_id: string | null; d
   
   const { data, error } = await supabase
     .from('profiles')
-    .select('telegram_chat_id, discord_user_id')
+    .select('telegram_chat_id, discord_user_id, alert_email')
     .eq('plan', 'pro');
 
   if (error) {
@@ -280,6 +281,110 @@ async function getProSubscribers(): Promise<{ telegram_chat_id: string | null; d
   }
 
   return data || [];
+}
+
+// --- Email Alerts ---
+async function sendEmailAlerts(
+  subscribers: { alert_email: string | null }[],
+  congressTrades: CongressTrade[],
+): Promise<{ sent: number; failed: number }> {
+  if (!RESEND_API_KEY) {
+    return { sent: 0, failed: 0 };
+  }
+
+  const emailSubs = subscribers.filter(s => s.alert_email);
+  if (emailSubs.length === 0 || congressTrades.length === 0) {
+    return { sent: 0, failed: 0 };
+  }
+
+  let sent = 0;
+  let failed = 0;
+
+  for (const sub of emailSubs) {
+    try {
+      // Send a summary of the first trade (or batch)
+      const trade = congressTrades[0];
+      const actionEmoji = trade.type === 'Purchase' ? '🟢' : '🔴';
+      const subject = congressTrades.length === 1
+        ? `${actionEmoji} ${trade.politician} — ${trade.type} $${trade.ticker}`
+        : `🏛️ ${congressTrades.length} New Congress Trades`;
+
+      const tradeRows = congressTrades.slice(0, 5).map(t => {
+        const emoji = t.type === 'Purchase' ? '🟢' : '🔴';
+        const color = t.type === 'Purchase' ? '#22c55e' : '#ef4444';
+        return `
+          <tr>
+            <td style="padding:12px 0;border-bottom:1px solid #27272a;">
+              <span style="color:${color};font-weight:600;">${emoji} ${t.type}</span>
+              <span style="color:#fff;font-weight:600;margin-left:8px;">$${t.ticker}</span>
+              <br><span style="color:#a1a1aa;font-size:13px;">${t.politician} — ${t.amount}</span>
+            </td>
+          </tr>`;
+      }).join('');
+
+      const moreText = congressTrades.length > 5
+        ? `<p style="color:#71717a;font-size:13px;margin-top:12px;">...and ${congressTrades.length - 5} more trades</p>`
+        : '';
+
+      const emailRes = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${RESEND_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          from: 'WhaleScope <alerts@whalescope.app>',
+          to: sub.alert_email!,
+          subject,
+          html: `
+<!DOCTYPE html>
+<html>
+<body style="margin:0;padding:0;background-color:#09090b;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#09090b;padding:32px 20px;">
+    <tr><td align="center">
+      <table width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;">
+        <tr><td align="center" style="padding-bottom:20px;">
+          <span style="font-size:28px;">🐋</span>
+          <span style="color:#71717a;font-size:13px;font-weight:600;vertical-align:middle;margin-left:6px;">WhaleScope Alert</span>
+        </td></tr>
+        <tr><td style="background:#18181b;border-radius:12px;padding:24px;border:1px solid #27272a;">
+          <h2 style="color:#fff;font-size:17px;margin:0 0 16px 0;">🏛️ ${congressTrades.length} New Congress Trade${congressTrades.length > 1 ? 's' : ''}</h2>
+          <table width="100%" cellpadding="0" cellspacing="0">${tradeRows}</table>
+          ${moreText}
+          <table width="100%" cellpadding="0" cellspacing="0" style="margin-top:20px;">
+            <tr><td align="center">
+              <a href="https://whalescope.app/congress" style="display:inline-block;background:#22c55e;color:#000;font-size:13px;font-weight:600;text-decoration:none;padding:10px 24px;border-radius:8px;">View All Trades →</a>
+            </td></tr>
+          </table>
+        </td></tr>
+        <tr><td align="center" style="padding-top:20px;">
+          <p style="color:#3f3f46;font-size:11px;margin:0;"><a href="https://whalescope.app" style="color:#3f3f46;text-decoration:none;">whalescope.app</a></p>
+        </td></tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>`,
+        }),
+      });
+
+      if (!emailRes.ok) {
+        const errData = await emailRes.json().catch(() => ({ message: emailRes.statusText }));
+        console.error(`  Email error for ${sub.alert_email}:`, errData.message || emailRes.statusText);
+        failed++;
+      } else {
+        sent++;
+      }
+
+      // Rate limit — small delay between emails
+      await new Promise(r => setTimeout(r, 100));
+    } catch (e: any) {
+      console.error(`  Email error for ${sub.alert_email}:`, e.message);
+      failed++;
+    }
+  }
+
+  return { sent, failed };
 }
 
 // --- Main ---
@@ -388,10 +493,18 @@ async function main() {
     pushResult.cleaned += whalePush.cleaned;
   }
 
+  // --- Email alerts ---
+  let emailResult = { sent: 0, failed: 0 };
+
+  if (newCongress.length > 0) {
+    emailResult = await sendEmailAlerts(subscribers, newCongress);
+  }
+
   console.log(`\n✅ Alerts sent:`);
   console.log(`   Telegram: ${telegramSent}`);
   console.log(`   Discord: ${discordSent}`);
   console.log(`   Push: ${pushResult.sent} (${pushResult.failed} failed, ${pushResult.cleaned} cleaned)`);
+  console.log(`   Email: ${emailResult.sent} (${emailResult.failed} failed)`);
 }
 
 main().catch(console.error);

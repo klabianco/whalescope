@@ -7,10 +7,12 @@ import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
 import { PushNotificationButton } from '../components/PushNotificationButton';
+import { EmailAlertInput } from '../components/EmailAlertInput';
 
 interface AccountData {
   plan: string;
   email: string | null;
+  alert_email?: string | null;
   subscription: {
     status: string;
     plan: string;
@@ -459,6 +461,9 @@ export default function AccountPage() {
 
                   {/* Push Notifications */}
                   <PushNotificationButton />
+
+                  {/* Email Alerts */}
+                  <EmailAlertInput existingEmail={account?.alert_email} />
                 </div>
               </div>
             )}
