@@ -1,330 +1,391 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import Link from 'next/link';
-import { useWallet } from '@solana/wallet-adapter-react';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
+import { EmailCapture } from '../components/EmailCapture';
 import { useAuth } from '../providers/AuthProvider';
-import whaleData from '../../data/whale-wallets.json';
-import { FOLLOW_BUTTON } from '../config/theme';
+import tradesData from '../../data/whale-trades.json';
 
-const FREE_WATCHLIST_LIMIT = 3;
-
-interface WhaleWallet {
-  address: string;
-  name: string;
+interface WhaleTrade {
+  wallet: string;
+  walletLabel: string;
+  walletValue: string;
+  signature: string;
+  timestamp: number;
   type: string;
-  totalUSD: string;
-  totalUSDRaw: number;
-  topHoldings?: string[] | null;
-  solscanUrl: string;
+  description: string;
+  tokenMint?: string;
+  tokenSymbol?: string;
+  tokenAmount?: number;
+  solAmount?: number;
+  action: 'BUY' | 'SELL' | 'TRANSFER' | 'UNKNOWN';
 }
 
-const WALLETS: WhaleWallet[] = (whaleData.wallets as WhaleWallet[])
-  .sort((a, b) => b.totalUSDRaw - a.totalUSDRaw);
+const TRADES: WhaleTrade[] = (tradesData as WhaleTrade[])
+  .sort((a, b) => b.timestamp - a.timestamp);
 
-type WalletType = 'all' | 'exchange' | 'protocol' | 'institution' | 'unknown_whale';
+const TRADES_PER_PAGE = 25;
 
-const TYPE_LABELS: Record<string, string> = {
-  exchange: 'Exchange',
-  protocol: 'Protocol',
-  institution: 'Institution',
-  unknown_whale: 'Whale',
-};
+function isRecentTrade(trade: WhaleTrade): boolean {
+  const now = Date.now() / 1000;
+  return (now - trade.timestamp) < 24 * 60 * 60;
+}
 
-const TYPE_COLORS: Record<string, string> = {
-  exchange: '#fbbf24',
-  protocol: '#22d3ee',
-  institution: '#60a5fa',
-  unknown_whale: '#a78bfa',
+function formatTime(ts: number): string {
+  const date = new Date(ts * 1000);
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffH = diffMs / (1000 * 60 * 60);
+  
+  if (diffH < 1) {
+    const mins = Math.floor(diffMs / (1000 * 60));
+    return `${mins}m ago`;
+  }
+  if (diffH < 24) {
+    return `${Math.floor(diffH)}h ago`;
+  }
+  if (diffH < 48) {
+    return 'Yesterday';
+  }
+  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+}
+
+function formatAmount(amount?: number): string {
+  if (!amount) return '?';
+  if (amount >= 1_000_000_000) return (amount / 1_000_000_000).toFixed(2) + 'B';
+  if (amount >= 1_000_000) return (amount / 1_000_000).toFixed(2) + 'M';
+  if (amount >= 1_000) return (amount / 1_000).toFixed(1) + 'K';
+  if (amount >= 1) return amount.toLocaleString(undefined, { maximumFractionDigits: 2 });
+  return amount.toFixed(6);
+}
+
+function shortAddress(addr: string): string {
+  return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
+}
+
+const ACTION_STYLES: Record<string, { bg: string; color: string; label: string }> = {
+  BUY: { bg: '#064e3b', color: '#4ade80', label: 'BUY' },
+  SELL: { bg: '#7f1d1d', color: '#f87171', label: 'SELL' },
+  TRANSFER: { bg: '#1e1b4b', color: '#a78bfa', label: 'TRANSFER' },
+  UNKNOWN: { bg: '#333', color: '#888', label: '???' },
 };
 
 export default function WhalesPage() {
-  const { publicKey, connected } = useWallet();
-  const [followingWallets, setFollowingWallets] = useState<string[]>([]);
-  const [walletFilter, setWalletFilter] = useState<WalletType>('all');
-  const [limitWarning, setLimitWarning] = useState(false);
-  
+  const [filter, setFilter] = useState<'all' | 'buy' | 'sell' | 'transfer'>('all');
+  const [visibleCount, setVisibleCount] = useState(TRADES_PER_PAGE);
+
   let isPro = false;
   try {
     const auth = useAuth();
     isPro = auth.isPro;
   } catch {}
 
-  const storageKey = publicKey ? publicKey.toBase58() : null;
+  const recentTradeCount = useMemo(() => TRADES.filter(isRecentTrade).length, []);
+  const FREE_TRADE_LIMIT = 25;
 
-  const filteredWallets = walletFilter === 'all'
-    ? WALLETS
-    : WALLETS.filter(w => w.type === walletFilter);
+  const filteredTrades = TRADES.filter(t => {
+    if (!isPro && isRecentTrade(t)) return false;
+    if (filter === 'buy') return t.action === 'BUY';
+    if (filter === 'sell') return t.action === 'SELL';
+    if (filter === 'transfer') return t.action === 'TRANSFER';
+    return true;
+  });
 
-  const typeCounts: Record<string, number> = {};
-  WALLETS.forEach(w => { typeCounts[w.type] = (typeCounts[w.type] || 0) + 1; });
+  const visibleTrades = isPro ? filteredTrades : filteredTrades.slice(0, FREE_TRADE_LIMIT);
+  const hiddenTradeCount = isPro ? 0 : Math.max(0, filteredTrades.length - FREE_TRADE_LIMIT);
 
-  useEffect(() => {
-    if (storageKey) {
-      try {
-        const saved = localStorage.getItem(`whales_${storageKey}`);
-        setFollowingWallets(saved ? JSON.parse(saved) : []);
-      } catch {
-        setFollowingWallets([]);
-      }
-    }
-  }, [storageKey]);
-
-  function toggleFollow(address: string) {
-    if (!storageKey) return;
-    if (followingWallets.includes(address)) {
-      const newList = followingWallets.filter(a => a !== address);
-      localStorage.setItem(`whales_${storageKey}`, JSON.stringify(newList));
-      setFollowingWallets(newList);
-      setLimitWarning(false);
-      return;
-    }
-    if (!isPro && followingWallets.length >= FREE_WATCHLIST_LIMIT) {
-      setLimitWarning(true);
-      return;
-    }
-    const newList = [...followingWallets, address];
-    localStorage.setItem(`whales_${storageKey}`, JSON.stringify(newList));
-    setFollowingWallets(newList);
-  }
+  // Unique whales
+  const uniqueWhales = useMemo(() => new Set(TRADES.map(t => t.wallet)).size, []);
 
   return (
     <>
       <Header />
       <main style={{ maxWidth: '900px', margin: '0 auto', padding: '0 20px 40px' }}>
-        {/* Page Title */}
-        <div style={{ marginBottom: '32px' }}>
-          <h1 style={{ fontSize: '36px', margin: '0 0 8px' }}>
+        <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+          <h1 style={{ fontSize: '36px', marginBottom: '8px' }}>
             Whale Tracker
           </h1>
-          <p style={{ color: '#888' }}>
-            Track the biggest crypto wallets on Solana — exchanges, protocols, and individual whales.
+          <p style={{ color: '#888', marginBottom: '16px' }}>
+            Real-time trades from the biggest wallets on Solana
           </p>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '16px' }}>
+            <Link href="/search" style={{ color: '#4ade80', textDecoration: 'none' }}>
+              Search Tokens →
+            </Link>
+            <Link href="/watchlist" style={{ color: '#60a5fa', textDecoration: 'none' }}>
+              Your Watchlist →
+            </Link>
+          </div>
         </div>
 
-        {/* Watchlist Limit Warning */}
-        {limitWarning && (
+        {/* Stats bar */}
+        <div style={{
+          display: 'flex',
+          gap: '16px',
+          marginBottom: '24px',
+          justifyContent: 'center',
+          flexWrap: 'wrap'
+        }}>
+          <div style={{ 
+            background: '#111118', 
+            border: '1px solid #222', 
+            borderRadius: '8px', 
+            padding: '10px 16px',
+            textAlign: 'center',
+            minWidth: '120px'
+          }}>
+            <div style={{ color: '#fff', fontSize: '20px', fontWeight: '700' }}>{uniqueWhales}</div>
+            <div style={{ color: '#666', fontSize: '12px' }}>Whales Tracked</div>
+          </div>
+          <div style={{ 
+            background: '#111118', 
+            border: '1px solid #222', 
+            borderRadius: '8px', 
+            padding: '10px 16px',
+            textAlign: 'center',
+            minWidth: '120px'
+          }}>
+            <div style={{ color: '#fff', fontSize: '20px', fontWeight: '700' }}>{TRADES.length}</div>
+            <div style={{ color: '#666', fontSize: '12px' }}>Recent Trades</div>
+          </div>
+          <div style={{ 
+            background: '#111118', 
+            border: '1px solid #222', 
+            borderRadius: '8px', 
+            padding: '10px 16px',
+            textAlign: 'center',
+            minWidth: '120px'
+          }}>
+            <div style={{ color: '#4ade80', fontSize: '20px', fontWeight: '700' }}>
+              {TRADES.filter(t => t.action === 'BUY').length}
+            </div>
+            <div style={{ color: '#666', fontSize: '12px' }}>Buys</div>
+          </div>
+        </div>
+
+        {/* Pro upsell for recent trades */}
+        {!isPro && recentTradeCount > 0 && (
           <div style={{
-            background: 'rgba(251, 191, 36, 0.1)',
-            border: '1px solid rgba(251, 191, 36, 0.3)',
+            background: 'linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(34, 197, 94, 0.05) 100%)',
+            border: '1px solid rgba(34, 197, 94, 0.3)',
             borderRadius: '12px',
-            padding: '12px 16px',
-            marginBottom: '16px',
+            padding: '16px 20px',
+            marginBottom: '20px',
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
             flexWrap: 'wrap',
-            gap: '8px'
+            gap: '12px'
           }}>
-            <p style={{ color: '#fbbf24', fontSize: '14px', margin: 0 }}>
-              Free plan limit: {FREE_WATCHLIST_LIMIT} watchlist slots. Upgrade for unlimited.
+          <div>
+            <p style={{ color: '#22c55e', fontSize: '14px', fontWeight: '600', margin: 0 }}>
+              🔒 {recentTradeCount} whale trade{recentTradeCount > 1 ? 's' : ''} in the last 24h
             </p>
-            <Link href="/pricing" style={{ textDecoration: 'none' }}>
-              <button style={{
-                background: '#fbbf24',
-                color: '#000',
-                border: 'none',
-                borderRadius: '6px',
-                padding: '6px 14px',
-                fontSize: '13px',
-                fontWeight: '600',
-                cursor: 'pointer'
-              }}>
-                Upgrade to Pro
-              </button>
-            </Link>
+            <p style={{ color: '#71717a', fontSize: '13px', margin: '4px 0 0' }}>
+              Pro members see whale moves instantly. Free users get a 24h delay.
+            </p>
+          </div>
+          <Link href="/pricing" style={{ textDecoration: 'none' }}>
+            <button style={{
+              background: '#22c55e',
+              color: '#000',
+              border: 'none',
+              borderRadius: '8px',
+              padding: '8px 16px',
+              fontSize: '13px',
+              fontWeight: '600',
+              cursor: 'pointer',
+              whiteSpace: 'nowrap'
+            }}>
+              Upgrade to Pro
+            </button>
+          </Link>
           </div>
         )}
 
-        {/* Filter pills */}
+        {/* Filter Tabs */}
         <div style={{ 
           display: 'flex', 
           gap: '8px', 
           marginBottom: '20px',
           flexWrap: 'wrap'
         }}>
-          <button
-            onClick={() => setWalletFilter('all')}
-            style={{
-              padding: '6px 14px',
-              background: walletFilter === 'all' ? '#fff' : '#1a1a24',
-              color: walletFilter === 'all' ? '#000' : '#888',
-              border: '1px solid ' + (walletFilter === 'all' ? '#fff' : '#333'),
-              borderRadius: '20px',
-              fontSize: '13px',
-              fontWeight: '500',
-              cursor: 'pointer'
-            }}
-          >
-            All ({WALLETS.length})
-          </button>
-          {Object.entries(TYPE_LABELS).map(([key, label]) => {
-            const count = typeCounts[key] || 0;
-            if (count === 0) return null;
-            const color = TYPE_COLORS[key] || '#888';
-            const isActive = walletFilter === key;
-            return (
-              <button
-                key={key}
-                onClick={() => setWalletFilter(key as WalletType)}
-                style={{
-                  padding: '6px 14px',
-                  background: isActive ? color + '20' : '#1a1a24',
-                  color: isActive ? color : '#888',
-                  border: '1px solid ' + (isActive ? color + '60' : '#333'),
-                  borderRadius: '20px',
-                  fontSize: '13px',
-                  fontWeight: '500',
-                  cursor: 'pointer'
-                }}
-              >
-                {label} ({count})
-              </button>
-            );
-          })}
+          {(['all', 'buy', 'sell', 'transfer'] as const).map((f) => (
+            <button
+              key={f}
+              onClick={() => { setFilter(f); setVisibleCount(TRADES_PER_PAGE); }}
+              style={{
+                padding: '8px 16px',
+                background: filter === f ? '#4ade80' : '#222',
+                color: filter === f ? '#000' : '#888',
+                border: 'none',
+                borderRadius: '6px',
+                fontSize: '14px',
+                cursor: 'pointer',
+                textTransform: 'capitalize',
+              }}
+            >
+              {f === 'all' ? 'All Trades' : 
+               f === 'buy' ? 'Buys' :
+               f === 'sell' ? 'Sells' : 'Transfers'}
+            </button>
+          ))}
         </div>
 
-        {/* Wallet cards */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          {filteredWallets.map((wallet) => {
-            const typeColor = TYPE_COLORS[wallet.type] || '#888';
-            const typeLabel = TYPE_LABELS[wallet.type] || wallet.type;
-            const isUnknown = wallet.type === 'unknown_whale';
-            const displayName = isUnknown 
-              ? `${wallet.address.slice(0, 6)}...${wallet.address.slice(-4)}`
-              : wallet.name;
-            return (
-              <div key={wallet.address} style={{
-                background: '#111118',
-                border: '1px solid #222',
-                borderRadius: '12px',
-                padding: '20px',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'flex-start',
-                gap: '16px',
-                flexWrap: 'wrap'
-              }}>
-                <div style={{ flex: 1, minWidth: '200px' }}>
-                  {/* Name + type badge */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px', flexWrap: 'wrap' }}>
-                    <span style={{ fontSize: '18px', fontWeight: '600', color: '#fff' }}>
-                      {displayName}
-                    </span>
-                    <span style={{
-                      background: typeColor + '20',
-                      color: typeColor,
-                      padding: '2px 8px',
-                      borderRadius: '4px',
-                      fontSize: '11px',
-                      fontWeight: '600',
-                      textTransform: 'uppercase',
-                      letterSpacing: '0.5px'
-                    }}>
-                      {typeLabel}
-                    </span>
-                  </div>
+        {/* Trades Feed */}
+        {filteredTrades.length === 0 ? (
+          <div style={{ 
+            background: '#111118', 
+            padding: '40px', 
+            borderRadius: '12px',
+            textAlign: 'center',
+            color: '#666'
+          }}>
+            No trades found for this filter.
+          </div>
+        ) : (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            {visibleTrades.slice(0, visibleCount).map((trade, i) => {
+              const actionStyle = ACTION_STYLES[trade.action] || ACTION_STYLES.UNKNOWN;
+              const symbol = trade.tokenSymbol || (trade.tokenMint ? shortAddress(trade.tokenMint) : '???');
+              const displayName = trade.walletLabel || shortAddress(trade.wallet);
 
-                  {/* Portfolio value */}
-                  <div style={{ fontSize: '24px', fontWeight: '700', color: '#fff', marginBottom: '10px' }}>
-                    {wallet.totalUSD}
-                    <span style={{ fontSize: '13px', color: '#666', fontWeight: '400', marginLeft: '8px' }}>
-                      tracked value
-                    </span>
-                  </div>
-
-                  {/* Top holdings */}
-                  {wallet.topHoldings && wallet.topHoldings.length > 0 && (
-                    <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginBottom: '8px' }}>
-                      {wallet.topHoldings.slice(0, 5).map((holding, i) => (
-                        <span key={i} style={{
-                          background: '#1a1a24',
-                          border: '1px solid #2a2a3a',
-                          color: '#aaa',
-                          padding: '3px 8px',
-                          borderRadius: '6px',
-                          fontSize: '11px',
-                          fontWeight: '500'
-                        }}>
-                          {holding}
+              return (
+                <div key={`${trade.signature}-${i}`} style={{
+                  background: '#111118',
+                  border: '1px solid #222',
+                  borderRadius: '12px',
+                  padding: '16px 20px',
+                }}>
+                  <div style={{ 
+                    display: 'flex', 
+                    justifyContent: 'space-between',
+                    alignItems: 'flex-start',
+                    marginBottom: '12px'
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+                      <span style={{
+                        background: actionStyle.bg,
+                        color: actionStyle.color,
+                        padding: '4px 10px',
+                        borderRadius: '6px',
+                        fontSize: '12px',
+                        fontWeight: '600'
+                      }}>
+                        {actionStyle.label}
+                      </span>
+                      <div>
+                        <Link 
+                          href={`/wallet/${trade.wallet}`}
+                          style={{ color: '#fff', fontWeight: '600', textDecoration: 'none' }}
+                        >
+                          {displayName}
+                        </Link>
+                        <span style={{ color: '#555', fontSize: '12px', marginLeft: '8px' }}>
+                          {trade.walletValue}
                         </span>
-                      ))}
+                      </div>
                     </div>
-                  )}
-
-                  {/* Address + Solscan link */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '4px' }}>
-                    <span style={{ color: '#555', fontSize: '12px', fontFamily: 'monospace' }}>
-                      {wallet.address.slice(0, 12)}...{wallet.address.slice(-6)}
+                    <span style={{ color: '#666', fontSize: '13px', whiteSpace: 'nowrap' }}>
+                      {formatTime(trade.timestamp)}
                     </span>
-                    <a 
-                      href={wallet.solscanUrl}
+                  </div>
+                  
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div>
+                      <span style={{ color: '#4ade80', fontWeight: '600', fontSize: '18px' }}>
+                        {symbol}
+                      </span>
+                      {trade.tokenAmount !== undefined && (
+                        <span style={{ color: '#888', marginLeft: '8px' }}>
+                          {formatAmount(trade.tokenAmount)} {symbol}
+                        </span>
+                      )}
+                    </div>
+                    <a
+                      href={`https://solscan.io/tx/${trade.signature}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      style={{ color: '#60a5fa', fontSize: '12px', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '4px' }}
+                      style={{ color: '#60a5fa', fontSize: '12px', textDecoration: 'none' }}
                     >
-                      View on Solscan ↗
+                      View tx ↗
                     </a>
                   </div>
                 </div>
-                
-                {/* Actions */}
-                <div style={{ display: 'flex', gap: '8px', flexShrink: 0 }}>
-                  <Link 
-                    href={`/wallet/${wallet.address}`}
-                    style={{ 
-                      padding: '10px 20px', 
-                      background: '#222', 
-                      color: '#fff', 
-                      borderRadius: '8px', 
-                      textDecoration: 'none', 
-                      fontSize: '14px',
-                      display: 'inline-block'
-                    }}
-                  >
-                    Profile
-                  </Link>
-                  <button
-                    onClick={() => {
-                      if (connected) {
-                        toggleFollow(wallet.address);
-                      } else {
-                        document.querySelector<HTMLButtonElement>('.wallet-adapter-button')?.click();
-                      }
-                    }}
-                    style={{
-                      padding: '10px 20px',
-                      background: followingWallets.includes(wallet.address) ? FOLLOW_BUTTON.activeBg : FOLLOW_BUTTON.inactiveBg,
-                      color: followingWallets.includes(wallet.address) ? FOLLOW_BUTTON.activeColor : FOLLOW_BUTTON.inactiveColor,
-                      border: followingWallets.includes(wallet.address) ? FOLLOW_BUTTON.activeBorder : FOLLOW_BUTTON.inactiveBorder,
-                      borderRadius: '8px',
-                      fontSize: '14px',
-                      fontWeight: '600',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    {followingWallets.includes(wallet.address) ? '✓ Following' : 'Follow'}
-                  </button>
+              );
+            })}
+
+            {visibleCount < visibleTrades.length && (
+              <button
+                onClick={() => setVisibleCount(v => v + TRADES_PER_PAGE)}
+                style={{
+                  background: '#1a1a2e',
+                  border: '1px solid #333',
+                  borderRadius: '12px',
+                  padding: '14px',
+                  color: '#4ade80',
+                  fontSize: '15px',
+                  fontWeight: '600',
+                  cursor: 'pointer',
+                  marginTop: '8px',
+                  width: '100%',
+                }}
+              >
+                Show More ({visibleTrades.length - visibleCount} remaining)
+              </button>
+            )}
+
+            {!isPro && hiddenTradeCount > 0 && visibleCount >= visibleTrades.length && (
+              <Link href="/pricing" style={{ textDecoration: 'none' }}>
+                <div style={{
+                  background: 'linear-gradient(135deg, rgba(34, 197, 94, 0.08) 0%, #111118 100%)',
+                  border: '1px solid rgba(34, 197, 94, 0.3)',
+                  borderRadius: '12px',
+                  padding: '20px',
+                  textAlign: 'center',
+                  cursor: 'pointer',
+                  marginTop: '8px'
+                }}>
+                  <p style={{ color: '#22c55e', fontSize: '15px', fontWeight: '600', margin: '0 0 4px' }}>
+                    🔒 {hiddenTradeCount} more trade{hiddenTradeCount > 1 ? 's' : ''} available with Pro
+                  </p>
+                  <p style={{ color: '#71717a', fontSize: '13px', margin: 0 }}>
+                    Get full trade history, real-time alerts, and analytics →
+                  </p>
                 </div>
-              </div>
-            );
-          })}
+              </Link>
+            )}
+          </div>
+        )}
+
+        {/* Email Capture */}
+        <div style={{ marginTop: '40px' }}>
+          <EmailCapture 
+            source="whales"
+            headline="Get whale trade alerts"
+            subtext="Know when big wallets move — delivered free to your inbox."
+            buttonText="Get Free Alerts"
+          />
         </div>
 
-        {/* Data source attribution */}
-        <div style={{ 
-          textAlign: 'center', 
-          marginTop: '24px', 
-          padding: '12px',
-          color: '#555',
-          fontSize: '12px'
+        {/* Data Notice */}
+        <div style={{
+          background: '#1a1a2e',
+          padding: '16px 20px',
+          borderRadius: '12px',
+          marginTop: '24px',
+          textAlign: 'center'
         }}>
-          {WALLETS.length} wallets tracked · Data from on-chain analysis ·{' '}
-          <a href="https://solscan.io" target="_blank" rel="noopener noreferrer" style={{ color: '#60a5fa', textDecoration: 'none' }}>
-            Solscan
-          </a>
+          <p style={{ color: '#888', fontSize: '13px' }}>
+            Tracking {uniqueWhales} whale wallets on Solana · Data from on-chain transactions ·{' '}
+            <a href="https://solscan.io" target="_blank" rel="noopener noreferrer" style={{ color: '#60a5fa', textDecoration: 'none' }}>
+              Solscan
+            </a>
+            <br />
+            <span style={{ color: '#4ade80' }}>Updated daily</span>
+          </p>
         </div>
       </main>
       <Footer />
