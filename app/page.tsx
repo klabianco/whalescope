@@ -367,12 +367,8 @@ export default function Home() {
               textAlign: 'center',
             }}
           >
-            <div style={{ fontSize: '36px', marginBottom: '12px' }}>🐋</div>
-            <h2 style={{ color: '#fff', fontSize: '20px', fontWeight: '700', marginBottom: '8px' }}>
-              Your wallet is your account
-            </h2>
-            <p style={{ color: '#888', fontSize: '14px', lineHeight: '1.5', marginBottom: '24px' }}>
-              No signup needed. Connect your Solana wallet to save your watchlist and get alerts when whales trade.
+            <p style={{ color: '#fff', fontSize: '16px', fontWeight: '600', lineHeight: '1.5', marginBottom: '20px' }}>
+              Your wallet is your account. Connect to save your watchlist and get alerts when whales trade.
             </p>
             <button
               onClick={() => {
