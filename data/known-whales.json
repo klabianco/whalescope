@@ -1,122 +1,98 @@
 [
   {
-    "name": "Jump Crypto",
-    "type": "Market Maker",
-    "address": "5Q544fKrFoe6tsEbD7S8EmxGTJYAKtTVhAW5Q5pge4j1",
-    "description": "Major crypto trading firm and market maker"
-  },
-  {
-    "name": "Wintermute",
-    "type": "Market Maker", 
-    "address": "CuieVDEDtLo7FypA9SbLM9saXFdb1dsshEkyErMqkRQq",
-    "description": "Algorithmic trading firm"
-  },
-  {
-    "name": "Binance Hot Wallet",
-    "type": "Exchange",
+    "name": "Whale #1 (Exchange Pattern)",
+    "type": "Unverified Exchange",
     "address": "5tzFkiKscXHK5ZXCGbXZxdw7gTjjD1mBwuoFbhUvuAi9",
-    "description": "Binance exchange hot wallet"
+    "description": "1.1M+ SOL balance. High-volume daily transfers to many addresses. Pattern consistent with exchange hot wallet. Identity unverified.",
+    "balanceSOL": 1137417,
+    "verified": false,
+    "lastChecked": "2026-01-28"
   },
   {
-    "name": "Coinbase Prime",
-    "type": "Exchange",
-    "address": "GJRs4FwHtemZ5ZE9x3FNvJ8TMwitKTh21yxdRPqn7npE",
-    "description": "Coinbase institutional custody"
-  },
-  {
-    "name": "Solana Foundation",
-    "type": "Foundation",
-    "address": "GK2zqSsXLA2rwVZk347RYhh6jJpRsCA69FjLW93ZGi3B",
-    "description": "Official Solana Foundation wallet"
-  },
-  {
-    "name": "Multicoin Capital",
-    "type": "VC",
-    "address": "AKnL4NNf3DGWZJS6cPknBuEGnVsV4A4m5tgebLHaRSZ9",
-    "description": "Crypto venture capital fund"
-  },
-  {
-    "name": "Paradigm",
-    "type": "VC",
-    "address": "HN7cABqLq46Es1jh92dQQisAq662SmxELLLsHHe4YWrH",
-    "description": "Major crypto VC fund"
-  },
-  {
-    "name": "Alameda Research",
-    "type": "Trading Firm (Defunct)",
-    "address": "5VCwKtCXgCJ6kit5FybXjvriW3xELsFDhYrPSqtJNmcD",
-    "description": "Former FTX trading arm - defunct but wallets still tracked"
-  },
-  {
-    "name": "Kraken",
-    "type": "Exchange",
-    "address": "FWznbcNXWQuHTawe9RxvQ2LdCENssh12dsznf4RiouN5",
-    "description": "Kraken exchange wallet"
-  },
-  {
-    "name": "OKX",
-    "type": "Exchange",
-    "address": "5VCwKtCXgCJ6kit5FybXjvriW3xELsFDhYrPSqtJNmcD",
-    "description": "OKX exchange hot wallet"
-  },
-  {
-    "name": "DeFiance Capital",
-    "type": "VC",
-    "address": "CZ2FBDqQ7Y94VQp5RhdPLpqbqg5e56sCNQYhXpyTdqGw",
-    "description": "DeFi-focused VC fund"
-  },
-  {
-    "name": "Galaxy Digital",
-    "type": "VC",
-    "address": "E6aTzkZKdCECgpDtBZtVpqiHwfoxx3XpEfH4yjnBPMNE",
-    "description": "Mike Novogratz's crypto investment firm"
-  },
-  {
-    "name": "Amber Group",
-    "type": "Trading Firm",
-    "address": "FKY6NyXGpMPR3pE2gEThXHPLNZLLqt7pCijBxEuiaNjf",
-    "description": "Crypto trading and financial services"
-  },
-  {
-    "name": "Three Arrows Capital",
-    "type": "VC (Defunct)",
-    "address": "9BVcYqEQxyccuwznvxXqDkSJFavvTyheiTYk231T1A8S",
-    "description": "Former crypto hedge fund - defunct"
-  },
-  {
-    "name": "Polychain Capital",
-    "type": "VC",
-    "address": "FYSvSgMqmPEhNWHQkdehrPQdrb6WVSzMBLRNV6aHMFJN",
-    "description": "Major crypto VC fund"
-  },
-  {
-    "name": "Crypto.com",
-    "type": "Exchange",
-    "address": "AobVSwdW9BbpMdJvTqeCN4hPAmh4rHm7vwLnQ5ATSPo9",
-    "description": "Crypto.com exchange wallet"
-  },
-  {
-    "name": "Bybit",
-    "type": "Exchange",
+    "name": "Whale #2 (Exchange Pattern)",
+    "type": "Unverified Exchange",
     "address": "AC5RDfQFmDS1deWZos921JfqscXdByf8BKHs5ACWjtW2",
-    "description": "Bybit exchange wallet"
+    "description": "286K+ SOL balance. Active daily transfers. Pattern consistent with exchange hot wallet. Identity unverified.",
+    "balanceSOL": 286847,
+    "verified": false,
+    "lastChecked": "2026-01-28"
   },
   {
-    "name": "Messari",
-    "type": "Research",
-    "address": "DRpbCBMxVnDK7maPM5tGv6MvB3v1sRMC86PZ8okm21hy",
-    "description": "Crypto research firm"
+    "name": "Whale #3 (DeFi Trader)",
+    "type": "Active Trader",
+    "address": "5Q544fKrFoe6tsEbD7S8EmxGTJYAKtTVhAW5Q5pge4j1",
+    "description": "Active Raydium DEX trader. Recent swap activity. ~33 SOL balance but high tx volume.",
+    "balanceSOL": 33,
+    "verified": false,
+    "lastChecked": "2026-01-28"
   },
   {
-    "name": "Delphi Digital",
-    "type": "Research/VC",
-    "address": "8MQNm3R4VbpDgKEqxnULz7zBhMCXfyiLpENMkaEMuNbL",
-    "description": "Crypto research and ventures"
+    "name": "Whale #4 (Large Holder)",
+    "type": "Whale",
+    "address": "MJKqp326RZCHnAAbew9MDdui3iCKWco7fsK9sVuZTX2",
+    "description": "Top #1 SOL holder. 5.17M SOL (1.01% of supply). Source: CoinCarp Solana Rich List.",
+    "balanceSOL": 5178991,
+    "verified": true,
+    "verifiedSource": "coincarp.com/currencies/solana/richlist",
+    "lastChecked": "2026-01-28"
   },
   {
-    "name": "Sino Global Capital",
-    "type": "VC",
-    "address": "BuNe7qF1cNgEBbXKPuZrWdcTxbRHm9vHxU8BHKW8kWqf",
-    "description": "Asia-focused crypto VC"
+    "name": "Whale #5 (Large Holder)",
+    "type": "Whale",
+    "address": "52C9T2T7JRojtxumYnYZhyUmrN7kqzvCLc4Ksvjk7TxD",
+    "description": "Top #2 SOL holder. 4.37M SOL (0.85% of supply). Source: CoinCarp Solana Rich List.",
+    "balanceSOL": 4371056,
+    "verified": true,
+    "verifiedSource": "coincarp.com/currencies/solana/richlist",
+    "lastChecked": "2026-01-28"
+  },
+  {
+    "name": "Whale #6 (Large Holder)",
+    "type": "Whale",
+    "address": "8BseXT9EtoEhBTKFFYkwTnjKSUZwhtmdKY2Jrj8j45Rt",
+    "description": "Top #3 SOL holder. 3.93M SOL (0.77% of supply). Source: CoinCarp Solana Rich List.",
+    "balanceSOL": 3927080,
+    "verified": true,
+    "verifiedSource": "coincarp.com/currencies/solana/richlist",
+    "lastChecked": "2026-01-28"
+  },
+  {
+    "name": "Whale #7 (Large Holder)",
+    "type": "Whale",
+    "address": "GitYucwpNcg6Dx1Y15UQ9TQn8LZMX1uuqQNn8rXxEWNC",
+    "description": "Top #4 SOL holder. 3.63M SOL (0.71% of supply). Source: CoinCarp Solana Rich List.",
+    "balanceSOL": 3628341,
+    "verified": true,
+    "verifiedSource": "coincarp.com/currencies/solana/richlist",
+    "lastChecked": "2026-01-28"
+  },
+  {
+    "name": "Whale #8 (Large Holder)",
+    "type": "Whale",
+    "address": "9QgXqrgdbVU8KcpfskqJpAXKzbaYQJecgMAruSWoXDkM",
+    "description": "Top #5 SOL holder. 3.14M SOL (0.61% of supply). Source: CoinCarp Solana Rich List.",
+    "balanceSOL": 3141238,
+    "verified": true,
+    "verifiedSource": "coincarp.com/currencies/solana/richlist",
+    "lastChecked": "2026-01-28"
+  },
+  {
+    "name": "Whale #9 (High Volume)",
+    "type": "Whale",
+    "address": "5VCwKtCXgCJ6kit5FybXjvriW3xELsFDhYrPSqtJNmcD",
+    "description": "Active wallet, recently transferred 7,359 SOL in single tx. Low resting balance. Identity unverified.",
+    "balanceSOL": 0,
+    "verified": false,
+    "lastChecked": "2026-01-28"
+  },
+  {
+    "name": "Whale #10 (Large Holder)",
+    "type": "Whale",
+    "address": "9uRJ5aGgeu2i3J98hsC5FDxd2PmRjVy9fQwNAy7fzLG3",
+    "description": "Top #6 SOL holder. 2.87M SOL (0.56% of supply). Source: CoinCarp Solana Rich List.",
+    "balanceSOL": 2870045,
+    "verified": true,
+    "verifiedSource": "coincarp.com/currencies/solana/richlist",
+    "lastChecked": "2026-01-28"
   }
 ]

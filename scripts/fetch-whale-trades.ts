@@ -6,14 +6,18 @@
 const HELIUS_API_KEY = process.env.HELIUS_API_KEY || "2bc6aa5c-ec94-4566-9102-18294afa2b14";
 const HELIUS_BASE = `https://api.helius.xyz/v0`;
 
-// Known profitable wallets (curated list - we'll expand this)
-// Sources: Twitter famous traders, on-chain analysis, leaderboards
-const SMART_WALLETS = [
-  { address: "JCpKmZwNQVRMKBvYANwcVXmPQVmKgzksqNeygeysD4U6", label: "Whale 1 - Meme Coin Hunter" },
-  { address: "5Q544fKrFoe6tsEbD7S8EmxGTJYAKtTVhAW5Q5pge4j1", label: "Raydium Top Trader" },
-  { address: "HN7cABqLq46Es1jh92dQQisAq662SmxELLLsHHe4YWrH", label: "DeFi Degen" },
-  { address: "AXWogXHKGe42fC4GVH6jw6nqLX7cN8ZHzKi9PZxWMNJ4", label: "Pump.fun Sniper" },
-];
+// Known wallets loaded from verified data file
+// Labels describe observable behavior, not claimed identity
+// See data/known-whales.json for verification status
+import { readFileSync } from 'fs';
+import { join } from 'path';
+
+const knownWhalesPath = join(process.cwd(), 'data', 'known-whales.json');
+const knownWhales = JSON.parse(readFileSync(knownWhalesPath, 'utf-8'));
+const SMART_WALLETS = knownWhales.map((w: { address: string; name: string }) => ({
+  address: w.address,
+  label: w.name,
+}));
 
 interface TokenTransfer {
   fromUserAccount: string;
