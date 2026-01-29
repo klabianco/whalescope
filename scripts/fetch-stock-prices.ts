@@ -108,58 +108,112 @@ async function main() {
   let cached = 0;
   let failed = 0;
   
-  for (const ticker of tickers) {
-    // Initialize cache for ticker if needed
+  // Phase 1: Get current prices for all tickers (most important for leaderboard)
+  const needsCurrentPrice = tickers.filter(t => !cache[t] || cache[t].lastUpdated !== today);
+  console.log(`Phase 1: Fetching current prices for ${needsCurrentPrice.length} tickers...\n`);
+  
+  for (let i = 0; i < needsCurrentPrice.length; i++) {
+    const ticker = needsCurrentPrice[i];
+    
     if (!cache[ticker]) {
       cache[ticker] = { prices: {}, lastUpdated: '' };
     }
     
-    // Get current price if not fetched today
-    if (cache[ticker].lastUpdated !== today) {
-      console.log(`Fetching ${ticker}...`);
-      const currentPrice = await getCurrentPrice(ticker);
-      if (currentPrice) {
-        cache[ticker].prices[today] = currentPrice;
-        cache[ticker].lastUpdated = today;
-        fetched++;
-      } else {
-        failed++;
-      }
-      // Rate limiting
-      await new Promise(r => setTimeout(r, 300));
+    const currentPrice = await getCurrentPrice(ticker);
+    if (currentPrice) {
+      cache[ticker].prices[today] = currentPrice;
+      cache[ticker].lastUpdated = today;
+      fetched++;
     } else {
-      cached++;
+      failed++;
     }
     
-    // Get historical prices for trade dates
+    // Progress + save every 50 tickers
+    if ((i + 1) % 50 === 0) {
+      console.log(`  Progress: ${i + 1}/${needsCurrentPrice.length} (${fetched} ok, ${failed} failed)`);
+      saveCache(cache);
+    }
+    
+    // Rate limiting
+    await new Promise(r => setTimeout(r, 200));
+  }
+  
+  // Save after phase 1
+  saveCache(cache);
+  console.log(`\nPhase 1 done: ${fetched} fetched, ${failed} failed\n`);
+  
+  // Phase 2: Get historical trade-date prices (only for tickers we have current prices for)
+  const tickersWithPrices = tickers.filter(t => cache[t]?.prices[today]);
+  console.log(`Phase 2: Fetching historical prices for ${tickersWithPrices.length} tickers...\n`);
+  
+  let histFetched = 0;
+  let histSkipped = 0;
+  let tickersDone = 0;
+  
+  for (const ticker of tickersWithPrices) {
     const tickerTrades = trades.filter(t => t.ticker === ticker);
+    // Only fetch unique trade dates we don't already have
+    const needsDates = new Set<string>();
     for (const trade of tickerTrades) {
       const tradeDate = trade.traded || trade.filed;
       if (!tradeDate) continue;
-      
       const dateKey = new Date(tradeDate).toISOString().split('T')[0];
-      
-      // Skip if we already have this date
-      if (cache[ticker].prices[dateKey]) continue;
-      
-      const price = await getHistoricalPrice(ticker, tradeDate);
-      if (price) {
-        cache[ticker].prices[dateKey] = price;
-        fetched++;
+      if (!cache[ticker].prices[dateKey]) {
+        needsDates.add(dateKey);
       }
-      
-      // Rate limiting
-      await new Promise(r => setTimeout(r, 300));
     }
+    
+    if (needsDates.size === 0) {
+      histSkipped++;
+      continue;
+    }
+    
+    // Fetch entire history in one call instead of per-date
+    try {
+      const oldestDate = [...needsDates].sort()[0];
+      const result = await yahooFinance.chart(ticker, {
+        period1: new Date(oldestDate),
+        period2: new Date(),
+        interval: '1d'
+      });
+      
+      if (result.quotes) {
+        for (const quote of result.quotes) {
+          const qDate = new Date(quote.date).toISOString().split('T')[0];
+          if (quote.close) {
+            cache[ticker].prices[qDate] = quote.close;
+          }
+        }
+        histFetched++;
+      }
+    } catch (e) {
+      // Skip failures silently
+    }
+    
+    tickersDone++;
+    if (tickersDone % 50 === 0) {
+      console.log(`  Phase 2: ${tickersDone}/${tickersWithPrices.length}`);
+      saveCache(cache);
+    }
+    
+    await new Promise(r => setTimeout(r, 200));
   }
+  
+  // Count already cached
+  cached = tickers.length - needsCurrentPrice.length;
   
   // Save cache
   saveCache(cache);
   
+  // Final save
+  saveCache(cache);
+  
   console.log(`\n✅ Done!`);
-  console.log(`   Fetched: ${fetched}`);
-  console.log(`   Cached: ${cached}`);
+  console.log(`   Current prices fetched: ${fetched}`);
+  console.log(`   Historical tickers fetched: ${histFetched}`);
+  console.log(`   Already cached: ${cached}`);
   console.log(`   Failed: ${failed}`);
+  console.log(`   Total tickers in cache: ${Object.keys(cache).length}`);
   console.log(`   Saved to: ${CACHE_PATH}`);
 }
 
