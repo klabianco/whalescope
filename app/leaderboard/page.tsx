@@ -165,7 +165,7 @@ function getTrades(): CongressTrade[] {
 export default function LeaderboardPage() {
   const trades = getTrades();
   const priceCache = loadPriceCache();
-  const leaderboard = calculateLeaderboard(trades, priceCache);
+  const leaderboard = calculateLeaderboard(trades, priceCache).slice(0, 50);
   
   return <LeaderboardClient leaderboard={leaderboard} />;
 }

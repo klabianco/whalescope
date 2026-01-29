@@ -1,11 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import CommitteeCorrelation from '../components/CommitteeCorrelation';
 import { Footer } from '../components/Footer';
 import TradeAlerts from '../components/TradeAlerts';
 import { Header } from '../components/Header';
+import { useAuth } from '../providers/AuthProvider';
 
 interface CongressTrade {
   politician: string;
@@ -55,11 +56,32 @@ function hasCorrelation(trade: CongressTrade, committeeData: CommitteeData): boo
 
 const TRADES_PER_PAGE = 25;
 
+// Check if a trade was filed within the last 24 hours
+function isRecentTrade(trade: CongressTrade): boolean {
+  const filedDate = new Date(trade.filed + 'T00:00:00');
+  const now = new Date();
+  const hoursSinceFiled = (now.getTime() - filedDate.getTime()) / (1000 * 60 * 60);
+  return hoursSinceFiled < 24;
+}
+
 export default function CongressClient({ trades, topTraders, committeeData, politicians }: Props) {
   const [filter, setFilter] = useState<'all' | 'buy' | 'sell' | 'flagged'>('all');
   const [visibleCount, setVisibleCount] = useState(TRADES_PER_PAGE);
   
+  let isPro = false;
+  try {
+    const auth = useAuth();
+    isPro = auth.isPro;
+  } catch {
+    // AuthProvider not available (e.g. SSR) — treat as free user
+  }
+
+  // Split trades into public (>24h) and recent (<24h, Pro-only)
+  const recentTradeCount = useMemo(() => trades.filter(isRecentTrade).length, [trades]);
+
   const filteredTrades = trades.filter(t => {
+    // Free users don't see trades filed in last 24h
+    if (!isPro && isRecentTrade(t)) return false;
     if (filter === 'buy') return t.type === 'Purchase';
     if (filter === 'sell') return t.type === 'Sale';
     if (filter === 'flagged') return hasCorrelation(t, committeeData);
@@ -130,6 +152,46 @@ export default function CongressClient({ trades, topTraders, committeeData, poli
               </Link>
             ))}
           </div>
+        </div>
+      )}
+
+      {/* Pro Upsell - shown when recent trades are hidden */}
+      {!isPro && recentTradeCount > 0 && (
+        <div style={{
+          background: 'linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(34, 197, 94, 0.05) 100%)',
+          border: '1px solid rgba(34, 197, 94, 0.3)',
+          borderRadius: '12px',
+          padding: '16px 20px',
+          marginBottom: '20px',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: '12px'
+        }}>
+          <div>
+            <p style={{ color: '#22c55e', fontSize: '14px', fontWeight: '600', margin: 0 }}>
+              🔒 {recentTradeCount} trade{recentTradeCount > 1 ? 's' : ''} filed in the last 24h
+            </p>
+            <p style={{ color: '#71717a', fontSize: '13px', margin: '4px 0 0' }}>
+              Pro members see new trades instantly. Free users get a 24h delay.
+            </p>
+          </div>
+          <Link href="/pricing" style={{ textDecoration: 'none' }}>
+            <button style={{
+              background: '#22c55e',
+              color: '#000',
+              border: 'none',
+              borderRadius: '8px',
+              padding: '8px 16px',
+              fontSize: '13px',
+              fontWeight: '600',
+              cursor: 'pointer',
+              whiteSpace: 'nowrap'
+            }}>
+              Upgrade to Pro
+            </button>
+          </Link>
         </div>
       )}
 

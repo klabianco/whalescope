@@ -54,7 +54,7 @@ export default function DashboardPage() {
     return null;
   }
 
-  const watchlistLimit = isPro ? Infinity : 5;
+  const watchlistLimit = isPro ? Infinity : 3;
   const watchlistCount = watchlist.length;
 
   return (
