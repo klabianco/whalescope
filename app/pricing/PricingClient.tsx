@@ -208,7 +208,7 @@ export default function PricingClient() {
               </div>
               {billing === 'yearly' && (
                 <p style={{ color: '#22c55e', fontSize: '13px', marginTop: '4px' }}>
-                  ${PRICING.pro.yearly}/year billed annually ({PRICING_DISPLAY.pro.monthsFree} months free)
+                  ${PRICING.pro.yearly}/year — one-time payment ({PRICING_DISPLAY.pro.monthsFree} months free)
                 </p>
               )}
             </div>
@@ -358,8 +358,8 @@ export default function PricingClient() {
                 a: 'We accept USDC and SOL on Solana. Pay directly from your wallet.'
               },
               {
-                q: 'Can I cancel anytime?',
-                a: 'Yes. Cancel anytime from your account. No questions asked.'
+                q: 'Is this a recurring subscription?',
+                a: 'No — it\'s a one-time payment. You won\'t be auto-charged. We\'ll email you before your access expires so you can renew if you\'d like.'
               },
               {
                 q: 'How real-time are the alerts?',

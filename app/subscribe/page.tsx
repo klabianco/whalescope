@@ -114,7 +114,7 @@ function SubscribeContent() {
           WhaleScope Pro
         </h1>
         <p style={{ color: '#71717a', fontSize: '15px' }}>
-          {isYearly ? 'Annual subscription' : 'Monthly subscription'}
+          {isYearly ? 'Annual access · one-time payment' : 'Monthly access · one-time payment'}
         </p>
       </div>
 
@@ -180,7 +180,7 @@ function SubscribeContent() {
               Payment Successful!
             </h3>
             <p style={{ color: '#a1a1aa', fontSize: '14px', marginBottom: '16px' }}>
-              Your Pro subscription is now active.
+              Your Pro access is now active{isYearly ? ' for 1 year' : ' for 30 days'}. We'll email you before it expires.
             </p>
             <a
               href={`https://solscan.io/tx/${txSig}`}
@@ -225,9 +225,11 @@ function SubscribeContent() {
         )}
       </div>
 
-      <p style={{ color: '#52525b', fontSize: '13px', textAlign: 'center' }}>
-        Payments are processed on Solana. USDC only.
-      </p>
+      <div style={{ color: '#52525b', fontSize: '13px', textAlign: 'center', lineHeight: '1.6' }}>
+        <p>💡 This is a <strong style={{ color: '#a1a1aa' }}>one-time payment</strong>, not a recurring subscription.</p>
+        <p style={{ marginTop: '4px' }}>You won't be auto-charged. We'll email you before your access expires so you can renew if you'd like.</p>
+        <p style={{ marginTop: '8px' }}>Payments are processed on Solana. USDC only.</p>
+      </div>
     </main>
   );
 }
