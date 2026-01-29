@@ -81,7 +81,7 @@ const TOKEN_SYMBOLS: Record<string, string> = {
   "bSo13r4TkiE4KumL71LsHTPpL2euBYLFx6h9HP3piy1": "bSOL",
 };
 
-async function fetchWalletTransactions(address: string, limit = 15): Promise<ParsedTransaction[]> {
+async function fetchWalletTransactions(address: string, limit = 50): Promise<ParsedTransaction[]> {
   const url = `${HELIUS_BASE}/addresses/${address}/transactions?api-key=${HELIUS_API_KEY}&limit=${limit}`;
   
   try {
