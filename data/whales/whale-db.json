@@ -1,0 +1,2176 @@
+{
+  "version": "1.0.0",
+  "last_updated": "2026-01-29T06:30:00Z",
+  "sources": [
+    "solscan_api",
+    "on_chain_token_holders"
+  ],
+  "categories": {
+    "exchange": "Centralized exchange wallet (hot/cold)",
+    "protocol": "DeFi protocol vault or authority",
+    "market": "DEX liquidity pool / market",
+    "fund": "Investment fund / VC / market maker",
+    "individual": "Individual whale / known person",
+    "institution": "Institution (corporate, foundation, govt)",
+    "mint_authority": "Token mint authority",
+    "unknown_whale": "Large holder, identity unknown"
+  },
+  "wallets": [
+    {
+      "address": "5tzFkiKscXHK5ZXCGbXZxdw7gTjjD1mBwuoFbhUvuAi9",
+      "label": "Binance 2",
+      "category": "exchange",
+      "estimated_value_usd": 1777609269.177812,
+      "tokens_held": {
+        "USDC": 502353115.389789,
+        "USDT": 675257692.635132,
+        "JTO": 25210084.89539497,
+        "WIF": 15827399.699227,
+        "TRUMP": 3743163.341914,
+        "RAY": 4028914.313134
+      },
+      "solscan_tags": [
+        "binance",
+        "exchange_wallet"
+      ],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "9DrvZvyWh1HuAoZxvYWMvkf2XCzryCpGgHqrMjyDWpmo",
+      "label": "Kamino Reserve 1",
+      "category": "protocol",
+      "estimated_value_usd": 1325930228.2214406,
+      "tokens_held": {
+        "USDC": 45858748.835106,
+        "USDT": 8856078.804687,
+        "SOL": 362171.039959595
+      },
+      "solscan_tags": [
+        "kamino_lending",
+        "dex_wallet"
+      ],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "AVzP2GeRmqGphJsMxWoqjpUifPpCret7LqWhD8NWQK49",
+      "label": "Jupiter Labs Perpetuals Vault Authority",
+      "category": "protocol",
+      "estimated_value_usd": 1215243028.5213795,
+      "tokens_held": {
+        "USDC": 270539623.15337,
+        "SOL": 1613276.756531449
+      },
+      "solscan_tags": [
+        "jupiter_perp",
+        "vault_owner"
+      ],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "7VHUFJHWu2CuExkJcJrzhQPJ2oygupTWkL2A2For4BmE",
+      "label": "Circle",
+      "category": "institution",
+      "estimated_value_usd": 1007307699.7942414,
+      "tokens_held": {
+        "USDC": 373957781.695984
+      },
+      "solscan_tags": [],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "7s1da8DduuBFqGra5bJBjpnvL5E9mGzCuMk1Qkh4or2Z",
+      "label": "Jupiter Lend: Supply Vault Owner",
+      "category": "protocol",
+      "estimated_value_usd": 975756981.3634777,
+      "tokens_held": {
+        "USDC": 101608256.947595,
+        "USDT": 18398303.225772,
+        "SOL": 246816.449134909,
+        "JUP": 27618423.929879
+      },
+      "solscan_tags": [
+        "vault_owner",
+        "dex_wallet",
+        "jupiter"
+      ],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "5Q544fKrFoe6tsEbD7S8EmxGTJYAKtTVhAW5Q5pge4j1",
+      "label": "Raydium Authority V4",
+      "category": "protocol",
+      "estimated_value_usd": 744385599.1884367,
+      "tokens_held": {
+        "SOL": 25622.096059186,
+        "WIF": 11987294.968867
+      },
+      "solscan_tags": [
+        "dex_wallet"
+      ],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "CBEADkb8TZAXHjVE3zwad4L995GZE7rJcacJ7asebkVG",
+      "label": "OKX: Cold Wallet",
+      "category": "exchange",
+      "estimated_value_usd": 684613591.1656798,
+      "tokens_held": {
+        "USDT": 133184245.194429,
+        "WIF": 27543569.91005,
+        "TRUMP": 8272075.371442
+      },
+      "solscan_tags": [],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "H8BgJgae6qhMtf7BM2JtddywSQt11WdxHHxkGLNX5hss",
+      "label": "Binance Cold Wallet",
+      "category": "exchange",
+      "estimated_value_usd": 522461414.20441455,
+      "tokens_held": {
+        "USDC": 522461392.579
+      },
+      "solscan_tags": [],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "JCNCMFXo5M5qwUPg2Utu1u6YWp3MbygxqBsBeXXJfrw",
+      "label": "Drift Vault",
+      "category": "protocol",
+      "estimated_value_usd": 430629201.40886927,
+      "tokens_held": {
+        "USDC": 32170562.607822,
+        "SOL": 89497.351764744
+      },
+      "solscan_tags": [
+        "drift",
+        "dex_wallet"
+      ],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "6LY1JzAFVZsP2a2xKrtU6znQMQ5h4i7tocWdgrkZzkzF",
+      "label": "Kraken Hot Wallet",
+      "category": "exchange",
+      "estimated_value_usd": 366134388.7740855,
+      "tokens_held": {
+        "USDC": 28296951.746532,
+        "USDT": 65219171.282155,
+        "WIF": 13034623.9796
+      },
+      "solscan_tags": [],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "7TWnq4WeYcwQWBCwKeEX2Q9xqVtthPGkB7adNvueuVuh",
+      "label": "Bitget: Cold Wallet",
+      "category": "exchange",
+      "estimated_value_usd": 348198222.9621971,
+      "tokens_held": {
+        "USDT": 54517419.890889,
+        "WIF": 12205709.136806,
+        "RAY": 2592986.130734
+      },
+      "solscan_tags": [],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "A3znyaRYUvi7GbQv1pp9CqqiVo7anddU9rPKFH55V28R",
+      "label": "USDT Mint Authority #3",
+      "category": "mint_authority",
+      "estimated_value_usd": 321782716.4493563,
+      "tokens_held": {
+        "USDT": 522150757.801269
+      },
+      "solscan_tags": [],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "u6PJ8DtQuPFnfmwHbGFULQ4u4EgjDiyYKjVEsynXq2w",
+      "label": "Gate.io",
+      "category": "exchange",
+      "estimated_value_usd": 320706491.7125388,
+      "tokens_held": {
+        "USDT": 13670871.322511,
+        "TRUMP": 2080372.318686
+      },
+      "solscan_tags": [
+        "exchange_wallet"
+      ],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "FxteHmLwG9nk1eL4pjNve3Eub2goGkkz6g6TbvdmW46a",
+      "label": "Bitfinex Hot Wallet",
+      "category": "exchange",
+      "estimated_value_usd": 214309515.96803194,
+      "tokens_held": {
+        "USDT": 140835609.584137
+      },
+      "solscan_tags": [
+        "exchange_wallet"
+      ],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "6FEVkH17P9y8Q9aCkDdPcMDjvj7SVxrTETaYEm8f51Jy",
+      "label": "Crypto.com Hot Wallet 1",
+      "category": "exchange",
+      "estimated_value_usd": 201047731.03677958,
+      "tokens_held": {
+        "USDC": 27219203.978525,
+        "USDT": 8371818.606866,
+        "TRUMP": 1529188.064597
+      },
+      "solscan_tags": [
+        "exchange_wallet"
+      ],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "8Vkgsarud8mSc1gkzayGA7XhNQfq4wDJRxTWDgq8RaJD",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 188591955.62825325,
+      "tokens_held": {
+        "USDC": 188591955.61454
+      },
+      "solscan_tags": [],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "AYhux5gJzCoeoc1PoJ1VxwPDe22RwcvpHviLDD1oCGvW",
+      "label": "Sanctum Markets",
+      "category": "protocol",
+      "estimated_value_usd": 171641257.93358502,
+      "tokens_held": {
+        "SOL": 38800.384791881
+      },
+      "solscan_tags": [
+        "sanctum",
+        "dex_wallet"
+      ],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "41zCUJsKk6cMB94DDtm99qWmyMZfp4GkAhhuz4xTwePu",
+      "label": "Circle Treasury",
+      "category": "institution",
+      "estimated_value_usd": 159426402.2877457,
+      "tokens_held": {
+        "USDC": 46747978.858056
+      },
+      "solscan_tags": [],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "3csuXZKah5rgpb8RiwX9XfjrMxcp3u1K9mBdCwL51spj",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 153668157.30001855,
+      "tokens_held": {
+        "USDC": 62716965.855903,
+        "USDT": 91055219.30863
+      },
+      "solscan_tags": [],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "FPRFLszBJFHCThF2yWvkGkfvtwyFPRGX9MFHnDGP6UYp",
+      "label": " KuCoin: Deposit 4",
+      "category": "exchange",
+      "estimated_value_usd": 140828687.3683155,
+      "tokens_held": {
+        "USDT": 138393877.210325
+      },
+      "solscan_tags": [],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "66GvPQJhqjUoeq8H93QYPMikAPiVCPP9XU5yfmYYYQBF",
+      "label": "Pump.fun: \"Coin 2 SOL2\" Squad Vault",
+      "category": "protocol",
+      "estimated_value_usd": 128605466.55884342,
+      "tokens_held": {
+        "USDT": 126273125.940614
+      },
+      "solscan_tags": [
+        "pump.fun",
+        "vault"
+      ],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "DdZR6zRFiUt4S5mg7AV1uKB2z1f1WzcNYCaTEEWPAuby",
+      "label": "Solend Main Pool Lending Authority",
+      "category": "protocol",
+      "estimated_value_usd": 112370371.78028561,
+      "tokens_held": {
+        "SOL": 128866.389590306
+      },
+      "solscan_tags": [
+        "solend",
+        "vault_owner"
+      ],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "C68a6RCGLiPskbPYtAcsCjhG8tfTWYcoB4JjCrXFdqyo",
+      "label": "OKX: Hot Wallet",
+      "category": "exchange",
+      "estimated_value_usd": 105110151.57917419,
+      "tokens_held": {
+        "USDT": 34763051.042739
+      },
+      "solscan_tags": [
+        "exchange_wallet"
+      ],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "DBD8hAwLDRQkTsu6EqviaYNGKPnsAMmQonxf7AH8ZcFY",
+      "label": "CCTP Token Minter",
+      "category": "institution",
+      "estimated_value_usd": 83357992.99776074,
+      "tokens_held": {
+        "USDC": 119585728.980183
+      },
+      "solscan_tags": [],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "DdHDoz94o2WJmD9myRobHCwtx1bESpHTd4SSPe6VEZaz",
+      "label": "Raydium Buy Back",
+      "category": "protocol",
+      "estimated_value_usd": 82196873.83459325,
+      "tokens_held": {
+        "SOL": 30680.191440547,
+        "RAY": 5645551.744874
+      },
+      "solscan_tags": [
+        "dex_wallet"
+      ],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "28nYGHJyUVcVdxZtzKByBXEj127XnrUkrE3VaGuWj1ZU",
+      "label": "Ceffu Custody Cold Wallet",
+      "category": "exchange",
+      "estimated_value_usd": 78981080.1597831,
+      "tokens_held": {
+        "USDT": 33609724.968
+      },
+      "solscan_tags": [
+        "exchange_wallet"
+      ],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "GugU1tP7doLeTw9hQP51xRJyS8Da1fWxuiy2rVrnMD2m",
+      "label": "Wormhole: Custody Authority",
+      "category": "protocol",
+      "estimated_value_usd": 74701979.29070175,
+      "tokens_held": {
+        "SOL": 504952.55387462
+      },
+      "solscan_tags": [
+        "wormhole",
+        "dex_wallet"
+      ],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "Q6XprfkF8RQQKoQVG33xT88H7wi8Uk1B1CC7YAs69Gi",
+      "label": "USDT Mint Authority Multisig",
+      "category": "mint_authority",
+      "estimated_value_usd": 73179341.18984914,
+      "tokens_held": {
+        "USDT": 73262719.192721
+      },
+      "solscan_tags": [],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "Gem2VAypSg7Ai7vjDKPTtqFahpoQWkfgVkyzx3rPoTka",
+      "label": "Bybit Wallet 14",
+      "category": "exchange",
+      "estimated_value_usd": 73060889.55920456,
+      "tokens_held": {
+        "USDC": 62227738.003527
+      },
+      "solscan_tags": [
+        "bybit",
+        "exchange_wallet"
+      ],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "FZ1t8TZtx7VSCQdBsxvFJiezj9paUBF6Ub7RKA2eTGyE",
+      "label": "KuCoin: Cold Wallet 2",
+      "category": "exchange",
+      "estimated_value_usd": 69402370.37804402,
+      "tokens_held": {
+        "USDT": 40586879.46
+      },
+      "solscan_tags": [],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "Bc5bth4Mn2n8DX1etZwvnq3uDEGg479s2D24TCEsnXHf",
+      "label": "Bullish.com: Hot Wallet",
+      "category": "exchange",
+      "estimated_value_usd": 63130785.77420317,
+      "tokens_held": {
+        "USDC": 34208320.944891
+      },
+      "solscan_tags": [],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "F6ZjiBm1WgVXzez5vxHeBDgaVPQRfLyFb7GFwXvyZVxD",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 61730790.59125218,
+      "tokens_held": {
+        "USDC": 33118108.905315,
+        "USDT": 28645415.395709
+      },
+      "solscan_tags": [],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "GL8T72PKygWaYrLKtSteN9UUvYYnuC8azNDunk4eaqqQ",
+      "label": "KuCoin: Cold Wallet 3",
+      "category": "exchange",
+      "estimated_value_usd": 60718365.43637894,
+      "tokens_held": {
+        "USDT": 34302773.58
+      },
+      "solscan_tags": [],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "Dx8iy2o46sK1DzWbEcznqSKeLbLVeu7otkibA3WohGAj",
+      "label": "Kamino Reserve 5",
+      "category": "protocol",
+      "estimated_value_usd": 60579492.36866082,
+      "tokens_held": {
+        "SOL": 40123.518481313
+      },
+      "solscan_tags": [
+        "kamino_lending",
+        "dex_wallet"
+      ],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "E1bQJ8eMMn3zmeSewW3HQ8zmJr7KR75JonbwAtWx2bux",
+      "label": " CCTP Token Minter 2",
+      "category": "institution",
+      "estimated_value_usd": 59972807.548456,
+      "tokens_held": {
+        "USDC": 38461115.383575
+      },
+      "solscan_tags": [],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "8YNf5MAeZkjJFx9BekEdCKw9LFagWa7CdJp1LztjUwiw",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 58904210.78713254,
+      "tokens_held": {
+        "USDC": 58904210.773713
+      },
+      "solscan_tags": [],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "2qo8jvuc49pFmTjmUHLiARSV6ppPTaE7gw27ZJ6DnNZy",
+      "label": "Bybit Wallet 12",
+      "category": "exchange",
+      "estimated_value_usd": 56046184.19697602,
+      "tokens_held": {
+        "USDT": 23597888.882746
+      },
+      "solscan_tags": [
+        "bybit",
+        "exchange_wallet"
+      ],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "8wM44Ryv9DFCSfkgUnPEPgnsc53arT4cnmXL6LnnC4UW",
+      "label": "OKX: Hot Wallet",
+      "category": "exchange",
+      "estimated_value_usd": 55598906.23303175,
+      "tokens_held": {
+        "USDT": 15029910.598167
+      },
+      "solscan_tags": [
+        "exchange_wallet"
+      ],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "HsQwR1swWwGGkg7EJ8A1Ft9Kw7rpkYk65S5jiJHj7Juo",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 54794926.855182,
+      "tokens_held": {
+        "USDC": 54794926.855182
+      },
+      "solscan_tags": [],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "AobVSwdW9BbpMdJvTqeCN4hPAmh4rHm7vwLnQ5ATSyrS",
+      "label": "Crypto.com Hot Wallet 2",
+      "category": "exchange",
+      "estimated_value_usd": 53839168.51082708,
+      "tokens_held": {
+        "USDC": 29463265.83172,
+        "USDT": 6443264.452313
+      },
+      "solscan_tags": [
+        "exchange_wallet"
+      ],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "BzGyaGh7LBd5CgrPLa52cEAZvZFEUSFfyVwA8L9x56nV",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 52450710.836185165,
+      "tokens_held": {
+        "USDC": 27668960.872024,
+        "USDT": 24810101.459503
+      },
+      "solscan_tags": [],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "9wZ4ngHgHw5BuEuHNS7PFQ8EYM3aHefesHQMpQRxybpR",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 49500000.012026,
+      "tokens_held": {
+        "USDC": 49500000.012026
+      },
+      "solscan_tags": [],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "3Ln6KEgLoMR2xFHfqtYazP7CxFQPDtUVVtwCVsLKVfmV",
+      "label": "BingX: Cold Wallet",
+      "category": "exchange",
+      "estimated_value_usd": 44642451.417474896,
+      "tokens_held": {
+        "USDT": 8377119.593797
+      },
+      "solscan_tags": [],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "21TNeLp92vZsTbuPYfkaQ9gQeJdZqoEBbxy8VEyaV1jj",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 41200000.24368718,
+      "tokens_held": {
+        "USDC": 41200000.02026
+      },
+      "solscan_tags": [],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "5kwCMKjE3Krvs7cHfcQ9kBkGyPQphd3oJ4KnsXcpMoVc",
+      "label": "Pacifica: Vault",
+      "category": "protocol",
+      "estimated_value_usd": 36100000.0,
+      "tokens_held": {
+        "USDC": 36100000.0
+      },
+      "solscan_tags": [],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "GThUX1Atko4tqhN2NaiTazWSeFWMuiUvfFnyJyUghFMJ",
+      "label": "Raydium Upgrade Authority",
+      "category": "market",
+      "estimated_value_usd": 33941908.24772082,
+      "tokens_held": {
+        "SOL": 35978.797584654,
+        "RAY": 8869656.406798
+      },
+      "solscan_tags": [
+        "raydium"
+      ],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "FERjPVNEa7Udq8CEv68h6tPL46Tq7ieE49HrE2wea3XT",
+      "label": "Meteora (WSOL) Vault Authority",
+      "category": "market",
+      "estimated_value_usd": 33723061.2010939,
+      "tokens_held": {
+        "SOL": 54654.901911262
+      },
+      "solscan_tags": [
+        "meteora",
+        "vault_owner"
+      ],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "ECHhYtSogLASVDZ8NTg1w7oCo2aeJGnNu4pDNvorwB9a",
+      "label": "Phantom: Fee Vault",
+      "category": "protocol",
+      "estimated_value_usd": 31570372.769845773,
+      "tokens_held": {
+        "SOL": 95159.826073541
+      },
+      "solscan_tags": [
+        "fee_vault"
+      ],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "jcerNwQ1Kn5LJcjvSGYgRUwn4yepDF4wnXXejuE7gHF",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 31450972.4256511,
+      "tokens_held": {
+        "USDC": 28650383.566631
+      },
+      "solscan_tags": [],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "smHcuBpWi4PUo4eMH17suBULzZC3r2HML9JnfJSGZgu",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 30998514.117262,
+      "tokens_held": {
+        "USDC": 37577825.995855
+      },
+      "solscan_tags": [],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "4gx76xwWFPTPxS2fkiRJ1wB9HifTDBsCJjdWFxeFFoML",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 29988017.793261,
+      "tokens_held": {
+        "USDC": 29988017.793261
+      },
+      "solscan_tags": [],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "5SDrsMNTYdhmApjfqYHDvjoW92f2S42vcc7zNDVcQ9Ej",
+      "label": "Ceffu Custody Hot Wallet",
+      "category": "exchange",
+      "estimated_value_usd": 28778516.06271469,
+      "tokens_held": {
+        "USDT": 7396491.975508
+      },
+      "solscan_tags": [
+        "exchange_wallet"
+      ],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "3taxccqkMUPqkuKMAxR7hXLGDMTeoaiX7eNbQxpneRo1",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 28429043.965405494,
+      "tokens_held": {
+        "USDC": 27073267.288814
+      },
+      "solscan_tags": [],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "6sEk1enayZBGFyNvvJMTP7qs5S3uC7KLrQWaEk38hSHH",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 27518944.63139011,
+      "tokens_held": {
+        "USDT": 27549942.071069
+      },
+      "solscan_tags": [],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "4K2Lse4uGc67xdutKrsmf4WgGcRevJ52YH4JaSfRrQS9",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 27300825.70863947,
+      "tokens_held": {
+        "USDC": 27300824.215262
+      },
+      "solscan_tags": [],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "9nUTd2UHdYAEbXHja2NAiRMGDgdwJVe84khvzUPGoQqs",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 26112393.865158856,
+      "tokens_held": {
+        "USDT": 10288789.646436
+      },
+      "solscan_tags": [],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "8Lj26EwG5UvNV7zTXAb3irtRmUqMnGjv22oxx9YAZBVb",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 25841238.04116443,
+      "tokens_held": {
+        "USDT": 8155930.147251
+      },
+      "solscan_tags": [],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "FCALJ4edD2suu7Aii6thUyh8uetn61U2g5ymZsNMXMF6",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 25143648.889218807,
+      "tokens_held": {
+        "USDC": 25143598.651903
+      },
+      "solscan_tags": [],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "MfDuWeqSHEqTFVYZ7LoexgAK9dxk7cy4DFJWjWMGVWa",
+      "label": "Wintermute Automated Liquidity Bot",
+      "category": "unknown_whale",
+      "estimated_value_usd": 23765932.654515952,
+      "tokens_held": {
+        "SOL": 40829.883675436
+      },
+      "solscan_tags": [],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "7bWNdNMCzFevTfuKmdDU136FQtfNuzUGJNa2moWBZW4P",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 23714703.079820864,
+      "tokens_held": {
+        "USDC": 23714703.079355
+      },
+      "solscan_tags": [],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "CnXMWB8W7bcnADsZsJAJYkcuu8jr392ZFvxDBiumW3ww",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 23492207.950537145,
+      "tokens_held": {
+        "USDT": 6629130.506932
+      },
+      "solscan_tags": [],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "81w96XvKAZZFmmuzaohSQUyxtGnAPJmkjwoBFBmtytUj",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 23345879.557682697,
+      "tokens_held": {
+        "USDC": 40493000.0
+      },
+      "solscan_tags": [],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "J46qrJyJipe3Vk4bKue4kKj7HvEH2sXwNCMu7iAAntxp",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 21725374.802365705,
+      "tokens_held": {
+        "USDC": 21595188.72026
+      },
+      "solscan_tags": [],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "92q4Y2xGE39Bm2JgNZLZWuafoBiBR4gCj4igfpwvpgcD",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 21181312.875313647,
+      "tokens_held": {
+        "USDC": 21181262.647983
+      },
+      "solscan_tags": [],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "Da8RuzF4whvWoQP8DD1rZMTi2i1u2VHFcU8zFrwfdBzA",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 19820899.45676927,
+      "tokens_held": {
+        "USDT": 37876501.505122
+      },
+      "solscan_tags": [],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "EDpCWJ9UTfphkPt4VoNP6H2kc7pA6ZkKjEzMHUnYx39z",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 18482857.741214,
+      "tokens_held": {
+        "USDC": 35073591.532883
+      },
+      "solscan_tags": [],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "G9XbC9ggrBYogsZgKYf2pnTvPnJ9z5Zd6WG8BuyioTA9",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 16413107.834124224,
+      "tokens_held": {
+        "USDT": 16431182.389793
+      },
+      "solscan_tags": [],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "BMnT51N4iSNhWU5PyFFgWwFvN1jgaiiDr9ZHgnkm3iLJ",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 15356624.435596734,
+      "tokens_held": {
+        "SOL": 22657.74127046
+      },
+      "solscan_tags": [],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "2NpevLhAKs5c9KNQ8zr6GztoSc6krdho6uDoBngg1was",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 14573361.205062145,
+      "tokens_held": {
+        "USDT": 8292826.729487
+      },
+      "solscan_tags": [],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "EU1eYxuiB4KgsnzFUQcfuqFom3BSyTwFGHnugvgoGU1L",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 11987288.118857259,
+      "tokens_held": {
+        "USDT": 12000001.0
+      },
+      "solscan_tags": [],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "HyXJcgYpURfDhgzuyRL7zxP4FhLg7LZQMeDrR4MXZcMN",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 11854195.299761724,
+      "tokens_held": {
+        "USDT": 12052136.492119
+      },
+      "solscan_tags": [],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "3nGBxV5piMnoUAqNUqaqhDZTpEGZm2cCZYNPndHNvGtt",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 10283781.482929,
+      "tokens_held": {
+        "USDC": 24550472.280875
+      },
+      "solscan_tags": [],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "Ep5jXAmYEzmoJ5rd6JePUgrDcE1Dk2PY5cv69UakNjaG",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 9988572.6,
+      "tokens_held": {
+        "USDT": 10000000.0
+      },
+      "solscan_tags": [],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "2kzXy9ZRPKSBLQH3QQRX9wiHzdJes78wdwdsck9q3vPv",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 9121634.085511958,
+      "tokens_held": {
+        "USDT": 9105653.162334
+      },
+      "solscan_tags": [],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "Dc9Tc7DuLaHgBiwRuEKtnN5Rp3XYXd5Z3fRuRQ81ccAq",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 8444175.429719537,
+      "tokens_held": {
+        "USDT": 8453824.787424
+      },
+      "solscan_tags": [],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "Fj2Ds124P6wzesopYWoUqhPqfrhQSVX8T5kxA91gp9Sg",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 8220842.69345581,
+      "tokens_held": {
+        "USDT": 7991002.278595
+      },
+      "solscan_tags": [],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "5JgYXM4DJBv8UboDKqpqD9TYhAARHwYHrMdKzgDvAptN",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 8125905.18512993,
+      "tokens_held": {
+        "USDT": 8135199.50301
+      },
+      "solscan_tags": [],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "6pVK8YrQNRTa7wgoDVuy3pXpfAfgCYdkZjSjRpMDkcyi",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 7401542.285172599,
+      "tokens_held": {
+        "USDT": 7410010.0
+      },
+      "solscan_tags": [],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "DD3AeAssFvjqTvRTrRAtpfjkBF8FpVKnFuwnMLN9haXD",
+      "label": "Marginfi Bank Liquidity (SOL) Vault Authority",
+      "category": "protocol",
+      "estimated_value_usd": 7322390.366375653,
+      "tokens_held": {
+        "SOL": 57130.196800022
+      },
+      "solscan_tags": [
+        "marginfi",
+        "vault_owner"
+      ],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "ETUSFDFz3EH4usBu3UZk2Fh5G5xuYF2KroaCFThZbwNr",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 2347987.212479,
+      "tokens_held": {
+        "USDC": 36613805.855129
+      },
+      "solscan_tags": [],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "9d9mb8kooFfaD3SctgZtkxQypkshx6ezhbKio89ixyy2",
+      "label": "Meteora (TRUMP-USDC) Market",
+      "category": "market",
+      "estimated_value_usd": 0,
+      "tokens_held": {
+        "USDC": 36271182.256231,
+        "TRUMP": 19271851.717239
+      },
+      "solscan_tags": [
+        "meteora",
+        "market"
+      ],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "AS5MV3ear4NZPMWXbCsEz3AdbCaXEnq4ChdaWsvLgkcM",
+      "label": "Raydium (USDS-USDC) Market",
+      "category": "market",
+      "estimated_value_usd": 0,
+      "tokens_held": {
+        "USDC": 23407349.488871
+      },
+      "solscan_tags": [
+        "raydium",
+        "market"
+      ],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "6fteKNvMdv7tYmBoJHhj1jx6rHcEwC6RdSEmVpyS613J",
+      "label": "Orca (syrupUSDC-USDC) Market",
+      "category": "market",
+      "estimated_value_usd": 0,
+      "tokens_held": {
+        "USDC": 20854249.242678
+      },
+      "solscan_tags": [
+        "orca",
+        "market"
+      ],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "Czfq3xZZDmsdGdUyrNLtRhGc47cXcZtLG4crryfu44zE",
+      "label": "Orca (SOL-USDC) Market",
+      "category": "market",
+      "estimated_value_usd": 0,
+      "tokens_held": {
+        "SOL": 255339.604236422
+      },
+      "solscan_tags": [
+        "orca",
+        "market"
+      ],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "AQAGYQsdU853WAKhXM79CgNdoyhrRwXvYHX6qrDyC1FS",
+      "label": "Raydium (WSOL-USD1) Market",
+      "category": "market",
+      "estimated_value_usd": 0,
+      "tokens_held": {
+        "SOL": 79408.641017888
+      },
+      "solscan_tags": [
+        "raydium",
+        "market"
+      ],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "CeaZcxBNLpJWtxzt58qQmfMBtJY8pQLvursXTJYGQpbN",
+      "label": "Orca (WSOL-cbBTC) Market",
+      "category": "market",
+      "estimated_value_usd": 0,
+      "tokens_held": {
+        "SOL": 75861.551585044
+      },
+      "solscan_tags": [
+        "orca",
+        "market"
+      ],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "3ucNos4NbumPLZNWztqGHNFFgkHeRMBQAVemeeomsUxv",
+      "label": "Raydium (WSOL-USDC) Market",
+      "category": "market",
+      "estimated_value_usd": 0,
+      "tokens_held": {
+        "SOL": 65040.477833284
+      },
+      "solscan_tags": [
+        "raydium",
+        "market"
+      ],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "Hp53XEtt4S8SvPCXarsLSdGfZBuUr5mMmZmX2DRNXQKp",
+      "label": "Orca (SOL-JitoSOL) Market",
+      "category": "market",
+      "estimated_value_usd": 0,
+      "tokens_held": {
+        "SOL": 59056.296601002
+      },
+      "solscan_tags": [
+        "orca",
+        "market"
+      ],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "HktfL7iwGKT5QHjywQkcDnZXScoh811k7akrMZJkCcEF",
+      "label": "Orca (SOL-WETH) Market",
+      "category": "market",
+      "estimated_value_usd": 0,
+      "tokens_held": {
+        "SOL": 53786.658608935
+      },
+      "solscan_tags": [
+        "orca",
+        "market"
+      ],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "7VuKeevbvbQQcxz6N4SNLmuq6PYy4AcGQRDssoqo4t65",
+      "label": "FusionAMM (WSOL-USDC) Market",
+      "category": "market",
+      "estimated_value_usd": 0,
+      "tokens_held": {
+        "SOL": 43131.766234084
+      },
+      "solscan_tags": [
+        "fusion_amm",
+        "market"
+      ],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "BGm1tav58oGcsQJehL9WXBFXF7D27vZsKefj4xJKD5Y",
+      "label": "Meteora (WSOL-USDC) Market",
+      "category": "market",
+      "estimated_value_usd": 0,
+      "tokens_held": {
+        "SOL": 39389.81221856
+      },
+      "solscan_tags": [
+        "meteora",
+        "market"
+      ],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "51FQwjrvo8J8zXUaKyAznJ5NYpoiTCuqAqCu3HAMB9NZ",
+      "label": "BisonFi (WSOL-USDC) Market",
+      "category": "market",
+      "estimated_value_usd": 0,
+      "tokens_held": {
+        "SOL": 30906.468197041
+      },
+      "solscan_tags": [
+        "bison_fi",
+        "market"
+      ],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "6a3m2EgFFKfsFuQtP4LJJXPcAe3TQYXNyHUjjZpUxYgd",
+      "label": "Orca (WSOL-JLP) Market",
+      "category": "market",
+      "estimated_value_usd": 0,
+      "tokens_held": {
+        "SOL": 27513.003959884
+      },
+      "solscan_tags": [
+        "orca",
+        "market"
+      ],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "BoeMUkCLHchTD31HdXsbDExuZZfcUppSLpYtV3LZTH6U",
+      "label": "Meteora (JitoSOL-WSOL) Market",
+      "category": "market",
+      "estimated_value_usd": 0,
+      "tokens_held": {
+        "SOL": 25897.563372001
+      },
+      "solscan_tags": [
+        "meteora",
+        "market"
+      ],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "65ZHSArs5XxPseKQbB1B4r16vDxMWnCxHMzogDAqiDUc",
+      "label": "SolFiV2 (WSOL-USDC) Market",
+      "category": "market",
+      "estimated_value_usd": 0,
+      "tokens_held": {
+        "SOL": 23587.327308407
+      },
+      "solscan_tags": [
+        "solfi_v2",
+        "market"
+      ],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "3XLkRVg69AgwKAbnSjJpm3PB4QgVeXFEjiXfw5shWMBT",
+      "label": "Orca (WSOL-PSOL) Market",
+      "category": "market",
+      "estimated_value_usd": 0,
+      "tokens_held": {
+        "SOL": 21701.386140524
+      },
+      "solscan_tags": [
+        "orca",
+        "market"
+      ],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "BVRbyLjjfSBcoyiYFuxbgKYnWuiFaF9CSXEa5vdSZ9Hh",
+      "label": "Meteora (WSOL-USDC) Market",
+      "category": "market",
+      "estimated_value_usd": 0,
+      "tokens_held": {
+        "SOL": 21583.342743115
+      },
+      "solscan_tags": [
+        "meteora",
+        "market"
+      ],
+      "source": "solscan_verified"
+    },
+    {
+      "address": "5eosrve6LktMZgVNszYzebgmmC7BjLK8NoWyRQtcmGTF",
+      "label": "Jito DAO Treasury",
+      "category": "protocol",
+      "estimated_value_usd": 110608644.82234374,
+      "tokens_held": {
+        "JTO": 219904905.5065117
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "5SybwTvGno6SBApbGinXyLqhnPzs47aaBG4PShyPT8ey",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 65724655.120187625,
+      "tokens_held": {
+        "JTO": 70288940.66238
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "3mv8hXktfpgCgK2W2jwRKdwDkw2UaYVJcVDozWmgv1uA",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 12881186.400000429,
+      "tokens_held": {
+        "JTO": 30000000.000001
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "ESnLXehGeReTRw3WxxEZwB4u2C9gAe8dMbob8Q4gm9Yg",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 9393435.946972983,
+      "tokens_held": {
+        "JTO": 21986423.357305303
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "FQnVcnwEXREJ3D4j7LzNGzCiMUVVqxkGEqZ2KffRY8ud",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 8587459.01506214,
+      "tokens_held": {
+        "JTO": 20000000.0303
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "Ad5i15ft4QwmXMvJ721WQdCZwwinMr5X5bmPkfEQhT31",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 8587459.002321178,
+      "tokens_held": {
+        "JTO": 20000000.0
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "CsWayfMjUmFU4Cbndn1QyciPhfNgirRJGPkS2h2LSUyK",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 8587459.059221162,
+      "tokens_held": {
+        "JTO": 20000000.0
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "3dguv2qss6GjmUEnJsddxkR9q5Zoem1sjoSk1jpXFPsz",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 8587458.572297782,
+      "tokens_held": {
+        "JTO": 19999999.0
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "jjCAwuuNpJCNMLAanpwgJZ6cdXzLPXe2GfD6TaDQBXt",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 8497143.48759671,
+      "tokens_held": {
+        "JTO": 19789559.672232877
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "BZ6N1mEhPxvXFy5KDscrQZ2Wc6LRN8MVn2T6GXyEgQr6",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 8115147.861372881,
+      "tokens_held": {
+        "JTO": 18900001.0
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "6pVyMqt1j4Dvq9sB781Sp6uBBFzshGTgRA8K4zDPhskp",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 6044079.638130027,
+      "tokens_held": {
+        "JTO": 18295113.196793105
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "7PTtow6mKkXEpLuLXB3u3qntP6uARjQUTvfuP96STCRm",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 6525107.930019276,
+      "tokens_held": {
+        "JTO": 15196832.948600005
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "9xSi6onCqhLuXTgodd5wB7EXv2WwuYPZyZwDyruGKL6v",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 6440594.600543828,
+      "tokens_held": {
+        "JTO": 15000000.0
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "6GdKDNs1oRjupkUBgKyNMvdnrTafruHtDSgedeJtTnLL",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 6440594.588249561,
+      "tokens_held": {
+        "JTO": 15000000.0
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "5wQULuzRkYe4KAttSD1L1fuxavjepcMn1PycNMmPchna",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 13475794.330879843,
+      "tokens_held": {
+        "JTO": 14714267.805490797
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "24bF2MJTAjqmDUaKHzemic5hkwVqzAbkhjTRCGcynMPT",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 5796453.322430456,
+      "tokens_held": {
+        "JTO": 13499812.383191168
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "CSM5ud7YRZ5pdMGm5L8U9Rgoh6h7sUUR1JyfhemfE3vN",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 5478838.797463523,
+      "tokens_held": {
+        "JTO": 12760092.485271828
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "6xGe9H7hbaXn6cu26fizNCvoUoTRxVapUQ61p5B9fM3N",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 5152474.5600000005,
+      "tokens_held": {
+        "JTO": 12000000.0
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "4TgumWudhhXpkD5cAyhXkk56hUaaVVT82PEXoyGX3iRQ",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 4555643.536940781,
+      "tokens_held": {
+        "JTO": 10609990.8602742
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "61aq585V8cR2sZBeawJFt2NPqmN7zDi1sws4KLs5xHXV",
+      "label": "Jupiter Team Cold Wallet",
+      "category": "protocol",
+      "estimated_value_usd": 386506250.0008783,
+      "tokens_held": {
+        "JUP": 1799366668.24308
+      },
+      "solscan_tags": [
+        "jupiter"
+      ],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "EXJHiMkj6NRFDfhWBMKccHNwdSpCT7tdvQeRf87yHm6T",
+      "label": "Jupiter Community Cold Wallet",
+      "category": "protocol",
+      "estimated_value_usd": 365161821.55044293,
+      "tokens_held": {
+        "JUP": 1700000000.001
+      },
+      "solscan_tags": [
+        "jupiter"
+      ],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "FVhQ3QHvXudWSdGix2sdcG47YmrmUxRhf3KCBmiKfekf",
+      "label": "Jupiter Community Hot Wallet",
+      "category": "protocol",
+      "estimated_value_usd": 79797166.44774507,
+      "tokens_held": {
+        "JUP": 371492923.738762
+      },
+      "solscan_tags": [
+        "jupiter"
+      ],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "Any5gL74oUQy9Psb3goym9STaYMau4CMrTkryS37T7iz",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 58948548.37016213,
+      "tokens_held": {
+        "JUP": 274433226.820385
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "BmEyv8gu9d4aDm5n96nyC3K328cn5UAR5ddVK1CSF1j2",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 46073824.90358035,
+      "tokens_held": {
+        "JUP": 214495332.28272
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM",
+      "label": "Binance 3",
+      "category": "exchange",
+      "estimated_value_usd": 4117175743.778925,
+      "tokens_held": {
+        "JUP": 165296266.184004,
+        "BONK": 6630444252336.522,
+        "WIF": 121553318.91557,
+        "TRUMP": 47589788.144223,
+        "RAY": 34342195.217404
+      },
+      "solscan_tags": [
+        "binance",
+        "exchange_wallet"
+      ],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "CbU4oSFCk8SVgW23NLvb5BwctvWcZZHfxRD6HudP8gAo",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 27145902.155183382,
+      "tokens_held": {
+        "JUP": 126376933.041118
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "CPZmKkAhD2wv1Z21EUZvdH8ZeSD13geAnSfyVBwcW8XK",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 31975529.026281074,
+      "tokens_held": {
+        "JUP": 103869516.852063
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "6wsjaQTidXNqmPDw4st2yMtFmTk7yyBEox5SydFQeJe7",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 20280392.366812844,
+      "tokens_held": {
+        "JUP": 94414767.366779
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "27b4PRN7K37rpTywq65t29rjuNfQkYpxZUjkbtHc5VvZ",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 17210741.39949708,
+      "tokens_held": {
+        "JUP": 81236205.899725
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "6tZT9AUcQn4iHMH79YZEXSy55kDLQ4VbA3PMtfLVNsFX",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 11991629.611691035,
+      "tokens_held": {
+        "JUP": 57468461.920162
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "BN5sEedysJxragPcFoR5UDXSiA7oZLe2FPbo7tZ2MZCG",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 8070642.425546523,
+      "tokens_held": {
+        "JUP": 37572636.684416
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "43DbAvKxhXh1oSxkJSqGosNw3HpBnmsWiak6tB5wpecN",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 32292142.316920336,
+      "tokens_held": {
+        "JUP": 35163392.214864
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "HmU2GUjRjWxFJ7PLZWC4ULKco5qN4NCUhx6hsRo6WgG3",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 6760130.778036963,
+      "tokens_held": {
+        "JUP": 31471589.283002
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "HZVW75BkNM6JyFerRgrtkpAzDSoZj6Z8HSaf9RPWvydy",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 6760130.862076413,
+      "tokens_held": {
+        "JUP": 31471588.87
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "5JA6jjjTKSEMDUKRcNgVmVtn7QcpWWkL7svTNVjgksEq",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 6760130.854877803,
+      "tokens_held": {
+        "JUP": 31471588.87
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "Ew6iUFb1dwu2fy1apprCJBa27mnpV6rZTe9XYeDnfQZc",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 9694843.435196802,
+      "tokens_held": {
+        "JUP": 30415376.834376
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "9K1SJYStwyA7kV2j5gZvqhtSujEhRr5WvES6JRgMyYUY",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 5911953.7276808955,
+      "tokens_held": {
+        "JUP": 27522925.504839
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "8Mm46CsqxiyAputDUp2cXHg41HE3BfynTeMBDwzrMZQH",
+      "label": "Bithumb Hot Wallet 1",
+      "category": "exchange",
+      "estimated_value_usd": 327492151.72191346,
+      "tokens_held": {
+        "JUP": 27237332.633059,
+        "BONK": 1929212324145.3801,
+        "TRUMP": 6668376.425703
+      },
+      "solscan_tags": [
+        "exchange_wallet"
+      ],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "AGkGWK1R669KDT4FCqgDgK7PgahGJPjD4J9xmVjuL9kn",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 38017928.10627895,
+      "tokens_held": {
+        "BONK": 4426104450305.68
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "8Tp9fFkZ2KcRBLYDTUNXo98Ez6ojGb6MZEPXfGDdeBzG",
+      "label": "Robinhood Cold Wallet 1",
+      "category": "exchange",
+      "estimated_value_usd": 588876659.121845,
+      "tokens_held": {
+        "BONK": 4312045617254.889,
+        "WIF": 115931365.513788,
+        "TRUMP": 17475671.365706
+      },
+      "solscan_tags": [
+        "exchange_wallet"
+      ],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "7Lp4JBapgNhXoxpJtR2twufh7oaQyqngqJpy7HFJcn7h",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 28706038.095579166,
+      "tokens_held": {
+        "BONK": 3354477403543.568
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "9AdEE8AAm1XgJrPEs4zkTPozr3o4U5iGbgvPwkNdLDJ3",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 28497500.418133594,
+      "tokens_held": {
+        "BONK": 3299752635134.3584
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "9RpzaFh4J8F6Qg1gjnhrhSp9eXdVDjsesZXe53qp7ubB",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 23090530.39645163,
+      "tokens_held": {
+        "BONK": 2688258761035.302
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "GJ8HjXMqQ79WRvxeAMRMng4ZTaohPcF1MZmBf9tVPpXA",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 23051874.72781113,
+      "tokens_held": {
+        "BONK": 2683756830161.133
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "1tjoQzWg21ceMAhyLVs4s2Zc1Pm27mLTcJ9EfEFu7km",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 23051867.58633439,
+      "tokens_held": {
+        "BONK": 2683756830161.133
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "EbLm4ZtRqDftrQnZaMMvnwcKjK5ef5vm1Hg3sAPv3tKi",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 22994908.325531065,
+      "tokens_held": {
+        "BONK": 2677126193536.918
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "EfEgUV2uQAzTooo6L4oYiEm15F6JBTnGiWMejqxPaqL3",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 19411024.344614696,
+      "tokens_held": {
+        "BONK": 2259881264331.0
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "4xLpwxgYuPwPvtQjE94RLS4WZ4aD8NJYYKr2AJk99Qdg",
+      "label": "Robinhood Hot Wallet",
+      "category": "exchange",
+      "estimated_value_usd": 167670761.0902534,
+      "tokens_held": {
+        "BONK": 1884430335905.776,
+        "WIF": 39925835.416319,
+        "TRUMP": 3924208.222133
+      },
+      "solscan_tags": [
+        "exchange_wallet"
+      ],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "3B7XAQrLoEMDEGvX8569F9GRb9PcXXocJmj5wvhhei9z",
+      "label": "BtcTurk Cold Wallet",
+      "category": "exchange",
+      "estimated_value_usd": 106425679.77800727,
+      "tokens_held": {
+        "BONK": 1464024486706.386,
+        "WIF": 10698786.284017,
+        "TRUMP": 1941378.529476
+      },
+      "solscan_tags": [
+        "exchange_wallet"
+      ],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "CJjCPXBnSt6wRoyi7wzcMj5NbWvmPtzxE2JpWDMTRxj4",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 248763030.20930648,
+      "tokens_held": {
+        "BONK": 1442004389953.638
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "8ijfaFjefHTnE385P5UgdNBwt4R9ftv6PZLsN6FPFf7A",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 8589413.368110357,
+      "tokens_held": {
+        "BONK": 1000000000000.0
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "GBrURzmtWujJRTA3Bkvo7ZgWuZYLMMwPCwre7BejJXnK",
+      "label": "Binance Cold Wallet",
+      "category": "exchange",
+      "estimated_value_usd": 74851134.2529965,
+      "tokens_held": {
+        "BONK": 986434345525.55,
+        "WIF": 10410235.535876
+      },
+      "solscan_tags": [
+        "exchange_wallet"
+      ],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "EZ41WcMH3FmyWGV9WQaDLo5uo4ysVNdeAm1ZoTybxjsJ",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 22591783.826533567,
+      "tokens_held": {
+        "BONK": 853345779658.5072
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "Am8MAEorCMAKxphqjAz3Ff59NEwPm4W2eS3DQLi2B4hg",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 27354105.47699237,
+      "tokens_held": {
+        "BONK": 843477239166.1906
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "F18jTyiQivKmuy3zYsJRjMBPgHab4is16betYFEY67WF",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 7119429.678009193,
+      "tokens_held": {
+        "BONK": 834716894623.6835
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "H9ukwfbFhqQF8wZNokPwe1ddT61HdDBoT5bXFvdD6f8D",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 6119702.941764559,
+      "tokens_held": {
+        "BONK": 712471527902.3632
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "3gd3dqgtJ4jWfBfLYTX67DALFetjc5iS72sCgRhCkW2u",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 54267147.63777177,
+      "tokens_held": {
+        "WIF": 49084012.876031
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "5z7gxL5u4jCW9D6acu28LEw4RKTiBSG1EmXbtCX7efg2",
+      "label": "Revolut: Hot Wallet 2",
+      "category": "exchange",
+      "estimated_value_usd": 110102426.53625166,
+      "tokens_held": {
+        "WIF": 23419773.024305,
+        "TRUMP": 1313667.045618
+      },
+      "solscan_tags": [
+        "exchange_wallet"
+      ],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "5NUdHyuSFHPaHh1Ut2FAotfXmH6qQJu5XPvAxz1z1VMe",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 6566115.964681925,
+      "tokens_held": {
+        "WIF": 20913896.171453
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "CK8i4zFXkDE2KWfyg7g9S748r6mwxajbcKcyGhQMR3qQ",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 15314828.946661774,
+      "tokens_held": {
+        "WIF": 17635096.007392
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "E2RvJg2myWpKcbkhBuF81gfhYr6KvmNcDbSmr5qnatYy",
+      "label": "Kraken: Cold Wallet",
+      "category": "exchange",
+      "estimated_value_usd": 125804371.39229427,
+      "tokens_held": {
+        "WIF": 13333290.19123
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "ADaENsRth44fqKE9vwXwQjjiNr6ZLd2jVTEkCp8hfRcL",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 3848599.3421351514,
+      "tokens_held": {
+        "WIF": 12257866.015003
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "42brAgAVNzMBP7aaktPvAmBSPEkehnFQejiZc53EpJFd",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 46074130.565357804,
+      "tokens_held": {
+        "WIF": 11000002.007132,
+        "TRUMP": 5150000.891233
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "CMivUnnbDHxLq9ChV1bSuiQE5ycZf6JVvFFDePMHhHYK",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 6553622.607046058,
+      "tokens_held": {
+        "WIF": 10000009.0
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "38xCLm9kSExfGU1GdyVuX4vop7SZns9kU2mQyTmmMdUP",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 122401066.7931534,
+      "tokens_held": {
+        "WIF": 9448180.618366
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "EFE3j1pcSP1paUzA86zW7989ZjsFP2J7ginyUqo4ewqR",
+      "label": "Kraken Cold Wallet 3",
+      "category": "exchange",
+      "estimated_value_usd": 140863822.97429413,
+      "tokens_held": {
+        "WIF": 9090655.16222
+      },
+      "solscan_tags": [
+        "exchange_wallet"
+      ],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "2RH6rUTPBJ9rUDPpuV9b8z1YL56k1tYU6Uk5ZoaEFFSK",
+      "label": "Official Trump Meme Team Allocation",
+      "category": "institution",
+      "estimated_value_usd": 3816547216.760206,
+      "tokens_held": {
+        "TRUMP": 800000026.912776
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "8N2ssXZGJbvVLszanERuCJpLZd2nuADgpZwLkDDxwNnS",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 66380043.0388777,
+      "tokens_held": {
+        "TRUMP": 14022154.845694
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "65AXrL2wYbrwEF37euk7Kf56QqGUudWMTYTQcj73y1Ye",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 21300013.294366598,
+      "tokens_held": {
+        "TRUMP": 4492109.299188
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "3C5YE97HADPDxZehYq9Cis8AXr9aNyrUsczKzE1nDbW9",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 0,
+      "tokens_held": {
+        "TRUMP": 3747791.954045
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "qcjtKjw2rMiA6cYkSaV8nbMDf99ASpukzhmg9a4CaN1",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 7995274.003876877,
+      "tokens_held": {
+        "TRUMP": 1686179.693884
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "22Wnk8PwyWZV7BfkZGJEKT9jGGdtvu7xY6EXeRh7zkBa",
+      "label": "Crypto.com Hot Wallet 3",
+      "category": "exchange",
+      "estimated_value_usd": 195786020.20247307,
+      "tokens_held": {
+        "TRUMP": 1671192.176454
+      },
+      "solscan_tags": [
+        "exchange_wallet"
+      ],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "4UdA1ZEEroMEUs3WbQnCdAyeydctVKxBX1CrcwQy7zzE",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 8076181.982571346,
+      "tokens_held": {
+        "TRUMP": 1667046.985391
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "2p63sfdNEKgQo39hQTqjcN5HURs9TWtvuxSs9hTePVxu",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 6234249.872385112,
+      "tokens_held": {
+        "TRUMP": 1297911.850621
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "8pFhUqCU7Fkxfg2DLytRDf7a9oK4XGtN92PrYwtVQc6G",
+      "label": "Raydium Treasury",
+      "category": "protocol",
+      "estimated_value_usd": 280175591.72771704,
+      "tokens_held": {
+        "RAY": 2347142.86
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "4qD717qKoj3Sm8YfHMSR7tSKjWn5An817nArA6nGdcUR",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 33773477.289277315,
+      "tokens_held": {
+        "RAY": 34103634.59526
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "CcPJow48P7tHQjTjxr5GKmdqaRFDbVdd25tDzh9bdYjp",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 8793062.936895836,
+      "tokens_held": {
+        "RAY": 8871098.791837
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "7yEJAtVPDop5P5Xgn8qkjMb3RqitpfmJwQHTbT1TBdwJ",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 3953995.2809595563,
+      "tokens_held": {
+        "RAY": 3954549.644697
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "Gjd48ViypZPnoRaTneYhKst1FhscVjBDk1vAeaHZvZm",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 2863627.06661976,
+      "tokens_held": {
+        "RAY": 2884931.505376
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "C5oqy6eer5yxbnbMsmZ7fAhRYqWhy1FJxGRfXwtXdBQA",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 2684793.847934001,
+      "tokens_held": {
+        "RAY": 2708601.0
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "7woqjAuxu4WJZyrRdpXa9jN3uer7oZAXw7ctFNFHuZn5",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 2478040.331895019,
+      "tokens_held": {
+        "RAY": 2499999.440002
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    },
+    {
+      "address": "3eVpnV8Y6dP6wg1sVB65s17AhnfSfBdstALEgcuQLVSS",
+      "label": null,
+      "category": "unknown_whale",
+      "estimated_value_usd": 2448278.464556639,
+      "tokens_held": {
+        "RAY": 2470005.900001
+      },
+      "solscan_tags": [],
+      "source": "solscan_token_holders"
+    }
+  ]
+}

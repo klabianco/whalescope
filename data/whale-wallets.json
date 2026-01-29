@@ -1,0 +1,1774 @@
+{
+  "lastUpdated": "2026-01-29T06:30:00Z",
+  "source": "WhaleScope (Solscan + on-chain data)",
+  "wallets": [
+    {
+      "address": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM",
+      "name": "Binance 3",
+      "type": "exchange",
+      "totalUSD": "$4.1B",
+      "totalUSDRaw": 4117175743.778925,
+      "topHoldings": [
+        "JUP 165,296,266",
+        "BONK 6,630,444,252,337",
+        "WIF 121,553,319",
+        "TRUMP 47,589,788",
+        "RAY 34,342,195"
+      ],
+      "solscanUrl": "https://solscan.io/account/9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
+    },
+    {
+      "address": "2RH6rUTPBJ9rUDPpuV9b8z1YL56k1tYU6Uk5ZoaEFFSK",
+      "name": "Official Trump Meme Team Allocation",
+      "type": "institution",
+      "totalUSD": "$3.8B",
+      "totalUSDRaw": 3816547216.760206,
+      "topHoldings": [
+        "TRUMP 800,000,027"
+      ],
+      "solscanUrl": "https://solscan.io/account/2RH6rUTPBJ9rUDPpuV9b8z1YL56k1tYU6Uk5ZoaEFFSK"
+    },
+    {
+      "address": "5tzFkiKscXHK5ZXCGbXZxdw7gTjjD1mBwuoFbhUvuAi9",
+      "name": "Binance 2",
+      "type": "exchange",
+      "totalUSD": "$1.8B",
+      "totalUSDRaw": 1777609269.177812,
+      "topHoldings": [
+        "USDC $502,353,115",
+        "USDT $675,257,693",
+        "JTO 25,210,085",
+        "WIF 15,827,400",
+        "TRUMP 3,743,163"
+      ],
+      "solscanUrl": "https://solscan.io/account/5tzFkiKscXHK5ZXCGbXZxdw7gTjjD1mBwuoFbhUvuAi9"
+    },
+    {
+      "address": "9DrvZvyWh1HuAoZxvYWMvkf2XCzryCpGgHqrMjyDWpmo",
+      "name": "Kamino Reserve 1",
+      "type": "protocol",
+      "totalUSD": "$1.3B",
+      "totalUSDRaw": 1325930228.2214406,
+      "topHoldings": [
+        "USDC $45,858,749",
+        "USDT $8,856,079",
+        "SOL 362,171"
+      ],
+      "solscanUrl": "https://solscan.io/account/9DrvZvyWh1HuAoZxvYWMvkf2XCzryCpGgHqrMjyDWpmo"
+    },
+    {
+      "address": "AVzP2GeRmqGphJsMxWoqjpUifPpCret7LqWhD8NWQK49",
+      "name": "Jupiter Labs Perpetuals Vault Authority",
+      "type": "protocol",
+      "totalUSD": "$1.2B",
+      "totalUSDRaw": 1215243028.5213795,
+      "topHoldings": [
+        "USDC $270,539,623",
+        "SOL 1,613,277"
+      ],
+      "solscanUrl": "https://solscan.io/account/AVzP2GeRmqGphJsMxWoqjpUifPpCret7LqWhD8NWQK49"
+    },
+    {
+      "address": "7VHUFJHWu2CuExkJcJrzhQPJ2oygupTWkL2A2For4BmE",
+      "name": "Circle",
+      "type": "institution",
+      "totalUSD": "$1.0B",
+      "totalUSDRaw": 1007307699.7942414,
+      "topHoldings": [
+        "USDC $373,957,782"
+      ],
+      "solscanUrl": "https://solscan.io/account/7VHUFJHWu2CuExkJcJrzhQPJ2oygupTWkL2A2For4BmE"
+    },
+    {
+      "address": "7s1da8DduuBFqGra5bJBjpnvL5E9mGzCuMk1Qkh4or2Z",
+      "name": "Jupiter Lend: Supply Vault Owner",
+      "type": "protocol",
+      "totalUSD": "$975.8M",
+      "totalUSDRaw": 975756981.3634777,
+      "topHoldings": [
+        "USDC $101,608,257",
+        "USDT $18,398,303",
+        "SOL 246,816",
+        "JUP 27,618,424"
+      ],
+      "solscanUrl": "https://solscan.io/account/7s1da8DduuBFqGra5bJBjpnvL5E9mGzCuMk1Qkh4or2Z"
+    },
+    {
+      "address": "5Q544fKrFoe6tsEbD7S8EmxGTJYAKtTVhAW5Q5pge4j1",
+      "name": "Raydium Authority V4",
+      "type": "protocol",
+      "totalUSD": "$744.4M",
+      "totalUSDRaw": 744385599.1884367,
+      "topHoldings": [
+        "SOL 25,622",
+        "WIF 11,987,295"
+      ],
+      "solscanUrl": "https://solscan.io/account/5Q544fKrFoe6tsEbD7S8EmxGTJYAKtTVhAW5Q5pge4j1"
+    },
+    {
+      "address": "CBEADkb8TZAXHjVE3zwad4L995GZE7rJcacJ7asebkVG",
+      "name": "OKX: Cold Wallet",
+      "type": "exchange",
+      "totalUSD": "$684.6M",
+      "totalUSDRaw": 684613591.1656798,
+      "topHoldings": [
+        "USDT $133,184,245",
+        "WIF 27,543,570",
+        "TRUMP 8,272,075"
+      ],
+      "solscanUrl": "https://solscan.io/account/CBEADkb8TZAXHjVE3zwad4L995GZE7rJcacJ7asebkVG"
+    },
+    {
+      "address": "8Tp9fFkZ2KcRBLYDTUNXo98Ez6ojGb6MZEPXfGDdeBzG",
+      "name": "Robinhood Cold Wallet 1",
+      "type": "exchange",
+      "totalUSD": "$588.9M",
+      "totalUSDRaw": 588876659.121845,
+      "topHoldings": [
+        "BONK 4,312,045,617,255",
+        "WIF 115,931,366",
+        "TRUMP 17,475,671"
+      ],
+      "solscanUrl": "https://solscan.io/account/8Tp9fFkZ2KcRBLYDTUNXo98Ez6ojGb6MZEPXfGDdeBzG"
+    },
+    {
+      "address": "H8BgJgae6qhMtf7BM2JtddywSQt11WdxHHxkGLNX5hss",
+      "name": "Binance Cold Wallet",
+      "type": "exchange",
+      "totalUSD": "$522.5M",
+      "totalUSDRaw": 522461414.20441455,
+      "topHoldings": [
+        "USDC $522,461,393"
+      ],
+      "solscanUrl": "https://solscan.io/account/H8BgJgae6qhMtf7BM2JtddywSQt11WdxHHxkGLNX5hss"
+    },
+    {
+      "address": "JCNCMFXo5M5qwUPg2Utu1u6YWp3MbygxqBsBeXXJfrw",
+      "name": "Drift Vault",
+      "type": "protocol",
+      "totalUSD": "$430.6M",
+      "totalUSDRaw": 430629201.40886927,
+      "topHoldings": [
+        "USDC $32,170,563",
+        "SOL 89,497"
+      ],
+      "solscanUrl": "https://solscan.io/account/JCNCMFXo5M5qwUPg2Utu1u6YWp3MbygxqBsBeXXJfrw"
+    },
+    {
+      "address": "61aq585V8cR2sZBeawJFt2NPqmN7zDi1sws4KLs5xHXV",
+      "name": "Jupiter Team Cold Wallet",
+      "type": "protocol",
+      "totalUSD": "$386.5M",
+      "totalUSDRaw": 386506250.0008783,
+      "topHoldings": [
+        "JUP 1,799,366,668"
+      ],
+      "solscanUrl": "https://solscan.io/account/61aq585V8cR2sZBeawJFt2NPqmN7zDi1sws4KLs5xHXV"
+    },
+    {
+      "address": "6LY1JzAFVZsP2a2xKrtU6znQMQ5h4i7tocWdgrkZzkzF",
+      "name": "Kraken Hot Wallet",
+      "type": "exchange",
+      "totalUSD": "$366.1M",
+      "totalUSDRaw": 366134388.7740855,
+      "topHoldings": [
+        "USDC $28,296,952",
+        "USDT $65,219,171",
+        "WIF 13,034,624"
+      ],
+      "solscanUrl": "https://solscan.io/account/6LY1JzAFVZsP2a2xKrtU6znQMQ5h4i7tocWdgrkZzkzF"
+    },
+    {
+      "address": "EXJHiMkj6NRFDfhWBMKccHNwdSpCT7tdvQeRf87yHm6T",
+      "name": "Jupiter Community Cold Wallet",
+      "type": "protocol",
+      "totalUSD": "$365.2M",
+      "totalUSDRaw": 365161821.55044293,
+      "topHoldings": [
+        "JUP 1,700,000,000"
+      ],
+      "solscanUrl": "https://solscan.io/account/EXJHiMkj6NRFDfhWBMKccHNwdSpCT7tdvQeRf87yHm6T"
+    },
+    {
+      "address": "7TWnq4WeYcwQWBCwKeEX2Q9xqVtthPGkB7adNvueuVuh",
+      "name": "Bitget: Cold Wallet",
+      "type": "exchange",
+      "totalUSD": "$348.2M",
+      "totalUSDRaw": 348198222.9621971,
+      "topHoldings": [
+        "USDT $54,517,420",
+        "WIF 12,205,709",
+        "RAY 2,592,986"
+      ],
+      "solscanUrl": "https://solscan.io/account/7TWnq4WeYcwQWBCwKeEX2Q9xqVtthPGkB7adNvueuVuh"
+    },
+    {
+      "address": "8Mm46CsqxiyAputDUp2cXHg41HE3BfynTeMBDwzrMZQH",
+      "name": "Bithumb Hot Wallet 1",
+      "type": "exchange",
+      "totalUSD": "$327.5M",
+      "totalUSDRaw": 327492151.72191346,
+      "topHoldings": [
+        "JUP 27,237,333",
+        "BONK 1,929,212,324,145",
+        "TRUMP 6,668,376"
+      ],
+      "solscanUrl": "https://solscan.io/account/8Mm46CsqxiyAputDUp2cXHg41HE3BfynTeMBDwzrMZQH"
+    },
+    {
+      "address": "u6PJ8DtQuPFnfmwHbGFULQ4u4EgjDiyYKjVEsynXq2w",
+      "name": "Gate.io",
+      "type": "exchange",
+      "totalUSD": "$320.7M",
+      "totalUSDRaw": 320706491.7125388,
+      "topHoldings": [
+        "USDT $13,670,871",
+        "TRUMP 2,080,372"
+      ],
+      "solscanUrl": "https://solscan.io/account/u6PJ8DtQuPFnfmwHbGFULQ4u4EgjDiyYKjVEsynXq2w"
+    },
+    {
+      "address": "8pFhUqCU7Fkxfg2DLytRDf7a9oK4XGtN92PrYwtVQc6G",
+      "name": "Raydium Treasury",
+      "type": "protocol",
+      "totalUSD": "$280.2M",
+      "totalUSDRaw": 280175591.72771704,
+      "topHoldings": [
+        "RAY 2,347,143"
+      ],
+      "solscanUrl": "https://solscan.io/account/8pFhUqCU7Fkxfg2DLytRDf7a9oK4XGtN92PrYwtVQc6G"
+    },
+    {
+      "address": "CJjCPXBnSt6wRoyi7wzcMj5NbWvmPtzxE2JpWDMTRxj4",
+      "name": "CJjCPXBn...Rxj4",
+      "type": "unknown_whale",
+      "totalUSD": "$248.8M",
+      "totalUSDRaw": 248763030.20930648,
+      "topHoldings": [
+        "BONK 1,442,004,389,954"
+      ],
+      "solscanUrl": "https://solscan.io/account/CJjCPXBnSt6wRoyi7wzcMj5NbWvmPtzxE2JpWDMTRxj4"
+    },
+    {
+      "address": "FxteHmLwG9nk1eL4pjNve3Eub2goGkkz6g6TbvdmW46a",
+      "name": "Bitfinex Hot Wallet",
+      "type": "exchange",
+      "totalUSD": "$214.3M",
+      "totalUSDRaw": 214309515.96803194,
+      "topHoldings": [
+        "USDT $140,835,610"
+      ],
+      "solscanUrl": "https://solscan.io/account/FxteHmLwG9nk1eL4pjNve3Eub2goGkkz6g6TbvdmW46a"
+    },
+    {
+      "address": "6FEVkH17P9y8Q9aCkDdPcMDjvj7SVxrTETaYEm8f51Jy",
+      "name": "Crypto.com Hot Wallet 1",
+      "type": "exchange",
+      "totalUSD": "$201.0M",
+      "totalUSDRaw": 201047731.03677958,
+      "topHoldings": [
+        "USDC $27,219,204",
+        "USDT $8,371,819",
+        "TRUMP 1,529,188"
+      ],
+      "solscanUrl": "https://solscan.io/account/6FEVkH17P9y8Q9aCkDdPcMDjvj7SVxrTETaYEm8f51Jy"
+    },
+    {
+      "address": "22Wnk8PwyWZV7BfkZGJEKT9jGGdtvu7xY6EXeRh7zkBa",
+      "name": "Crypto.com Hot Wallet 3",
+      "type": "exchange",
+      "totalUSD": "$195.8M",
+      "totalUSDRaw": 195786020.20247307,
+      "topHoldings": [
+        "TRUMP 1,671,192"
+      ],
+      "solscanUrl": "https://solscan.io/account/22Wnk8PwyWZV7BfkZGJEKT9jGGdtvu7xY6EXeRh7zkBa"
+    },
+    {
+      "address": "8Vkgsarud8mSc1gkzayGA7XhNQfq4wDJRxTWDgq8RaJD",
+      "name": "8Vkgsaru...RaJD",
+      "type": "unknown_whale",
+      "totalUSD": "$188.6M",
+      "totalUSDRaw": 188591955.62825325,
+      "topHoldings": [
+        "USDC $188,591,956"
+      ],
+      "solscanUrl": "https://solscan.io/account/8Vkgsarud8mSc1gkzayGA7XhNQfq4wDJRxTWDgq8RaJD"
+    },
+    {
+      "address": "AYhux5gJzCoeoc1PoJ1VxwPDe22RwcvpHviLDD1oCGvW",
+      "name": "Sanctum Markets",
+      "type": "protocol",
+      "totalUSD": "$171.6M",
+      "totalUSDRaw": 171641257.93358502,
+      "topHoldings": [
+        "SOL 38,800"
+      ],
+      "solscanUrl": "https://solscan.io/account/AYhux5gJzCoeoc1PoJ1VxwPDe22RwcvpHviLDD1oCGvW"
+    },
+    {
+      "address": "4xLpwxgYuPwPvtQjE94RLS4WZ4aD8NJYYKr2AJk99Qdg",
+      "name": "Robinhood Hot Wallet",
+      "type": "exchange",
+      "totalUSD": "$167.7M",
+      "totalUSDRaw": 167670761.0902534,
+      "topHoldings": [
+        "BONK 1,884,430,335,906",
+        "WIF 39,925,835",
+        "TRUMP 3,924,208"
+      ],
+      "solscanUrl": "https://solscan.io/account/4xLpwxgYuPwPvtQjE94RLS4WZ4aD8NJYYKr2AJk99Qdg"
+    },
+    {
+      "address": "41zCUJsKk6cMB94DDtm99qWmyMZfp4GkAhhuz4xTwePu",
+      "name": "Circle Treasury",
+      "type": "institution",
+      "totalUSD": "$159.4M",
+      "totalUSDRaw": 159426402.2877457,
+      "topHoldings": [
+        "USDC $46,747,979"
+      ],
+      "solscanUrl": "https://solscan.io/account/41zCUJsKk6cMB94DDtm99qWmyMZfp4GkAhhuz4xTwePu"
+    },
+    {
+      "address": "3csuXZKah5rgpb8RiwX9XfjrMxcp3u1K9mBdCwL51spj",
+      "name": "3csuXZKa...1spj",
+      "type": "unknown_whale",
+      "totalUSD": "$153.7M",
+      "totalUSDRaw": 153668157.30001855,
+      "topHoldings": [
+        "USDC $62,716,966",
+        "USDT $91,055,219"
+      ],
+      "solscanUrl": "https://solscan.io/account/3csuXZKah5rgpb8RiwX9XfjrMxcp3u1K9mBdCwL51spj"
+    },
+    {
+      "address": "EFE3j1pcSP1paUzA86zW7989ZjsFP2J7ginyUqo4ewqR",
+      "name": "Kraken Cold Wallet 3",
+      "type": "exchange",
+      "totalUSD": "$140.9M",
+      "totalUSDRaw": 140863822.97429413,
+      "topHoldings": [
+        "WIF 9,090,655"
+      ],
+      "solscanUrl": "https://solscan.io/account/EFE3j1pcSP1paUzA86zW7989ZjsFP2J7ginyUqo4ewqR"
+    },
+    {
+      "address": "FPRFLszBJFHCThF2yWvkGkfvtwyFPRGX9MFHnDGP6UYp",
+      "name": " KuCoin: Deposit 4",
+      "type": "exchange",
+      "totalUSD": "$140.8M",
+      "totalUSDRaw": 140828687.3683155,
+      "topHoldings": [
+        "USDT $138,393,877"
+      ],
+      "solscanUrl": "https://solscan.io/account/FPRFLszBJFHCThF2yWvkGkfvtwyFPRGX9MFHnDGP6UYp"
+    },
+    {
+      "address": "66GvPQJhqjUoeq8H93QYPMikAPiVCPP9XU5yfmYYYQBF",
+      "name": "Pump.fun: \"Coin 2 SOL2\" Squad Vault",
+      "type": "protocol",
+      "totalUSD": "$128.6M",
+      "totalUSDRaw": 128605466.55884342,
+      "topHoldings": [
+        "USDT $126,273,126"
+      ],
+      "solscanUrl": "https://solscan.io/account/66GvPQJhqjUoeq8H93QYPMikAPiVCPP9XU5yfmYYYQBF"
+    },
+    {
+      "address": "E2RvJg2myWpKcbkhBuF81gfhYr6KvmNcDbSmr5qnatYy",
+      "name": "Kraken: Cold Wallet",
+      "type": "exchange",
+      "totalUSD": "$125.8M",
+      "totalUSDRaw": 125804371.39229427,
+      "topHoldings": [
+        "WIF 13,333,290"
+      ],
+      "solscanUrl": "https://solscan.io/account/E2RvJg2myWpKcbkhBuF81gfhYr6KvmNcDbSmr5qnatYy"
+    },
+    {
+      "address": "38xCLm9kSExfGU1GdyVuX4vop7SZns9kU2mQyTmmMdUP",
+      "name": "38xCLm9k...MdUP",
+      "type": "unknown_whale",
+      "totalUSD": "$122.4M",
+      "totalUSDRaw": 122401066.7931534,
+      "topHoldings": [
+        "WIF 9,448,181"
+      ],
+      "solscanUrl": "https://solscan.io/account/38xCLm9kSExfGU1GdyVuX4vop7SZns9kU2mQyTmmMdUP"
+    },
+    {
+      "address": "DdZR6zRFiUt4S5mg7AV1uKB2z1f1WzcNYCaTEEWPAuby",
+      "name": "Solend Main Pool Lending Authority",
+      "type": "protocol",
+      "totalUSD": "$112.4M",
+      "totalUSDRaw": 112370371.78028561,
+      "topHoldings": [
+        "SOL 128,866"
+      ],
+      "solscanUrl": "https://solscan.io/account/DdZR6zRFiUt4S5mg7AV1uKB2z1f1WzcNYCaTEEWPAuby"
+    },
+    {
+      "address": "5eosrve6LktMZgVNszYzebgmmC7BjLK8NoWyRQtcmGTF",
+      "name": "Jito DAO Treasury",
+      "type": "protocol",
+      "totalUSD": "$110.6M",
+      "totalUSDRaw": 110608644.82234374,
+      "topHoldings": [
+        "JTO 219,904,906"
+      ],
+      "solscanUrl": "https://solscan.io/account/5eosrve6LktMZgVNszYzebgmmC7BjLK8NoWyRQtcmGTF"
+    },
+    {
+      "address": "5z7gxL5u4jCW9D6acu28LEw4RKTiBSG1EmXbtCX7efg2",
+      "name": "Revolut: Hot Wallet 2",
+      "type": "exchange",
+      "totalUSD": "$110.1M",
+      "totalUSDRaw": 110102426.53625166,
+      "topHoldings": [
+        "WIF 23,419,773",
+        "TRUMP 1,313,667"
+      ],
+      "solscanUrl": "https://solscan.io/account/5z7gxL5u4jCW9D6acu28LEw4RKTiBSG1EmXbtCX7efg2"
+    },
+    {
+      "address": "3B7XAQrLoEMDEGvX8569F9GRb9PcXXocJmj5wvhhei9z",
+      "name": "BtcTurk Cold Wallet",
+      "type": "exchange",
+      "totalUSD": "$106.4M",
+      "totalUSDRaw": 106425679.77800727,
+      "topHoldings": [
+        "BONK 1,464,024,486,706",
+        "WIF 10,698,786",
+        "TRUMP 1,941,379"
+      ],
+      "solscanUrl": "https://solscan.io/account/3B7XAQrLoEMDEGvX8569F9GRb9PcXXocJmj5wvhhei9z"
+    },
+    {
+      "address": "C68a6RCGLiPskbPYtAcsCjhG8tfTWYcoB4JjCrXFdqyo",
+      "name": "OKX: Hot Wallet",
+      "type": "exchange",
+      "totalUSD": "$105.1M",
+      "totalUSDRaw": 105110151.57917419,
+      "topHoldings": [
+        "USDT $34,763,051"
+      ],
+      "solscanUrl": "https://solscan.io/account/C68a6RCGLiPskbPYtAcsCjhG8tfTWYcoB4JjCrXFdqyo"
+    },
+    {
+      "address": "DBD8hAwLDRQkTsu6EqviaYNGKPnsAMmQonxf7AH8ZcFY",
+      "name": "CCTP Token Minter",
+      "type": "institution",
+      "totalUSD": "$83.4M",
+      "totalUSDRaw": 83357992.99776074,
+      "topHoldings": [
+        "USDC $119,585,729"
+      ],
+      "solscanUrl": "https://solscan.io/account/DBD8hAwLDRQkTsu6EqviaYNGKPnsAMmQonxf7AH8ZcFY"
+    },
+    {
+      "address": "DdHDoz94o2WJmD9myRobHCwtx1bESpHTd4SSPe6VEZaz",
+      "name": "Raydium Buy Back",
+      "type": "protocol",
+      "totalUSD": "$82.2M",
+      "totalUSDRaw": 82196873.83459325,
+      "topHoldings": [
+        "SOL 30,680",
+        "RAY 5,645,552"
+      ],
+      "solscanUrl": "https://solscan.io/account/DdHDoz94o2WJmD9myRobHCwtx1bESpHTd4SSPe6VEZaz"
+    },
+    {
+      "address": "FVhQ3QHvXudWSdGix2sdcG47YmrmUxRhf3KCBmiKfekf",
+      "name": "Jupiter Community Hot Wallet",
+      "type": "protocol",
+      "totalUSD": "$79.8M",
+      "totalUSDRaw": 79797166.44774507,
+      "topHoldings": [
+        "JUP 371,492,924"
+      ],
+      "solscanUrl": "https://solscan.io/account/FVhQ3QHvXudWSdGix2sdcG47YmrmUxRhf3KCBmiKfekf"
+    },
+    {
+      "address": "28nYGHJyUVcVdxZtzKByBXEj127XnrUkrE3VaGuWj1ZU",
+      "name": "Ceffu Custody Cold Wallet",
+      "type": "exchange",
+      "totalUSD": "$79.0M",
+      "totalUSDRaw": 78981080.1597831,
+      "topHoldings": [
+        "USDT $33,609,725"
+      ],
+      "solscanUrl": "https://solscan.io/account/28nYGHJyUVcVdxZtzKByBXEj127XnrUkrE3VaGuWj1ZU"
+    },
+    {
+      "address": "GBrURzmtWujJRTA3Bkvo7ZgWuZYLMMwPCwre7BejJXnK",
+      "name": "Binance Cold Wallet",
+      "type": "exchange",
+      "totalUSD": "$74.9M",
+      "totalUSDRaw": 74851134.2529965,
+      "topHoldings": [
+        "BONK 986,434,345,526",
+        "WIF 10,410,236"
+      ],
+      "solscanUrl": "https://solscan.io/account/GBrURzmtWujJRTA3Bkvo7ZgWuZYLMMwPCwre7BejJXnK"
+    },
+    {
+      "address": "GugU1tP7doLeTw9hQP51xRJyS8Da1fWxuiy2rVrnMD2m",
+      "name": "Wormhole: Custody Authority",
+      "type": "protocol",
+      "totalUSD": "$74.7M",
+      "totalUSDRaw": 74701979.29070175,
+      "topHoldings": [
+        "SOL 504,953"
+      ],
+      "solscanUrl": "https://solscan.io/account/GugU1tP7doLeTw9hQP51xRJyS8Da1fWxuiy2rVrnMD2m"
+    },
+    {
+      "address": "Gem2VAypSg7Ai7vjDKPTtqFahpoQWkfgVkyzx3rPoTka",
+      "name": "Bybit Wallet 14",
+      "type": "exchange",
+      "totalUSD": "$73.1M",
+      "totalUSDRaw": 73060889.55920456,
+      "topHoldings": [
+        "USDC $62,227,738"
+      ],
+      "solscanUrl": "https://solscan.io/account/Gem2VAypSg7Ai7vjDKPTtqFahpoQWkfgVkyzx3rPoTka"
+    },
+    {
+      "address": "FZ1t8TZtx7VSCQdBsxvFJiezj9paUBF6Ub7RKA2eTGyE",
+      "name": "KuCoin: Cold Wallet 2",
+      "type": "exchange",
+      "totalUSD": "$69.4M",
+      "totalUSDRaw": 69402370.37804402,
+      "topHoldings": [
+        "USDT $40,586,879"
+      ],
+      "solscanUrl": "https://solscan.io/account/FZ1t8TZtx7VSCQdBsxvFJiezj9paUBF6Ub7RKA2eTGyE"
+    },
+    {
+      "address": "8N2ssXZGJbvVLszanERuCJpLZd2nuADgpZwLkDDxwNnS",
+      "name": "8N2ssXZG...wNnS",
+      "type": "unknown_whale",
+      "totalUSD": "$66.4M",
+      "totalUSDRaw": 66380043.0388777,
+      "topHoldings": [
+        "TRUMP 14,022,155"
+      ],
+      "solscanUrl": "https://solscan.io/account/8N2ssXZGJbvVLszanERuCJpLZd2nuADgpZwLkDDxwNnS"
+    },
+    {
+      "address": "5SybwTvGno6SBApbGinXyLqhnPzs47aaBG4PShyPT8ey",
+      "name": "5SybwTvG...T8ey",
+      "type": "unknown_whale",
+      "totalUSD": "$65.7M",
+      "totalUSDRaw": 65724655.120187625,
+      "topHoldings": [
+        "JTO 70,288,941"
+      ],
+      "solscanUrl": "https://solscan.io/account/5SybwTvGno6SBApbGinXyLqhnPzs47aaBG4PShyPT8ey"
+    },
+    {
+      "address": "Bc5bth4Mn2n8DX1etZwvnq3uDEGg479s2D24TCEsnXHf",
+      "name": "Bullish.com: Hot Wallet",
+      "type": "exchange",
+      "totalUSD": "$63.1M",
+      "totalUSDRaw": 63130785.77420317,
+      "topHoldings": [
+        "USDC $34,208,321"
+      ],
+      "solscanUrl": "https://solscan.io/account/Bc5bth4Mn2n8DX1etZwvnq3uDEGg479s2D24TCEsnXHf"
+    },
+    {
+      "address": "F6ZjiBm1WgVXzez5vxHeBDgaVPQRfLyFb7GFwXvyZVxD",
+      "name": "F6ZjiBm1...ZVxD",
+      "type": "unknown_whale",
+      "totalUSD": "$61.7M",
+      "totalUSDRaw": 61730790.59125218,
+      "topHoldings": [
+        "USDC $33,118,109",
+        "USDT $28,645,415"
+      ],
+      "solscanUrl": "https://solscan.io/account/F6ZjiBm1WgVXzez5vxHeBDgaVPQRfLyFb7GFwXvyZVxD"
+    },
+    {
+      "address": "GL8T72PKygWaYrLKtSteN9UUvYYnuC8azNDunk4eaqqQ",
+      "name": "KuCoin: Cold Wallet 3",
+      "type": "exchange",
+      "totalUSD": "$60.7M",
+      "totalUSDRaw": 60718365.43637894,
+      "topHoldings": [
+        "USDT $34,302,774"
+      ],
+      "solscanUrl": "https://solscan.io/account/GL8T72PKygWaYrLKtSteN9UUvYYnuC8azNDunk4eaqqQ"
+    },
+    {
+      "address": "Dx8iy2o46sK1DzWbEcznqSKeLbLVeu7otkibA3WohGAj",
+      "name": "Kamino Reserve 5",
+      "type": "protocol",
+      "totalUSD": "$60.6M",
+      "totalUSDRaw": 60579492.36866082,
+      "topHoldings": [
+        "SOL 40,124"
+      ],
+      "solscanUrl": "https://solscan.io/account/Dx8iy2o46sK1DzWbEcznqSKeLbLVeu7otkibA3WohGAj"
+    },
+    {
+      "address": "E1bQJ8eMMn3zmeSewW3HQ8zmJr7KR75JonbwAtWx2bux",
+      "name": " CCTP Token Minter 2",
+      "type": "institution",
+      "totalUSD": "$60.0M",
+      "totalUSDRaw": 59972807.548456,
+      "topHoldings": [
+        "USDC $38,461,115"
+      ],
+      "solscanUrl": "https://solscan.io/account/E1bQJ8eMMn3zmeSewW3HQ8zmJr7KR75JonbwAtWx2bux"
+    },
+    {
+      "address": "Any5gL74oUQy9Psb3goym9STaYMau4CMrTkryS37T7iz",
+      "name": "Any5gL74...T7iz",
+      "type": "unknown_whale",
+      "totalUSD": "$58.9M",
+      "totalUSDRaw": 58948548.37016213,
+      "topHoldings": [
+        "JUP 274,433,227"
+      ],
+      "solscanUrl": "https://solscan.io/account/Any5gL74oUQy9Psb3goym9STaYMau4CMrTkryS37T7iz"
+    },
+    {
+      "address": "8YNf5MAeZkjJFx9BekEdCKw9LFagWa7CdJp1LztjUwiw",
+      "name": "8YNf5MAe...Uwiw",
+      "type": "unknown_whale",
+      "totalUSD": "$58.9M",
+      "totalUSDRaw": 58904210.78713254,
+      "topHoldings": [
+        "USDC $58,904,211"
+      ],
+      "solscanUrl": "https://solscan.io/account/8YNf5MAeZkjJFx9BekEdCKw9LFagWa7CdJp1LztjUwiw"
+    },
+    {
+      "address": "2qo8jvuc49pFmTjmUHLiARSV6ppPTaE7gw27ZJ6DnNZy",
+      "name": "Bybit Wallet 12",
+      "type": "exchange",
+      "totalUSD": "$56.0M",
+      "totalUSDRaw": 56046184.19697602,
+      "topHoldings": [
+        "USDT $23,597,889"
+      ],
+      "solscanUrl": "https://solscan.io/account/2qo8jvuc49pFmTjmUHLiARSV6ppPTaE7gw27ZJ6DnNZy"
+    },
+    {
+      "address": "8wM44Ryv9DFCSfkgUnPEPgnsc53arT4cnmXL6LnnC4UW",
+      "name": "OKX: Hot Wallet",
+      "type": "exchange",
+      "totalUSD": "$55.6M",
+      "totalUSDRaw": 55598906.23303175,
+      "topHoldings": [
+        "USDT $15,029,911"
+      ],
+      "solscanUrl": "https://solscan.io/account/8wM44Ryv9DFCSfkgUnPEPgnsc53arT4cnmXL6LnnC4UW"
+    },
+    {
+      "address": "HsQwR1swWwGGkg7EJ8A1Ft9Kw7rpkYk65S5jiJHj7Juo",
+      "name": "HsQwR1sw...7Juo",
+      "type": "unknown_whale",
+      "totalUSD": "$54.8M",
+      "totalUSDRaw": 54794926.855182,
+      "topHoldings": [
+        "USDC $54,794,927"
+      ],
+      "solscanUrl": "https://solscan.io/account/HsQwR1swWwGGkg7EJ8A1Ft9Kw7rpkYk65S5jiJHj7Juo"
+    },
+    {
+      "address": "3gd3dqgtJ4jWfBfLYTX67DALFetjc5iS72sCgRhCkW2u",
+      "name": "3gd3dqgt...kW2u",
+      "type": "unknown_whale",
+      "totalUSD": "$54.3M",
+      "totalUSDRaw": 54267147.63777177,
+      "topHoldings": [
+        "WIF 49,084,013"
+      ],
+      "solscanUrl": "https://solscan.io/account/3gd3dqgtJ4jWfBfLYTX67DALFetjc5iS72sCgRhCkW2u"
+    },
+    {
+      "address": "AobVSwdW9BbpMdJvTqeCN4hPAmh4rHm7vwLnQ5ATSyrS",
+      "name": "Crypto.com Hot Wallet 2",
+      "type": "exchange",
+      "totalUSD": "$53.8M",
+      "totalUSDRaw": 53839168.51082708,
+      "topHoldings": [
+        "USDC $29,463,266",
+        "USDT $6,443,264"
+      ],
+      "solscanUrl": "https://solscan.io/account/AobVSwdW9BbpMdJvTqeCN4hPAmh4rHm7vwLnQ5ATSyrS"
+    },
+    {
+      "address": "BzGyaGh7LBd5CgrPLa52cEAZvZFEUSFfyVwA8L9x56nV",
+      "name": "BzGyaGh7...56nV",
+      "type": "unknown_whale",
+      "totalUSD": "$52.5M",
+      "totalUSDRaw": 52450710.836185165,
+      "topHoldings": [
+        "USDC $27,668,961",
+        "USDT $24,810,101"
+      ],
+      "solscanUrl": "https://solscan.io/account/BzGyaGh7LBd5CgrPLa52cEAZvZFEUSFfyVwA8L9x56nV"
+    },
+    {
+      "address": "9wZ4ngHgHw5BuEuHNS7PFQ8EYM3aHefesHQMpQRxybpR",
+      "name": "9wZ4ngHg...ybpR",
+      "type": "unknown_whale",
+      "totalUSD": "$49.5M",
+      "totalUSDRaw": 49500000.012026,
+      "topHoldings": [
+        "USDC $49,500,000"
+      ],
+      "solscanUrl": "https://solscan.io/account/9wZ4ngHgHw5BuEuHNS7PFQ8EYM3aHefesHQMpQRxybpR"
+    },
+    {
+      "address": "42brAgAVNzMBP7aaktPvAmBSPEkehnFQejiZc53EpJFd",
+      "name": "42brAgAV...pJFd",
+      "type": "unknown_whale",
+      "totalUSD": "$46.1M",
+      "totalUSDRaw": 46074130.565357804,
+      "topHoldings": [
+        "WIF 11,000,002",
+        "TRUMP 5,150,001"
+      ],
+      "solscanUrl": "https://solscan.io/account/42brAgAVNzMBP7aaktPvAmBSPEkehnFQejiZc53EpJFd"
+    },
+    {
+      "address": "BmEyv8gu9d4aDm5n96nyC3K328cn5UAR5ddVK1CSF1j2",
+      "name": "BmEyv8gu...F1j2",
+      "type": "unknown_whale",
+      "totalUSD": "$46.1M",
+      "totalUSDRaw": 46073824.90358035,
+      "topHoldings": [
+        "JUP 214,495,332"
+      ],
+      "solscanUrl": "https://solscan.io/account/BmEyv8gu9d4aDm5n96nyC3K328cn5UAR5ddVK1CSF1j2"
+    },
+    {
+      "address": "3Ln6KEgLoMR2xFHfqtYazP7CxFQPDtUVVtwCVsLKVfmV",
+      "name": "BingX: Cold Wallet",
+      "type": "exchange",
+      "totalUSD": "$44.6M",
+      "totalUSDRaw": 44642451.417474896,
+      "topHoldings": [
+        "USDT $8,377,120"
+      ],
+      "solscanUrl": "https://solscan.io/account/3Ln6KEgLoMR2xFHfqtYazP7CxFQPDtUVVtwCVsLKVfmV"
+    },
+    {
+      "address": "21TNeLp92vZsTbuPYfkaQ9gQeJdZqoEBbxy8VEyaV1jj",
+      "name": "21TNeLp9...V1jj",
+      "type": "unknown_whale",
+      "totalUSD": "$41.2M",
+      "totalUSDRaw": 41200000.24368718,
+      "topHoldings": [
+        "USDC $41,200,000"
+      ],
+      "solscanUrl": "https://solscan.io/account/21TNeLp92vZsTbuPYfkaQ9gQeJdZqoEBbxy8VEyaV1jj"
+    },
+    {
+      "address": "AGkGWK1R669KDT4FCqgDgK7PgahGJPjD4J9xmVjuL9kn",
+      "name": "AGkGWK1R...L9kn",
+      "type": "unknown_whale",
+      "totalUSD": "$38.0M",
+      "totalUSDRaw": 38017928.10627895,
+      "topHoldings": [
+        "BONK 4,426,104,450,306"
+      ],
+      "solscanUrl": "https://solscan.io/account/AGkGWK1R669KDT4FCqgDgK7PgahGJPjD4J9xmVjuL9kn"
+    },
+    {
+      "address": "5kwCMKjE3Krvs7cHfcQ9kBkGyPQphd3oJ4KnsXcpMoVc",
+      "name": "Pacifica: Vault",
+      "type": "protocol",
+      "totalUSD": "$36.1M",
+      "totalUSDRaw": 36100000.0,
+      "topHoldings": [
+        "USDC $36,100,000"
+      ],
+      "solscanUrl": "https://solscan.io/account/5kwCMKjE3Krvs7cHfcQ9kBkGyPQphd3oJ4KnsXcpMoVc"
+    },
+    {
+      "address": "4qD717qKoj3Sm8YfHMSR7tSKjWn5An817nArA6nGdcUR",
+      "name": "4qD717qK...dcUR",
+      "type": "unknown_whale",
+      "totalUSD": "$33.8M",
+      "totalUSDRaw": 33773477.289277315,
+      "topHoldings": [
+        "RAY 34,103,635"
+      ],
+      "solscanUrl": "https://solscan.io/account/4qD717qKoj3Sm8YfHMSR7tSKjWn5An817nArA6nGdcUR"
+    },
+    {
+      "address": "43DbAvKxhXh1oSxkJSqGosNw3HpBnmsWiak6tB5wpecN",
+      "name": "43DbAvKx...pecN",
+      "type": "unknown_whale",
+      "totalUSD": "$32.3M",
+      "totalUSDRaw": 32292142.316920336,
+      "topHoldings": [
+        "JUP 35,163,392"
+      ],
+      "solscanUrl": "https://solscan.io/account/43DbAvKxhXh1oSxkJSqGosNw3HpBnmsWiak6tB5wpecN"
+    },
+    {
+      "address": "CPZmKkAhD2wv1Z21EUZvdH8ZeSD13geAnSfyVBwcW8XK",
+      "name": "CPZmKkAh...W8XK",
+      "type": "unknown_whale",
+      "totalUSD": "$32.0M",
+      "totalUSDRaw": 31975529.026281074,
+      "topHoldings": [
+        "JUP 103,869,517"
+      ],
+      "solscanUrl": "https://solscan.io/account/CPZmKkAhD2wv1Z21EUZvdH8ZeSD13geAnSfyVBwcW8XK"
+    },
+    {
+      "address": "ECHhYtSogLASVDZ8NTg1w7oCo2aeJGnNu4pDNvorwB9a",
+      "name": "Phantom: Fee Vault",
+      "type": "protocol",
+      "totalUSD": "$31.6M",
+      "totalUSDRaw": 31570372.769845773,
+      "topHoldings": [
+        "SOL 95,160"
+      ],
+      "solscanUrl": "https://solscan.io/account/ECHhYtSogLASVDZ8NTg1w7oCo2aeJGnNu4pDNvorwB9a"
+    },
+    {
+      "address": "jcerNwQ1Kn5LJcjvSGYgRUwn4yepDF4wnXXejuE7gHF",
+      "name": "jcerNwQ1...7gHF",
+      "type": "unknown_whale",
+      "totalUSD": "$31.5M",
+      "totalUSDRaw": 31450972.4256511,
+      "topHoldings": [
+        "USDC $28,650,384"
+      ],
+      "solscanUrl": "https://solscan.io/account/jcerNwQ1Kn5LJcjvSGYgRUwn4yepDF4wnXXejuE7gHF"
+    },
+    {
+      "address": "smHcuBpWi4PUo4eMH17suBULzZC3r2HML9JnfJSGZgu",
+      "name": "smHcuBpW...GZgu",
+      "type": "unknown_whale",
+      "totalUSD": "$31.0M",
+      "totalUSDRaw": 30998514.117262,
+      "topHoldings": [
+        "USDC $37,577,826"
+      ],
+      "solscanUrl": "https://solscan.io/account/smHcuBpWi4PUo4eMH17suBULzZC3r2HML9JnfJSGZgu"
+    },
+    {
+      "address": "4gx76xwWFPTPxS2fkiRJ1wB9HifTDBsCJjdWFxeFFoML",
+      "name": "4gx76xwW...FoML",
+      "type": "unknown_whale",
+      "totalUSD": "$30.0M",
+      "totalUSDRaw": 29988017.793261,
+      "topHoldings": [
+        "USDC $29,988,018"
+      ],
+      "solscanUrl": "https://solscan.io/account/4gx76xwWFPTPxS2fkiRJ1wB9HifTDBsCJjdWFxeFFoML"
+    },
+    {
+      "address": "5SDrsMNTYdhmApjfqYHDvjoW92f2S42vcc7zNDVcQ9Ej",
+      "name": "Ceffu Custody Hot Wallet",
+      "type": "exchange",
+      "totalUSD": "$28.8M",
+      "totalUSDRaw": 28778516.06271469,
+      "topHoldings": [
+        "USDT $7,396,492"
+      ],
+      "solscanUrl": "https://solscan.io/account/5SDrsMNTYdhmApjfqYHDvjoW92f2S42vcc7zNDVcQ9Ej"
+    },
+    {
+      "address": "7Lp4JBapgNhXoxpJtR2twufh7oaQyqngqJpy7HFJcn7h",
+      "name": "7Lp4JBap...cn7h",
+      "type": "unknown_whale",
+      "totalUSD": "$28.7M",
+      "totalUSDRaw": 28706038.095579166,
+      "topHoldings": [
+        "BONK 3,354,477,403,544"
+      ],
+      "solscanUrl": "https://solscan.io/account/7Lp4JBapgNhXoxpJtR2twufh7oaQyqngqJpy7HFJcn7h"
+    },
+    {
+      "address": "9AdEE8AAm1XgJrPEs4zkTPozr3o4U5iGbgvPwkNdLDJ3",
+      "name": "9AdEE8AA...LDJ3",
+      "type": "unknown_whale",
+      "totalUSD": "$28.5M",
+      "totalUSDRaw": 28497500.418133594,
+      "topHoldings": [
+        "BONK 3,299,752,635,134"
+      ],
+      "solscanUrl": "https://solscan.io/account/9AdEE8AAm1XgJrPEs4zkTPozr3o4U5iGbgvPwkNdLDJ3"
+    },
+    {
+      "address": "3taxccqkMUPqkuKMAxR7hXLGDMTeoaiX7eNbQxpneRo1",
+      "name": "3taxccqk...eRo1",
+      "type": "unknown_whale",
+      "totalUSD": "$28.4M",
+      "totalUSDRaw": 28429043.965405494,
+      "topHoldings": [
+        "USDC $27,073,267"
+      ],
+      "solscanUrl": "https://solscan.io/account/3taxccqkMUPqkuKMAxR7hXLGDMTeoaiX7eNbQxpneRo1"
+    },
+    {
+      "address": "6sEk1enayZBGFyNvvJMTP7qs5S3uC7KLrQWaEk38hSHH",
+      "name": "6sEk1ena...hSHH",
+      "type": "unknown_whale",
+      "totalUSD": "$27.5M",
+      "totalUSDRaw": 27518944.63139011,
+      "topHoldings": [
+        "USDT $27,549,942"
+      ],
+      "solscanUrl": "https://solscan.io/account/6sEk1enayZBGFyNvvJMTP7qs5S3uC7KLrQWaEk38hSHH"
+    },
+    {
+      "address": "Am8MAEorCMAKxphqjAz3Ff59NEwPm4W2eS3DQLi2B4hg",
+      "name": "Am8MAEor...B4hg",
+      "type": "unknown_whale",
+      "totalUSD": "$27.4M",
+      "totalUSDRaw": 27354105.47699237,
+      "topHoldings": [
+        "BONK 843,477,239,166"
+      ],
+      "solscanUrl": "https://solscan.io/account/Am8MAEorCMAKxphqjAz3Ff59NEwPm4W2eS3DQLi2B4hg"
+    },
+    {
+      "address": "4K2Lse4uGc67xdutKrsmf4WgGcRevJ52YH4JaSfRrQS9",
+      "name": "4K2Lse4u...rQS9",
+      "type": "unknown_whale",
+      "totalUSD": "$27.3M",
+      "totalUSDRaw": 27300825.70863947,
+      "topHoldings": [
+        "USDC $27,300,824"
+      ],
+      "solscanUrl": "https://solscan.io/account/4K2Lse4uGc67xdutKrsmf4WgGcRevJ52YH4JaSfRrQS9"
+    },
+    {
+      "address": "CbU4oSFCk8SVgW23NLvb5BwctvWcZZHfxRD6HudP8gAo",
+      "name": "CbU4oSFC...8gAo",
+      "type": "unknown_whale",
+      "totalUSD": "$27.1M",
+      "totalUSDRaw": 27145902.155183382,
+      "topHoldings": [
+        "JUP 126,376,933"
+      ],
+      "solscanUrl": "https://solscan.io/account/CbU4oSFCk8SVgW23NLvb5BwctvWcZZHfxRD6HudP8gAo"
+    },
+    {
+      "address": "9nUTd2UHdYAEbXHja2NAiRMGDgdwJVe84khvzUPGoQqs",
+      "name": "9nUTd2UH...oQqs",
+      "type": "unknown_whale",
+      "totalUSD": "$26.1M",
+      "totalUSDRaw": 26112393.865158856,
+      "topHoldings": [
+        "USDT $10,288,790"
+      ],
+      "solscanUrl": "https://solscan.io/account/9nUTd2UHdYAEbXHja2NAiRMGDgdwJVe84khvzUPGoQqs"
+    },
+    {
+      "address": "8Lj26EwG5UvNV7zTXAb3irtRmUqMnGjv22oxx9YAZBVb",
+      "name": "8Lj26EwG...ZBVb",
+      "type": "unknown_whale",
+      "totalUSD": "$25.8M",
+      "totalUSDRaw": 25841238.04116443,
+      "topHoldings": [
+        "USDT $8,155,930"
+      ],
+      "solscanUrl": "https://solscan.io/account/8Lj26EwG5UvNV7zTXAb3irtRmUqMnGjv22oxx9YAZBVb"
+    },
+    {
+      "address": "FCALJ4edD2suu7Aii6thUyh8uetn61U2g5ymZsNMXMF6",
+      "name": "FCALJ4ed...XMF6",
+      "type": "unknown_whale",
+      "totalUSD": "$25.1M",
+      "totalUSDRaw": 25143648.889218807,
+      "topHoldings": [
+        "USDC $25,143,599"
+      ],
+      "solscanUrl": "https://solscan.io/account/FCALJ4edD2suu7Aii6thUyh8uetn61U2g5ymZsNMXMF6"
+    },
+    {
+      "address": "MfDuWeqSHEqTFVYZ7LoexgAK9dxk7cy4DFJWjWMGVWa",
+      "name": "Wintermute Automated Liquidity Bot",
+      "type": "unknown_whale",
+      "totalUSD": "$23.8M",
+      "totalUSDRaw": 23765932.654515952,
+      "topHoldings": [
+        "SOL 40,830"
+      ],
+      "solscanUrl": "https://solscan.io/account/MfDuWeqSHEqTFVYZ7LoexgAK9dxk7cy4DFJWjWMGVWa"
+    },
+    {
+      "address": "7bWNdNMCzFevTfuKmdDU136FQtfNuzUGJNa2moWBZW4P",
+      "name": "7bWNdNMC...ZW4P",
+      "type": "unknown_whale",
+      "totalUSD": "$23.7M",
+      "totalUSDRaw": 23714703.079820864,
+      "topHoldings": [
+        "USDC $23,714,703"
+      ],
+      "solscanUrl": "https://solscan.io/account/7bWNdNMCzFevTfuKmdDU136FQtfNuzUGJNa2moWBZW4P"
+    },
+    {
+      "address": "CnXMWB8W7bcnADsZsJAJYkcuu8jr392ZFvxDBiumW3ww",
+      "name": "CnXMWB8W...W3ww",
+      "type": "unknown_whale",
+      "totalUSD": "$23.5M",
+      "totalUSDRaw": 23492207.950537145,
+      "topHoldings": [
+        "USDT $6,629,131"
+      ],
+      "solscanUrl": "https://solscan.io/account/CnXMWB8W7bcnADsZsJAJYkcuu8jr392ZFvxDBiumW3ww"
+    },
+    {
+      "address": "81w96XvKAZZFmmuzaohSQUyxtGnAPJmkjwoBFBmtytUj",
+      "name": "81w96XvK...ytUj",
+      "type": "unknown_whale",
+      "totalUSD": "$23.3M",
+      "totalUSDRaw": 23345879.557682697,
+      "topHoldings": [
+        "USDC $40,493,000"
+      ],
+      "solscanUrl": "https://solscan.io/account/81w96XvKAZZFmmuzaohSQUyxtGnAPJmkjwoBFBmtytUj"
+    },
+    {
+      "address": "9RpzaFh4J8F6Qg1gjnhrhSp9eXdVDjsesZXe53qp7ubB",
+      "name": "9RpzaFh4...7ubB",
+      "type": "unknown_whale",
+      "totalUSD": "$23.1M",
+      "totalUSDRaw": 23090530.39645163,
+      "topHoldings": [
+        "BONK 2,688,258,761,035"
+      ],
+      "solscanUrl": "https://solscan.io/account/9RpzaFh4J8F6Qg1gjnhrhSp9eXdVDjsesZXe53qp7ubB"
+    },
+    {
+      "address": "GJ8HjXMqQ79WRvxeAMRMng4ZTaohPcF1MZmBf9tVPpXA",
+      "name": "GJ8HjXMq...PpXA",
+      "type": "unknown_whale",
+      "totalUSD": "$23.1M",
+      "totalUSDRaw": 23051874.72781113,
+      "topHoldings": [
+        "BONK 2,683,756,830,161"
+      ],
+      "solscanUrl": "https://solscan.io/account/GJ8HjXMqQ79WRvxeAMRMng4ZTaohPcF1MZmBf9tVPpXA"
+    },
+    {
+      "address": "1tjoQzWg21ceMAhyLVs4s2Zc1Pm27mLTcJ9EfEFu7km",
+      "name": "1tjoQzWg...u7km",
+      "type": "unknown_whale",
+      "totalUSD": "$23.1M",
+      "totalUSDRaw": 23051867.58633439,
+      "topHoldings": [
+        "BONK 2,683,756,830,161"
+      ],
+      "solscanUrl": "https://solscan.io/account/1tjoQzWg21ceMAhyLVs4s2Zc1Pm27mLTcJ9EfEFu7km"
+    },
+    {
+      "address": "EbLm4ZtRqDftrQnZaMMvnwcKjK5ef5vm1Hg3sAPv3tKi",
+      "name": "EbLm4ZtR...3tKi",
+      "type": "unknown_whale",
+      "totalUSD": "$23.0M",
+      "totalUSDRaw": 22994908.325531065,
+      "topHoldings": [
+        "BONK 2,677,126,193,537"
+      ],
+      "solscanUrl": "https://solscan.io/account/EbLm4ZtRqDftrQnZaMMvnwcKjK5ef5vm1Hg3sAPv3tKi"
+    },
+    {
+      "address": "EZ41WcMH3FmyWGV9WQaDLo5uo4ysVNdeAm1ZoTybxjsJ",
+      "name": "EZ41WcMH...xjsJ",
+      "type": "unknown_whale",
+      "totalUSD": "$22.6M",
+      "totalUSDRaw": 22591783.826533567,
+      "topHoldings": [
+        "BONK 853,345,779,659"
+      ],
+      "solscanUrl": "https://solscan.io/account/EZ41WcMH3FmyWGV9WQaDLo5uo4ysVNdeAm1ZoTybxjsJ"
+    },
+    {
+      "address": "J46qrJyJipe3Vk4bKue4kKj7HvEH2sXwNCMu7iAAntxp",
+      "name": "J46qrJyJ...ntxp",
+      "type": "unknown_whale",
+      "totalUSD": "$21.7M",
+      "totalUSDRaw": 21725374.802365705,
+      "topHoldings": [
+        "USDC $21,595,189"
+      ],
+      "solscanUrl": "https://solscan.io/account/J46qrJyJipe3Vk4bKue4kKj7HvEH2sXwNCMu7iAAntxp"
+    },
+    {
+      "address": "65AXrL2wYbrwEF37euk7Kf56QqGUudWMTYTQcj73y1Ye",
+      "name": "65AXrL2w...y1Ye",
+      "type": "unknown_whale",
+      "totalUSD": "$21.3M",
+      "totalUSDRaw": 21300013.294366598,
+      "topHoldings": [
+        "TRUMP 4,492,109"
+      ],
+      "solscanUrl": "https://solscan.io/account/65AXrL2wYbrwEF37euk7Kf56QqGUudWMTYTQcj73y1Ye"
+    },
+    {
+      "address": "92q4Y2xGE39Bm2JgNZLZWuafoBiBR4gCj4igfpwvpgcD",
+      "name": "92q4Y2xG...pgcD",
+      "type": "unknown_whale",
+      "totalUSD": "$21.2M",
+      "totalUSDRaw": 21181312.875313647,
+      "topHoldings": [
+        "USDC $21,181,263"
+      ],
+      "solscanUrl": "https://solscan.io/account/92q4Y2xGE39Bm2JgNZLZWuafoBiBR4gCj4igfpwvpgcD"
+    },
+    {
+      "address": "6wsjaQTidXNqmPDw4st2yMtFmTk7yyBEox5SydFQeJe7",
+      "name": "6wsjaQTi...eJe7",
+      "type": "unknown_whale",
+      "totalUSD": "$20.3M",
+      "totalUSDRaw": 20280392.366812844,
+      "topHoldings": [
+        "JUP 94,414,767"
+      ],
+      "solscanUrl": "https://solscan.io/account/6wsjaQTidXNqmPDw4st2yMtFmTk7yyBEox5SydFQeJe7"
+    },
+    {
+      "address": "Da8RuzF4whvWoQP8DD1rZMTi2i1u2VHFcU8zFrwfdBzA",
+      "name": "Da8RuzF4...dBzA",
+      "type": "unknown_whale",
+      "totalUSD": "$19.8M",
+      "totalUSDRaw": 19820899.45676927,
+      "topHoldings": [
+        "USDT $37,876,502"
+      ],
+      "solscanUrl": "https://solscan.io/account/Da8RuzF4whvWoQP8DD1rZMTi2i1u2VHFcU8zFrwfdBzA"
+    },
+    {
+      "address": "EfEgUV2uQAzTooo6L4oYiEm15F6JBTnGiWMejqxPaqL3",
+      "name": "EfEgUV2u...aqL3",
+      "type": "unknown_whale",
+      "totalUSD": "$19.4M",
+      "totalUSDRaw": 19411024.344614696,
+      "topHoldings": [
+        "BONK 2,259,881,264,331"
+      ],
+      "solscanUrl": "https://solscan.io/account/EfEgUV2uQAzTooo6L4oYiEm15F6JBTnGiWMejqxPaqL3"
+    },
+    {
+      "address": "EDpCWJ9UTfphkPt4VoNP6H2kc7pA6ZkKjEzMHUnYx39z",
+      "name": "EDpCWJ9U...x39z",
+      "type": "unknown_whale",
+      "totalUSD": "$18.5M",
+      "totalUSDRaw": 18482857.741214,
+      "topHoldings": [
+        "USDC $35,073,592"
+      ],
+      "solscanUrl": "https://solscan.io/account/EDpCWJ9UTfphkPt4VoNP6H2kc7pA6ZkKjEzMHUnYx39z"
+    },
+    {
+      "address": "27b4PRN7K37rpTywq65t29rjuNfQkYpxZUjkbtHc5VvZ",
+      "name": "27b4PRN7...5VvZ",
+      "type": "unknown_whale",
+      "totalUSD": "$17.2M",
+      "totalUSDRaw": 17210741.39949708,
+      "topHoldings": [
+        "JUP 81,236,206"
+      ],
+      "solscanUrl": "https://solscan.io/account/27b4PRN7K37rpTywq65t29rjuNfQkYpxZUjkbtHc5VvZ"
+    },
+    {
+      "address": "G9XbC9ggrBYogsZgKYf2pnTvPnJ9z5Zd6WG8BuyioTA9",
+      "name": "G9XbC9gg...oTA9",
+      "type": "unknown_whale",
+      "totalUSD": "$16.4M",
+      "totalUSDRaw": 16413107.834124224,
+      "topHoldings": [
+        "USDT $16,431,182"
+      ],
+      "solscanUrl": "https://solscan.io/account/G9XbC9ggrBYogsZgKYf2pnTvPnJ9z5Zd6WG8BuyioTA9"
+    },
+    {
+      "address": "BMnT51N4iSNhWU5PyFFgWwFvN1jgaiiDr9ZHgnkm3iLJ",
+      "name": "BMnT51N4...3iLJ",
+      "type": "unknown_whale",
+      "totalUSD": "$15.4M",
+      "totalUSDRaw": 15356624.435596734,
+      "topHoldings": [
+        "SOL 22,658"
+      ],
+      "solscanUrl": "https://solscan.io/account/BMnT51N4iSNhWU5PyFFgWwFvN1jgaiiDr9ZHgnkm3iLJ"
+    },
+    {
+      "address": "CK8i4zFXkDE2KWfyg7g9S748r6mwxajbcKcyGhQMR3qQ",
+      "name": "CK8i4zFX...R3qQ",
+      "type": "unknown_whale",
+      "totalUSD": "$15.3M",
+      "totalUSDRaw": 15314828.946661774,
+      "topHoldings": [
+        "WIF 17,635,096"
+      ],
+      "solscanUrl": "https://solscan.io/account/CK8i4zFXkDE2KWfyg7g9S748r6mwxajbcKcyGhQMR3qQ"
+    },
+    {
+      "address": "2NpevLhAKs5c9KNQ8zr6GztoSc6krdho6uDoBngg1was",
+      "name": "2NpevLhA...1was",
+      "type": "unknown_whale",
+      "totalUSD": "$14.6M",
+      "totalUSDRaw": 14573361.205062145,
+      "topHoldings": [
+        "USDT $8,292,827"
+      ],
+      "solscanUrl": "https://solscan.io/account/2NpevLhAKs5c9KNQ8zr6GztoSc6krdho6uDoBngg1was"
+    },
+    {
+      "address": "5wQULuzRkYe4KAttSD1L1fuxavjepcMn1PycNMmPchna",
+      "name": "5wQULuzR...chna",
+      "type": "unknown_whale",
+      "totalUSD": "$13.5M",
+      "totalUSDRaw": 13475794.330879843,
+      "topHoldings": [
+        "JTO 14,714,268"
+      ],
+      "solscanUrl": "https://solscan.io/account/5wQULuzRkYe4KAttSD1L1fuxavjepcMn1PycNMmPchna"
+    },
+    {
+      "address": "3mv8hXktfpgCgK2W2jwRKdwDkw2UaYVJcVDozWmgv1uA",
+      "name": "3mv8hXkt...v1uA",
+      "type": "unknown_whale",
+      "totalUSD": "$12.9M",
+      "totalUSDRaw": 12881186.400000429,
+      "topHoldings": [
+        "JTO 30,000,000"
+      ],
+      "solscanUrl": "https://solscan.io/account/3mv8hXktfpgCgK2W2jwRKdwDkw2UaYVJcVDozWmgv1uA"
+    },
+    {
+      "address": "6tZT9AUcQn4iHMH79YZEXSy55kDLQ4VbA3PMtfLVNsFX",
+      "name": "6tZT9AUc...NsFX",
+      "type": "unknown_whale",
+      "totalUSD": "$12.0M",
+      "totalUSDRaw": 11991629.611691035,
+      "topHoldings": [
+        "JUP 57,468,462"
+      ],
+      "solscanUrl": "https://solscan.io/account/6tZT9AUcQn4iHMH79YZEXSy55kDLQ4VbA3PMtfLVNsFX"
+    },
+    {
+      "address": "EU1eYxuiB4KgsnzFUQcfuqFom3BSyTwFGHnugvgoGU1L",
+      "name": "EU1eYxui...GU1L",
+      "type": "unknown_whale",
+      "totalUSD": "$12.0M",
+      "totalUSDRaw": 11987288.118857259,
+      "topHoldings": [
+        "USDT $12,000,001"
+      ],
+      "solscanUrl": "https://solscan.io/account/EU1eYxuiB4KgsnzFUQcfuqFom3BSyTwFGHnugvgoGU1L"
+    },
+    {
+      "address": "HyXJcgYpURfDhgzuyRL7zxP4FhLg7LZQMeDrR4MXZcMN",
+      "name": "HyXJcgYp...ZcMN",
+      "type": "unknown_whale",
+      "totalUSD": "$11.9M",
+      "totalUSDRaw": 11854195.299761724,
+      "topHoldings": [
+        "USDT $12,052,136"
+      ],
+      "solscanUrl": "https://solscan.io/account/HyXJcgYpURfDhgzuyRL7zxP4FhLg7LZQMeDrR4MXZcMN"
+    },
+    {
+      "address": "3nGBxV5piMnoUAqNUqaqhDZTpEGZm2cCZYNPndHNvGtt",
+      "name": "3nGBxV5p...vGtt",
+      "type": "unknown_whale",
+      "totalUSD": "$10.3M",
+      "totalUSDRaw": 10283781.482929,
+      "topHoldings": [
+        "USDC $24,550,472"
+      ],
+      "solscanUrl": "https://solscan.io/account/3nGBxV5piMnoUAqNUqaqhDZTpEGZm2cCZYNPndHNvGtt"
+    },
+    {
+      "address": "Ep5jXAmYEzmoJ5rd6JePUgrDcE1Dk2PY5cv69UakNjaG",
+      "name": "Ep5jXAmY...NjaG",
+      "type": "unknown_whale",
+      "totalUSD": "$10.0M",
+      "totalUSDRaw": 9988572.6,
+      "topHoldings": [
+        "USDT $10,000,000"
+      ],
+      "solscanUrl": "https://solscan.io/account/Ep5jXAmYEzmoJ5rd6JePUgrDcE1Dk2PY5cv69UakNjaG"
+    },
+    {
+      "address": "Ew6iUFb1dwu2fy1apprCJBa27mnpV6rZTe9XYeDnfQZc",
+      "name": "Ew6iUFb1...fQZc",
+      "type": "unknown_whale",
+      "totalUSD": "$9.7M",
+      "totalUSDRaw": 9694843.435196802,
+      "topHoldings": [
+        "JUP 30,415,377"
+      ],
+      "solscanUrl": "https://solscan.io/account/Ew6iUFb1dwu2fy1apprCJBa27mnpV6rZTe9XYeDnfQZc"
+    },
+    {
+      "address": "ESnLXehGeReTRw3WxxEZwB4u2C9gAe8dMbob8Q4gm9Yg",
+      "name": "ESnLXehG...m9Yg",
+      "type": "unknown_whale",
+      "totalUSD": "$9.4M",
+      "totalUSDRaw": 9393435.946972983,
+      "topHoldings": [
+        "JTO 21,986,423"
+      ],
+      "solscanUrl": "https://solscan.io/account/ESnLXehGeReTRw3WxxEZwB4u2C9gAe8dMbob8Q4gm9Yg"
+    },
+    {
+      "address": "2kzXy9ZRPKSBLQH3QQRX9wiHzdJes78wdwdsck9q3vPv",
+      "name": "2kzXy9ZR...3vPv",
+      "type": "unknown_whale",
+      "totalUSD": "$9.1M",
+      "totalUSDRaw": 9121634.085511958,
+      "topHoldings": [
+        "USDT $9,105,653"
+      ],
+      "solscanUrl": "https://solscan.io/account/2kzXy9ZRPKSBLQH3QQRX9wiHzdJes78wdwdsck9q3vPv"
+    },
+    {
+      "address": "CcPJow48P7tHQjTjxr5GKmdqaRFDbVdd25tDzh9bdYjp",
+      "name": "CcPJow48...dYjp",
+      "type": "unknown_whale",
+      "totalUSD": "$8.8M",
+      "totalUSDRaw": 8793062.936895836,
+      "topHoldings": [
+        "RAY 8,871,099"
+      ],
+      "solscanUrl": "https://solscan.io/account/CcPJow48P7tHQjTjxr5GKmdqaRFDbVdd25tDzh9bdYjp"
+    },
+    {
+      "address": "8ijfaFjefHTnE385P5UgdNBwt4R9ftv6PZLsN6FPFf7A",
+      "name": "8ijfaFje...Ff7A",
+      "type": "unknown_whale",
+      "totalUSD": "$8.6M",
+      "totalUSDRaw": 8589413.368110357,
+      "topHoldings": [
+        "BONK 1,000,000,000,000"
+      ],
+      "solscanUrl": "https://solscan.io/account/8ijfaFjefHTnE385P5UgdNBwt4R9ftv6PZLsN6FPFf7A"
+    },
+    {
+      "address": "CsWayfMjUmFU4Cbndn1QyciPhfNgirRJGPkS2h2LSUyK",
+      "name": "CsWayfMj...SUyK",
+      "type": "unknown_whale",
+      "totalUSD": "$8.6M",
+      "totalUSDRaw": 8587459.059221162,
+      "topHoldings": [
+        "JTO 20,000,000"
+      ],
+      "solscanUrl": "https://solscan.io/account/CsWayfMjUmFU4Cbndn1QyciPhfNgirRJGPkS2h2LSUyK"
+    },
+    {
+      "address": "FQnVcnwEXREJ3D4j7LzNGzCiMUVVqxkGEqZ2KffRY8ud",
+      "name": "FQnVcnwE...Y8ud",
+      "type": "unknown_whale",
+      "totalUSD": "$8.6M",
+      "totalUSDRaw": 8587459.01506214,
+      "topHoldings": [
+        "JTO 20,000,000"
+      ],
+      "solscanUrl": "https://solscan.io/account/FQnVcnwEXREJ3D4j7LzNGzCiMUVVqxkGEqZ2KffRY8ud"
+    },
+    {
+      "address": "Ad5i15ft4QwmXMvJ721WQdCZwwinMr5X5bmPkfEQhT31",
+      "name": "Ad5i15ft...hT31",
+      "type": "unknown_whale",
+      "totalUSD": "$8.6M",
+      "totalUSDRaw": 8587459.002321178,
+      "topHoldings": [
+        "JTO 20,000,000"
+      ],
+      "solscanUrl": "https://solscan.io/account/Ad5i15ft4QwmXMvJ721WQdCZwwinMr5X5bmPkfEQhT31"
+    },
+    {
+      "address": "3dguv2qss6GjmUEnJsddxkR9q5Zoem1sjoSk1jpXFPsz",
+      "name": "3dguv2qs...FPsz",
+      "type": "unknown_whale",
+      "totalUSD": "$8.6M",
+      "totalUSDRaw": 8587458.572297782,
+      "topHoldings": [
+        "JTO 19,999,999"
+      ],
+      "solscanUrl": "https://solscan.io/account/3dguv2qss6GjmUEnJsddxkR9q5Zoem1sjoSk1jpXFPsz"
+    },
+    {
+      "address": "jjCAwuuNpJCNMLAanpwgJZ6cdXzLPXe2GfD6TaDQBXt",
+      "name": "jjCAwuuN...QBXt",
+      "type": "unknown_whale",
+      "totalUSD": "$8.5M",
+      "totalUSDRaw": 8497143.48759671,
+      "topHoldings": [
+        "JTO 19,789,560"
+      ],
+      "solscanUrl": "https://solscan.io/account/jjCAwuuNpJCNMLAanpwgJZ6cdXzLPXe2GfD6TaDQBXt"
+    },
+    {
+      "address": "Dc9Tc7DuLaHgBiwRuEKtnN5Rp3XYXd5Z3fRuRQ81ccAq",
+      "name": "Dc9Tc7Du...ccAq",
+      "type": "unknown_whale",
+      "totalUSD": "$8.4M",
+      "totalUSDRaw": 8444175.429719537,
+      "topHoldings": [
+        "USDT $8,453,825"
+      ],
+      "solscanUrl": "https://solscan.io/account/Dc9Tc7DuLaHgBiwRuEKtnN5Rp3XYXd5Z3fRuRQ81ccAq"
+    },
+    {
+      "address": "Fj2Ds124P6wzesopYWoUqhPqfrhQSVX8T5kxA91gp9Sg",
+      "name": "Fj2Ds124...p9Sg",
+      "type": "unknown_whale",
+      "totalUSD": "$8.2M",
+      "totalUSDRaw": 8220842.69345581,
+      "topHoldings": [
+        "USDT $7,991,002"
+      ],
+      "solscanUrl": "https://solscan.io/account/Fj2Ds124P6wzesopYWoUqhPqfrhQSVX8T5kxA91gp9Sg"
+    },
+    {
+      "address": "5JgYXM4DJBv8UboDKqpqD9TYhAARHwYHrMdKzgDvAptN",
+      "name": "5JgYXM4D...AptN",
+      "type": "unknown_whale",
+      "totalUSD": "$8.1M",
+      "totalUSDRaw": 8125905.18512993,
+      "topHoldings": [
+        "USDT $8,135,200"
+      ],
+      "solscanUrl": "https://solscan.io/account/5JgYXM4DJBv8UboDKqpqD9TYhAARHwYHrMdKzgDvAptN"
+    },
+    {
+      "address": "BZ6N1mEhPxvXFy5KDscrQZ2Wc6LRN8MVn2T6GXyEgQr6",
+      "name": "BZ6N1mEh...gQr6",
+      "type": "unknown_whale",
+      "totalUSD": "$8.1M",
+      "totalUSDRaw": 8115147.861372881,
+      "topHoldings": [
+        "JTO 18,900,001"
+      ],
+      "solscanUrl": "https://solscan.io/account/BZ6N1mEhPxvXFy5KDscrQZ2Wc6LRN8MVn2T6GXyEgQr6"
+    },
+    {
+      "address": "4UdA1ZEEroMEUs3WbQnCdAyeydctVKxBX1CrcwQy7zzE",
+      "name": "4UdA1ZEE...7zzE",
+      "type": "unknown_whale",
+      "totalUSD": "$8.1M",
+      "totalUSDRaw": 8076181.982571346,
+      "topHoldings": [
+        "TRUMP 1,667,047"
+      ],
+      "solscanUrl": "https://solscan.io/account/4UdA1ZEEroMEUs3WbQnCdAyeydctVKxBX1CrcwQy7zzE"
+    },
+    {
+      "address": "BN5sEedysJxragPcFoR5UDXSiA7oZLe2FPbo7tZ2MZCG",
+      "name": "BN5sEedy...MZCG",
+      "type": "unknown_whale",
+      "totalUSD": "$8.1M",
+      "totalUSDRaw": 8070642.425546523,
+      "topHoldings": [
+        "JUP 37,572,637"
+      ],
+      "solscanUrl": "https://solscan.io/account/BN5sEedysJxragPcFoR5UDXSiA7oZLe2FPbo7tZ2MZCG"
+    },
+    {
+      "address": "qcjtKjw2rMiA6cYkSaV8nbMDf99ASpukzhmg9a4CaN1",
+      "name": "qcjtKjw2...CaN1",
+      "type": "unknown_whale",
+      "totalUSD": "$8.0M",
+      "totalUSDRaw": 7995274.003876877,
+      "topHoldings": [
+        "TRUMP 1,686,180"
+      ],
+      "solscanUrl": "https://solscan.io/account/qcjtKjw2rMiA6cYkSaV8nbMDf99ASpukzhmg9a4CaN1"
+    },
+    {
+      "address": "6pVK8YrQNRTa7wgoDVuy3pXpfAfgCYdkZjSjRpMDkcyi",
+      "name": "6pVK8YrQ...kcyi",
+      "type": "unknown_whale",
+      "totalUSD": "$7.4M",
+      "totalUSDRaw": 7401542.285172599,
+      "topHoldings": [
+        "USDT $7,410,010"
+      ],
+      "solscanUrl": "https://solscan.io/account/6pVK8YrQNRTa7wgoDVuy3pXpfAfgCYdkZjSjRpMDkcyi"
+    },
+    {
+      "address": "DD3AeAssFvjqTvRTrRAtpfjkBF8FpVKnFuwnMLN9haXD",
+      "name": "Marginfi Bank Liquidity (SOL) Vault Authority",
+      "type": "protocol",
+      "totalUSD": "$7.3M",
+      "totalUSDRaw": 7322390.366375653,
+      "topHoldings": [
+        "SOL 57,130"
+      ],
+      "solscanUrl": "https://solscan.io/account/DD3AeAssFvjqTvRTrRAtpfjkBF8FpVKnFuwnMLN9haXD"
+    },
+    {
+      "address": "F18jTyiQivKmuy3zYsJRjMBPgHab4is16betYFEY67WF",
+      "name": "F18jTyiQ...67WF",
+      "type": "unknown_whale",
+      "totalUSD": "$7.1M",
+      "totalUSDRaw": 7119429.678009193,
+      "topHoldings": [
+        "BONK 834,716,894,624"
+      ],
+      "solscanUrl": "https://solscan.io/account/F18jTyiQivKmuy3zYsJRjMBPgHab4is16betYFEY67WF"
+    },
+    {
+      "address": "HZVW75BkNM6JyFerRgrtkpAzDSoZj6Z8HSaf9RPWvydy",
+      "name": "HZVW75Bk...vydy",
+      "type": "unknown_whale",
+      "totalUSD": "$6.8M",
+      "totalUSDRaw": 6760130.862076413,
+      "topHoldings": [
+        "JUP 31,471,589"
+      ],
+      "solscanUrl": "https://solscan.io/account/HZVW75BkNM6JyFerRgrtkpAzDSoZj6Z8HSaf9RPWvydy"
+    },
+    {
+      "address": "5JA6jjjTKSEMDUKRcNgVmVtn7QcpWWkL7svTNVjgksEq",
+      "name": "5JA6jjjT...ksEq",
+      "type": "unknown_whale",
+      "totalUSD": "$6.8M",
+      "totalUSDRaw": 6760130.854877803,
+      "topHoldings": [
+        "JUP 31,471,589"
+      ],
+      "solscanUrl": "https://solscan.io/account/5JA6jjjTKSEMDUKRcNgVmVtn7QcpWWkL7svTNVjgksEq"
+    },
+    {
+      "address": "HmU2GUjRjWxFJ7PLZWC4ULKco5qN4NCUhx6hsRo6WgG3",
+      "name": "HmU2GUjR...WgG3",
+      "type": "unknown_whale",
+      "totalUSD": "$6.8M",
+      "totalUSDRaw": 6760130.778036963,
+      "topHoldings": [
+        "JUP 31,471,589"
+      ],
+      "solscanUrl": "https://solscan.io/account/HmU2GUjRjWxFJ7PLZWC4ULKco5qN4NCUhx6hsRo6WgG3"
+    },
+    {
+      "address": "5NUdHyuSFHPaHh1Ut2FAotfXmH6qQJu5XPvAxz1z1VMe",
+      "name": "5NUdHyuS...1VMe",
+      "type": "unknown_whale",
+      "totalUSD": "$6.6M",
+      "totalUSDRaw": 6566115.964681925,
+      "topHoldings": [
+        "WIF 20,913,896"
+      ],
+      "solscanUrl": "https://solscan.io/account/5NUdHyuSFHPaHh1Ut2FAotfXmH6qQJu5XPvAxz1z1VMe"
+    },
+    {
+      "address": "CMivUnnbDHxLq9ChV1bSuiQE5ycZf6JVvFFDePMHhHYK",
+      "name": "CMivUnnb...hHYK",
+      "type": "unknown_whale",
+      "totalUSD": "$6.6M",
+      "totalUSDRaw": 6553622.607046058,
+      "topHoldings": [
+        "WIF 10,000,009"
+      ],
+      "solscanUrl": "https://solscan.io/account/CMivUnnbDHxLq9ChV1bSuiQE5ycZf6JVvFFDePMHhHYK"
+    },
+    {
+      "address": "7PTtow6mKkXEpLuLXB3u3qntP6uARjQUTvfuP96STCRm",
+      "name": "7PTtow6m...TCRm",
+      "type": "unknown_whale",
+      "totalUSD": "$6.5M",
+      "totalUSDRaw": 6525107.930019276,
+      "topHoldings": [
+        "JTO 15,196,833"
+      ],
+      "solscanUrl": "https://solscan.io/account/7PTtow6mKkXEpLuLXB3u3qntP6uARjQUTvfuP96STCRm"
+    },
+    {
+      "address": "9xSi6onCqhLuXTgodd5wB7EXv2WwuYPZyZwDyruGKL6v",
+      "name": "9xSi6onC...KL6v",
+      "type": "unknown_whale",
+      "totalUSD": "$6.4M",
+      "totalUSDRaw": 6440594.600543828,
+      "topHoldings": [
+        "JTO 15,000,000"
+      ],
+      "solscanUrl": "https://solscan.io/account/9xSi6onCqhLuXTgodd5wB7EXv2WwuYPZyZwDyruGKL6v"
+    },
+    {
+      "address": "6GdKDNs1oRjupkUBgKyNMvdnrTafruHtDSgedeJtTnLL",
+      "name": "6GdKDNs1...TnLL",
+      "type": "unknown_whale",
+      "totalUSD": "$6.4M",
+      "totalUSDRaw": 6440594.588249561,
+      "topHoldings": [
+        "JTO 15,000,000"
+      ],
+      "solscanUrl": "https://solscan.io/account/6GdKDNs1oRjupkUBgKyNMvdnrTafruHtDSgedeJtTnLL"
+    },
+    {
+      "address": "2p63sfdNEKgQo39hQTqjcN5HURs9TWtvuxSs9hTePVxu",
+      "name": "2p63sfdN...PVxu",
+      "type": "unknown_whale",
+      "totalUSD": "$6.2M",
+      "totalUSDRaw": 6234249.872385112,
+      "topHoldings": [
+        "TRUMP 1,297,912"
+      ],
+      "solscanUrl": "https://solscan.io/account/2p63sfdNEKgQo39hQTqjcN5HURs9TWtvuxSs9hTePVxu"
+    },
+    {
+      "address": "H9ukwfbFhqQF8wZNokPwe1ddT61HdDBoT5bXFvdD6f8D",
+      "name": "H9ukwfbF...6f8D",
+      "type": "unknown_whale",
+      "totalUSD": "$6.1M",
+      "totalUSDRaw": 6119702.941764559,
+      "topHoldings": [
+        "BONK 712,471,527,902"
+      ],
+      "solscanUrl": "https://solscan.io/account/H9ukwfbFhqQF8wZNokPwe1ddT61HdDBoT5bXFvdD6f8D"
+    },
+    {
+      "address": "6pVyMqt1j4Dvq9sB781Sp6uBBFzshGTgRA8K4zDPhskp",
+      "name": "6pVyMqt1...hskp",
+      "type": "unknown_whale",
+      "totalUSD": "$6.0M",
+      "totalUSDRaw": 6044079.638130027,
+      "topHoldings": [
+        "JTO 18,295,113"
+      ],
+      "solscanUrl": "https://solscan.io/account/6pVyMqt1j4Dvq9sB781Sp6uBBFzshGTgRA8K4zDPhskp"
+    },
+    {
+      "address": "9K1SJYStwyA7kV2j5gZvqhtSujEhRr5WvES6JRgMyYUY",
+      "name": "9K1SJYSt...yYUY",
+      "type": "unknown_whale",
+      "totalUSD": "$5.9M",
+      "totalUSDRaw": 5911953.7276808955,
+      "topHoldings": [
+        "JUP 27,522,926"
+      ],
+      "solscanUrl": "https://solscan.io/account/9K1SJYStwyA7kV2j5gZvqhtSujEhRr5WvES6JRgMyYUY"
+    },
+    {
+      "address": "24bF2MJTAjqmDUaKHzemic5hkwVqzAbkhjTRCGcynMPT",
+      "name": "24bF2MJT...nMPT",
+      "type": "unknown_whale",
+      "totalUSD": "$5.8M",
+      "totalUSDRaw": 5796453.322430456,
+      "topHoldings": [
+        "JTO 13,499,812"
+      ],
+      "solscanUrl": "https://solscan.io/account/24bF2MJTAjqmDUaKHzemic5hkwVqzAbkhjTRCGcynMPT"
+    },
+    {
+      "address": "CSM5ud7YRZ5pdMGm5L8U9Rgoh6h7sUUR1JyfhemfE3vN",
+      "name": "CSM5ud7Y...E3vN",
+      "type": "unknown_whale",
+      "totalUSD": "$5.5M",
+      "totalUSDRaw": 5478838.797463523,
+      "topHoldings": [
+        "JTO 12,760,092"
+      ],
+      "solscanUrl": "https://solscan.io/account/CSM5ud7YRZ5pdMGm5L8U9Rgoh6h7sUUR1JyfhemfE3vN"
+    },
+    {
+      "address": "6xGe9H7hbaXn6cu26fizNCvoUoTRxVapUQ61p5B9fM3N",
+      "name": "6xGe9H7h...fM3N",
+      "type": "unknown_whale",
+      "totalUSD": "$5.2M",
+      "totalUSDRaw": 5152474.5600000005,
+      "topHoldings": [
+        "JTO 12,000,000"
+      ],
+      "solscanUrl": "https://solscan.io/account/6xGe9H7hbaXn6cu26fizNCvoUoTRxVapUQ61p5B9fM3N"
+    },
+    {
+      "address": "4TgumWudhhXpkD5cAyhXkk56hUaaVVT82PEXoyGX3iRQ",
+      "name": "4TgumWud...3iRQ",
+      "type": "unknown_whale",
+      "totalUSD": "$4.6M",
+      "totalUSDRaw": 4555643.536940781,
+      "topHoldings": [
+        "JTO 10,609,991"
+      ],
+      "solscanUrl": "https://solscan.io/account/4TgumWudhhXpkD5cAyhXkk56hUaaVVT82PEXoyGX3iRQ"
+    },
+    {
+      "address": "7yEJAtVPDop5P5Xgn8qkjMb3RqitpfmJwQHTbT1TBdwJ",
+      "name": "7yEJAtVP...BdwJ",
+      "type": "unknown_whale",
+      "totalUSD": "$4.0M",
+      "totalUSDRaw": 3953995.2809595563,
+      "topHoldings": [
+        "RAY 3,954,550"
+      ],
+      "solscanUrl": "https://solscan.io/account/7yEJAtVPDop5P5Xgn8qkjMb3RqitpfmJwQHTbT1TBdwJ"
+    },
+    {
+      "address": "ADaENsRth44fqKE9vwXwQjjiNr6ZLd2jVTEkCp8hfRcL",
+      "name": "ADaENsRt...fRcL",
+      "type": "unknown_whale",
+      "totalUSD": "$3.8M",
+      "totalUSDRaw": 3848599.3421351514,
+      "topHoldings": [
+        "WIF 12,257,866"
+      ],
+      "solscanUrl": "https://solscan.io/account/ADaENsRth44fqKE9vwXwQjjiNr6ZLd2jVTEkCp8hfRcL"
+    },
+    {
+      "address": "Gjd48ViypZPnoRaTneYhKst1FhscVjBDk1vAeaHZvZm",
+      "name": "Gjd48Viy...ZvZm",
+      "type": "unknown_whale",
+      "totalUSD": "$2.9M",
+      "totalUSDRaw": 2863627.06661976,
+      "topHoldings": [
+        "RAY 2,884,932"
+      ],
+      "solscanUrl": "https://solscan.io/account/Gjd48ViypZPnoRaTneYhKst1FhscVjBDk1vAeaHZvZm"
+    },
+    {
+      "address": "C5oqy6eer5yxbnbMsmZ7fAhRYqWhy1FJxGRfXwtXdBQA",
+      "name": "C5oqy6ee...dBQA",
+      "type": "unknown_whale",
+      "totalUSD": "$2.7M",
+      "totalUSDRaw": 2684793.847934001,
+      "topHoldings": [
+        "RAY 2,708,601"
+      ],
+      "solscanUrl": "https://solscan.io/account/C5oqy6eer5yxbnbMsmZ7fAhRYqWhy1FJxGRfXwtXdBQA"
+    },
+    {
+      "address": "7woqjAuxu4WJZyrRdpXa9jN3uer7oZAXw7ctFNFHuZn5",
+      "name": "7woqjAux...uZn5",
+      "type": "unknown_whale",
+      "totalUSD": "$2.5M",
+      "totalUSDRaw": 2478040.331895019,
+      "topHoldings": [
+        "RAY 2,499,999"
+      ],
+      "solscanUrl": "https://solscan.io/account/7woqjAuxu4WJZyrRdpXa9jN3uer7oZAXw7ctFNFHuZn5"
+    },
+    {
+      "address": "3eVpnV8Y6dP6wg1sVB65s17AhnfSfBdstALEgcuQLVSS",
+      "name": "3eVpnV8Y...LVSS",
+      "type": "unknown_whale",
+      "totalUSD": "$2.4M",
+      "totalUSDRaw": 2448278.464556639,
+      "topHoldings": [
+        "RAY 2,470,006"
+      ],
+      "solscanUrl": "https://solscan.io/account/3eVpnV8Y6dP6wg1sVB65s17AhnfSfBdstALEgcuQLVSS"
+    },
+    {
+      "address": "ETUSFDFz3EH4usBu3UZk2Fh5G5xuYF2KroaCFThZbwNr",
+      "name": "ETUSFDFz...bwNr",
+      "type": "unknown_whale",
+      "totalUSD": "$2.3M",
+      "totalUSDRaw": 2347987.212479,
+      "topHoldings": [
+        "USDC $36,613,806"
+      ],
+      "solscanUrl": "https://solscan.io/account/ETUSFDFz3EH4usBu3UZk2Fh5G5xuYF2KroaCFThZbwNr"
+    }
+  ]
+}

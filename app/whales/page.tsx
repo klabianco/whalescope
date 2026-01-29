@@ -6,56 +6,43 @@ import { useWallet } from '@solana/wallet-adapter-react';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
 import { useAuth } from '../providers/AuthProvider';
-import arkhamData from '../../data/arkham-entities.json';
+import whaleData from '../../data/whale-wallets.json';
 
 const FREE_WATCHLIST_LIMIT = 3;
 
-interface ArkhamEntity {
-  slug: string;
+interface WhaleWallet {
+  address: string;
   name: string;
   type: string;
   totalUSD: string;
-  addresses: number | null;
-  arkhamUrl: string;
-  topHoldings?: string[];
+  totalUSDRaw: number;
+  topHoldings?: string[] | null;
+  solscanUrl: string;
 }
 
-// Parse "$901.8M" or "$7.4B" to a number for sorting
-function parseUSD(val: string): number {
-  const num = parseFloat(val.replace(/[$,]/g, ''));
-  if (val.includes('B')) return num * 1_000_000_000;
-  if (val.includes('M')) return num * 1_000_000;
-  if (val.includes('K')) return num * 1_000;
-  return num;
-}
+const WALLETS: WhaleWallet[] = (whaleData.wallets as WhaleWallet[])
+  .sort((a, b) => b.totalUSDRaw - a.totalUSDRaw);
 
-const ENTITIES: ArkhamEntity[] = (arkhamData.entities as ArkhamEntity[])
-  .sort((a, b) => parseUSD(b.totalUSD) - parseUSD(a.totalUSD));
+type WalletType = 'all' | 'exchange' | 'protocol' | 'institution' | 'unknown_whale';
 
-type EntityType = 'all' | 'fund' | 'institution' | 'individual' | 'protocol' | 'exchange' | 'government';
-
-const ENTITY_TYPE_LABELS: Record<string, string> = {
-  fund: 'Fund',
-  institution: 'Institution',
-  individual: 'Individual',
-  protocol: 'Protocol',
+const TYPE_LABELS: Record<string, string> = {
   exchange: 'Exchange',
-  government: 'Government',
+  protocol: 'Protocol',
+  institution: 'Institution',
+  unknown_whale: 'Whale',
 };
 
-const ENTITY_TYPE_COLORS: Record<string, string> = {
-  fund: '#4ade80',
-  institution: '#60a5fa',
-  individual: '#a78bfa',
-  protocol: '#22d3ee',
+const TYPE_COLORS: Record<string, string> = {
   exchange: '#fbbf24',
-  government: '#f87171',
+  protocol: '#22d3ee',
+  institution: '#60a5fa',
+  unknown_whale: '#a78bfa',
 };
 
 export default function WhalesPage() {
   const { publicKey, connected } = useWallet();
-  const [followingEntities, setFollowingEntities] = useState<string[]>([]);
-  const [entityFilter, setEntityFilter] = useState<EntityType>('all');
+  const [followingWallets, setFollowingWallets] = useState<string[]>([]);
+  const [walletFilter, setWalletFilter] = useState<WalletType>('all');
   const [limitWarning, setLimitWarning] = useState(false);
   
   let isPro = false;
@@ -66,40 +53,40 @@ export default function WhalesPage() {
 
   const storageKey = publicKey ? publicKey.toBase58() : null;
 
-  const filteredEntities = entityFilter === 'all'
-    ? ENTITIES
-    : ENTITIES.filter(e => e.type === entityFilter);
+  const filteredWallets = walletFilter === 'all'
+    ? WALLETS
+    : WALLETS.filter(w => w.type === walletFilter);
 
   const typeCounts: Record<string, number> = {};
-  ENTITIES.forEach(e => { typeCounts[e.type] = (typeCounts[e.type] || 0) + 1; });
+  WALLETS.forEach(w => { typeCounts[w.type] = (typeCounts[w.type] || 0) + 1; });
 
   useEffect(() => {
     if (storageKey) {
       try {
-        const saved = localStorage.getItem(`entities_${storageKey}`);
-        setFollowingEntities(saved ? JSON.parse(saved) : []);
+        const saved = localStorage.getItem(`whales_${storageKey}`);
+        setFollowingWallets(saved ? JSON.parse(saved) : []);
       } catch {
-        setFollowingEntities([]);
+        setFollowingWallets([]);
       }
     }
   }, [storageKey]);
 
-  function toggleFollowEntity(slug: string) {
+  function toggleFollow(address: string) {
     if (!storageKey) return;
-    if (followingEntities.includes(slug)) {
-      const newList = followingEntities.filter(s => s !== slug);
-      localStorage.setItem(`entities_${storageKey}`, JSON.stringify(newList));
-      setFollowingEntities(newList);
+    if (followingWallets.includes(address)) {
+      const newList = followingWallets.filter(a => a !== address);
+      localStorage.setItem(`whales_${storageKey}`, JSON.stringify(newList));
+      setFollowingWallets(newList);
       setLimitWarning(false);
       return;
     }
-    if (!isPro && followingEntities.length >= FREE_WATCHLIST_LIMIT) {
+    if (!isPro && followingWallets.length >= FREE_WATCHLIST_LIMIT) {
       setLimitWarning(true);
       return;
     }
-    const newList = [...followingEntities, slug];
-    localStorage.setItem(`entities_${storageKey}`, JSON.stringify(newList));
-    setFollowingEntities(newList);
+    const newList = [...followingWallets, address];
+    localStorage.setItem(`whales_${storageKey}`, JSON.stringify(newList));
+    setFollowingWallets(newList);
   }
 
   return (
@@ -112,238 +99,234 @@ export default function WhalesPage() {
             Whale Tracker
           </h1>
           <p style={{ color: '#888' }}>
-            Track the biggest crypto wallets and funds on-chain.
+            Track the biggest crypto wallets on Solana — exchanges, protocols, and individual whales.
           </p>
         </div>
 
-      {/* Watchlist Limit Warning */}
-      {limitWarning && (
-        <div style={{
-          background: 'rgba(251, 191, 36, 0.1)',
-          border: '1px solid rgba(251, 191, 36, 0.3)',
-          borderRadius: '12px',
-          padding: '12px 16px',
-          marginBottom: '16px',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          flexWrap: 'wrap',
-          gap: '8px'
-        }}>
-          <p style={{ color: '#fbbf24', fontSize: '14px', margin: 0 }}>
-            Free plan limit: {FREE_WATCHLIST_LIMIT} watchlist slots. Upgrade for unlimited.
-          </p>
-          <Link href="/pricing" style={{ textDecoration: 'none' }}>
-            <button style={{
-              background: '#fbbf24',
-              color: '#000',
-              border: 'none',
-              borderRadius: '6px',
-              padding: '6px 14px',
-              fontSize: '13px',
-              fontWeight: '600',
-              cursor: 'pointer'
-            }}>
-              Upgrade to Pro
-            </button>
-          </Link>
-        </div>
-      )}
-
-      {/* Arkham Entities */}
-      <>
-          {/* Filter pills */}
-          <div style={{ 
-            display: 'flex', 
-            gap: '8px', 
-            marginBottom: '20px',
-            flexWrap: 'wrap'
+        {/* Watchlist Limit Warning */}
+        {limitWarning && (
+          <div style={{
+            background: 'rgba(251, 191, 36, 0.1)',
+            border: '1px solid rgba(251, 191, 36, 0.3)',
+            borderRadius: '12px',
+            padding: '12px 16px',
+            marginBottom: '16px',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            gap: '8px'
           }}>
-            <button
-              onClick={() => setEntityFilter('all')}
-              style={{
+            <p style={{ color: '#fbbf24', fontSize: '14px', margin: 0 }}>
+              Free plan limit: {FREE_WATCHLIST_LIMIT} watchlist slots. Upgrade for unlimited.
+            </p>
+            <Link href="/pricing" style={{ textDecoration: 'none' }}>
+              <button style={{
+                background: '#fbbf24',
+                color: '#000',
+                border: 'none',
+                borderRadius: '6px',
                 padding: '6px 14px',
-                background: entityFilter === 'all' ? '#fff' : '#1a1a24',
-                color: entityFilter === 'all' ? '#000' : '#888',
-                border: '1px solid ' + (entityFilter === 'all' ? '#fff' : '#333'),
-                borderRadius: '20px',
                 fontSize: '13px',
-                fontWeight: '500',
+                fontWeight: '600',
                 cursor: 'pointer'
-              }}
-            >
-              All ({ENTITIES.length})
-            </button>
-            {Object.entries(ENTITY_TYPE_LABELS).map(([key, label]) => {
-              const count = typeCounts[key] || 0;
-              if (count === 0) return null;
-              const color = ENTITY_TYPE_COLORS[key] || '#888';
-              const isActive = entityFilter === key;
-              return (
-                <button
-                  key={key}
-                  onClick={() => setEntityFilter(key as EntityType)}
-                  style={{
-                    padding: '6px 14px',
-                    background: isActive ? color + '20' : '#1a1a24',
-                    color: isActive ? color : '#888',
-                    border: '1px solid ' + (isActive ? color + '60' : '#333'),
-                    borderRadius: '20px',
-                    fontSize: '13px',
-                    fontWeight: '500',
-                    cursor: 'pointer'
-                  }}
-                >
-                  {label} ({count})
-                </button>
-              );
-            })}
+              }}>
+                Upgrade to Pro
+              </button>
+            </Link>
           </div>
+        )}
 
-          {/* Entity cards */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            {filteredEntities.map((entity) => {
-              const typeColor = ENTITY_TYPE_COLORS[entity.type] || '#888';
-              const typeLabel = ENTITY_TYPE_LABELS[entity.type] || entity.type;
-              return (
-                <div key={entity.slug} style={{
-                  background: '#111118',
-                  border: '1px solid #222',
-                  borderRadius: '12px',
-                  padding: '20px',
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'flex-start',
-                  gap: '16px',
-                  flexWrap: 'wrap'
-                }}>
-                  <div style={{ flex: 1, minWidth: '200px' }}>
-                    {/* Name + type badge */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px', flexWrap: 'wrap' }}>
-                      <span style={{ fontSize: '18px', fontWeight: '600', color: '#fff' }}>
-                        {entity.name}
-                      </span>
-                      <span style={{
-                        background: typeColor + '20',
-                        color: typeColor,
-                        padding: '2px 8px',
-                        borderRadius: '4px',
-                        fontSize: '11px',
-                        fontWeight: '600',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.5px'
-                      }}>
-                        {typeLabel}
-                      </span>
-                    </div>
+        {/* Filter pills */}
+        <div style={{ 
+          display: 'flex', 
+          gap: '8px', 
+          marginBottom: '20px',
+          flexWrap: 'wrap'
+        }}>
+          <button
+            onClick={() => setWalletFilter('all')}
+            style={{
+              padding: '6px 14px',
+              background: walletFilter === 'all' ? '#fff' : '#1a1a24',
+              color: walletFilter === 'all' ? '#000' : '#888',
+              border: '1px solid ' + (walletFilter === 'all' ? '#fff' : '#333'),
+              borderRadius: '20px',
+              fontSize: '13px',
+              fontWeight: '500',
+              cursor: 'pointer'
+            }}
+          >
+            All ({WALLETS.length})
+          </button>
+          {Object.entries(TYPE_LABELS).map(([key, label]) => {
+            const count = typeCounts[key] || 0;
+            if (count === 0) return null;
+            const color = TYPE_COLORS[key] || '#888';
+            const isActive = walletFilter === key;
+            return (
+              <button
+                key={key}
+                onClick={() => setWalletFilter(key as WalletType)}
+                style={{
+                  padding: '6px 14px',
+                  background: isActive ? color + '20' : '#1a1a24',
+                  color: isActive ? color : '#888',
+                  border: '1px solid ' + (isActive ? color + '60' : '#333'),
+                  borderRadius: '20px',
+                  fontSize: '13px',
+                  fontWeight: '500',
+                  cursor: 'pointer'
+                }}
+              >
+                {label} ({count})
+              </button>
+            );
+          })}
+        </div>
 
-                    {/* Portfolio value */}
-                    <div style={{ fontSize: '24px', fontWeight: '700', color: '#fff', marginBottom: '10px' }}>
-                      {entity.totalUSD}
-                      <span style={{ fontSize: '13px', color: '#666', fontWeight: '400', marginLeft: '8px' }}>
-                        portfolio
-                      </span>
-                    </div>
-
-                    {/* Top holdings */}
-                    {entity.topHoldings && entity.topHoldings.length > 0 && (
-                      <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginBottom: '8px' }}>
-                        {entity.topHoldings.slice(0, 5).map((holding, i) => (
-                          <span key={i} style={{
-                            background: '#1a1a24',
-                            border: '1px solid #2a2a3a',
-                            color: '#aaa',
-                            padding: '3px 8px',
-                            borderRadius: '6px',
-                            fontSize: '11px',
-                            fontWeight: '500'
-                          }}>
-                            {holding}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-
-                    {/* Address count + Arkham link */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '4px' }}>
-                      {entity.addresses && (
-                        <span style={{ color: '#666', fontSize: '12px' }}>
-                          {entity.addresses} addresses tracked
-                        </span>
-                      )}
-                      <a 
-                        href={entity.arkhamUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        style={{ color: '#60a5fa', fontSize: '12px', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '4px' }}
-                      >
-                        View on Arkham ↗
-                      </a>
-                    </div>
+        {/* Wallet cards */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          {filteredWallets.map((wallet) => {
+            const typeColor = TYPE_COLORS[wallet.type] || '#888';
+            const typeLabel = TYPE_LABELS[wallet.type] || wallet.type;
+            const isUnknown = wallet.type === 'unknown_whale';
+            const displayName = isUnknown 
+              ? `${wallet.address.slice(0, 6)}...${wallet.address.slice(-4)}`
+              : wallet.name;
+            return (
+              <div key={wallet.address} style={{
+                background: '#111118',
+                border: '1px solid #222',
+                borderRadius: '12px',
+                padding: '20px',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'flex-start',
+                gap: '16px',
+                flexWrap: 'wrap'
+              }}>
+                <div style={{ flex: 1, minWidth: '200px' }}>
+                  {/* Name + type badge */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px', flexWrap: 'wrap' }}>
+                    <span style={{ fontSize: '18px', fontWeight: '600', color: '#fff' }}>
+                      {displayName}
+                    </span>
+                    <span style={{
+                      background: typeColor + '20',
+                      color: typeColor,
+                      padding: '2px 8px',
+                      borderRadius: '4px',
+                      fontSize: '11px',
+                      fontWeight: '600',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.5px'
+                    }}>
+                      {typeLabel}
+                    </span>
                   </div>
-                  
-                  {/* Actions */}
-                  <div style={{ display: 'flex', gap: '8px', flexShrink: 0 }}>
+
+                  {/* Portfolio value */}
+                  <div style={{ fontSize: '24px', fontWeight: '700', color: '#fff', marginBottom: '10px' }}>
+                    {wallet.totalUSD}
+                    <span style={{ fontSize: '13px', color: '#666', fontWeight: '400', marginLeft: '8px' }}>
+                      tracked value
+                    </span>
+                  </div>
+
+                  {/* Top holdings */}
+                  {wallet.topHoldings && wallet.topHoldings.length > 0 && (
+                    <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginBottom: '8px' }}>
+                      {wallet.topHoldings.slice(0, 5).map((holding, i) => (
+                        <span key={i} style={{
+                          background: '#1a1a24',
+                          border: '1px solid #2a2a3a',
+                          color: '#aaa',
+                          padding: '3px 8px',
+                          borderRadius: '6px',
+                          fontSize: '11px',
+                          fontWeight: '500'
+                        }}>
+                          {holding}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Address + Solscan link */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '4px' }}>
+                    <span style={{ color: '#555', fontSize: '12px', fontFamily: 'monospace' }}>
+                      {wallet.address.slice(0, 12)}...{wallet.address.slice(-6)}
+                    </span>
                     <a 
-                      href={entity.arkhamUrl}
+                      href={wallet.solscanUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      style={{ 
-                        padding: '10px 20px', 
-                        background: '#222', 
-                        color: '#fff', 
-                        borderRadius: '8px', 
-                        textDecoration: 'none', 
-                        fontSize: '14px',
-                        display: 'inline-block'
-                      }}
+                      style={{ color: '#60a5fa', fontSize: '12px', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '4px' }}
                     >
-                      Profile
+                      View on Solscan ↗
                     </a>
-                    <button
-                      onClick={() => {
-                        if (connected) {
-                          toggleFollowEntity(entity.slug);
-                        } else {
-                          document.querySelector<HTMLButtonElement>('.wallet-adapter-button')?.click();
-                        }
-                      }}
-                      style={{
-                        padding: '10px 20px',
-                        background: followingEntities.includes(entity.slug) ? typeColor + '30' : '#222',
-                        color: followingEntities.includes(entity.slug) ? typeColor : '#fff',
-                        border: followingEntities.includes(entity.slug) ? `1px solid ${typeColor}50` : '1px solid transparent',
-                        borderRadius: '8px',
-                        fontSize: '14px',
-                        fontWeight: '600',
-                        cursor: 'pointer'
-                      }}
-                    >
-                      {followingEntities.includes(entity.slug) ? '✓ Following' : 'Follow'}
-                    </button>
                   </div>
                 </div>
-              );
-            })}
-          </div>
+                
+                {/* Actions */}
+                <div style={{ display: 'flex', gap: '8px', flexShrink: 0 }}>
+                  <Link 
+                    href={`/wallet/${wallet.address}`}
+                    style={{ 
+                      padding: '10px 20px', 
+                      background: '#222', 
+                      color: '#fff', 
+                      borderRadius: '8px', 
+                      textDecoration: 'none', 
+                      fontSize: '14px',
+                      display: 'inline-block'
+                    }}
+                  >
+                    Profile
+                  </Link>
+                  <button
+                    onClick={() => {
+                      if (connected) {
+                        toggleFollow(wallet.address);
+                      } else {
+                        document.querySelector<HTMLButtonElement>('.wallet-adapter-button')?.click();
+                      }
+                    }}
+                    style={{
+                      padding: '10px 20px',
+                      background: followingWallets.includes(wallet.address) ? typeColor + '30' : '#222',
+                      color: followingWallets.includes(wallet.address) ? typeColor : '#fff',
+                      border: followingWallets.includes(wallet.address) ? `1px solid ${typeColor}50` : '1px solid transparent',
+                      borderRadius: '8px',
+                      fontSize: '14px',
+                      fontWeight: '600',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    {followingWallets.includes(wallet.address) ? '✓ Following' : 'Follow'}
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
 
-          {/* Data source attribution */}
-          <div style={{ 
-            textAlign: 'center', 
-            marginTop: '24px', 
-            padding: '12px',
-            color: '#555',
-            fontSize: '12px'
-          }}>
-            Entity data powered by{' '}
-            <a href="https://intel.arkm.com" target="_blank" rel="noopener noreferrer" style={{ color: '#60a5fa', textDecoration: 'none' }}>
-              Arkham Intelligence
-            </a>
-          </div>
-        </>
-
-    </main>
-    <Footer />
+        {/* Data source attribution */}
+        <div style={{ 
+          textAlign: 'center', 
+          marginTop: '24px', 
+          padding: '12px',
+          color: '#555',
+          fontSize: '12px'
+        }}>
+          {WALLETS.length} wallets tracked · Data from on-chain analysis ·{' '}
+          <a href="https://solscan.io" target="_blank" rel="noopener noreferrer" style={{ color: '#60a5fa', textDecoration: 'none' }}>
+            Solscan
+          </a>
+        </div>
+      </main>
+      <Footer />
     </>
   );
 }
