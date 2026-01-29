@@ -84,18 +84,29 @@ async function handleStart(chatId: number, userId: number, text: string, usernam
   if (parts.length < 2) {
     // No wallet provided, send welcome message
     await sendMessage(chatId, `
-🐋 <b>Welcome to WhaleScope!</b>
+🐋 <b>Welcome to WhaleScope Alerts!</b>
 
-To connect your account and receive trade alerts:
+Get real-time notifications for Congress trades and crypto whale moves.
 
-1. Subscribe at <a href="https://whalescope.app/pricing">whalescope.app/pricing</a>
-2. Send your wallet address here:
-   <code>/start YOUR_WALLET_ADDRESS</code>
+<b>How to get alerts:</b>
 
-Example:
-<code>/start fkjcdhbTDWjdRb3SwNmA4dRRSca7K3qKypfPwCYDZyP</code>
+1️⃣ Go to <a href="https://whalescope.app/pricing">whalescope.app/pricing</a> and subscribe to Pro ($24/mo)
+2️⃣ Copy your Solana wallet address (the one you paid with)
+3️⃣ Come back here and send:
 
-We'll verify your Pro subscription and link your Telegram for real-time alerts.
+<code>/start YOUR_WALLET_ADDRESS</code>
+
+<b>Example:</b>
+<code>/start 7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU</code>
+
+We'll verify your Pro subscription and start sending you alerts instantly.
+
+<b>What you'll get:</b>
+• 🏛️ Congress trades — Pelosi, Tuberville, 200+ politicians
+• 🐋 Whale moves — Large Solana wallet activity
+• ⚡ Real-time — No delays, straight to your phone
+
+Questions? Reply here or email wrentheai@proton.me
     `.trim());
     return;
   }
@@ -166,7 +177,7 @@ async function handleStatus(chatId: number) {
 ❌ <b>Account not connected</b>
 
 Connect your WhaleScope account:
-whalescope.io/dashboard
+whalescope.app/dashboard
     `.trim());
     return;
   }
@@ -183,7 +194,7 @@ Plan: ${profile.plan === 'pro' ? '✨ Pro' : profile.plan === 'enterprise' ? '�
 Email: ${profile.email}
 Alerts: ${profile.plan === 'pro' || profile.plan === 'enterprise' ? '✅ Active' : '❌ Upgrade needed'}
 
-Manage at whalescope.io/dashboard
+Manage at whalescope.app/dashboard
   `.trim());
 }
 
@@ -204,7 +215,7 @@ ${trade.trade_type} <b>$${trade.ticker}</b>
 📅 Trade: ${trade.trade_date}
 📋 Disclosed: ${trade.disclosure_date}
 
-<a href="https://whalescope.io/congress/${encodeURIComponent(trade.politician_name.toLowerCase().replace(/ /g, '-'))}">View Profile →</a>
+<a href="https://whalescope.app/congress/${encodeURIComponent(trade.politician_name.toLowerCase().replace(/ /g, '-'))}">View Profile →</a>
   `.trim();
 
   await sendMessage(chatId, message);
@@ -224,7 +235,7 @@ ${trade.type === 'buy' ? 'Bought' : 'Sold'} <b>${trade.token}</b>
 💰 $${trade.amount_usd.toLocaleString()}
 ⏰ ${new Date(trade.timestamp).toLocaleString()}
 
-<a href="https://whalescope.io/wallet/${trade.wallet}">View Wallet →</a>
+<a href="https://whalescope.app/wallet/${trade.wallet}">View Wallet →</a>
   `.trim();
 
   await sendMessage(chatId, message);
@@ -249,15 +260,24 @@ export async function processUpdate(update: TelegramUpdate) {
       break;
     case '/help':
       await sendMessage(chatId, `
-🐋 <b>WhaleScope Bot Commands</b>
+🐋 <b>WhaleScope Alerts — Help</b>
 
-/start [code] - Connect your account
-/status - Check subscription status
-/mute - Pause alerts
-/unmute - Resume alerts
-/help - Show this message
+<b>Commands:</b>
+/start &lt;wallet&gt; — Link your Solana wallet to get alerts
+/status — Check your subscription status
+/stop — Stop receiving alerts
+/help — Show this message
 
-Need help? support@whalescope.io
+<b>How to get started:</b>
+1. Subscribe at <a href="https://whalescope.app/pricing">whalescope.app/pricing</a>
+2. Send: <code>/start YOUR_WALLET_ADDRESS</code>
+
+<b>What are the alerts?</b>
+• Congress stock trades (from STOCK Act disclosures)
+• Crypto whale wallet activity on Solana
+• Sent in real-time — no 24-hour delay for Pro
+
+Need help? Email wrentheai@proton.me
       `.trim());
       break;
     case '/mute':
