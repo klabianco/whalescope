@@ -107,8 +107,32 @@ export default function PricingClient() {
         <style>{`
           @media (max-width: 640px) {
             .ws-pricing-grid { grid-template-columns: 1fr !important; }
-            .ws-compare-grid { grid-template-columns: 1fr 90px 90px 90px !important; font-size: 12px !important; }
-            .ws-compare-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+            .ws-compare-wrap { 
+              overflow-x: auto; 
+              -webkit-overflow-scrolling: touch;
+              position: relative;
+            }
+            .ws-compare-wrap::after {
+              content: '→';
+              position: absolute;
+              top: 8px;
+              right: 0;
+              color: #52525b;
+              font-size: 14px;
+              background: linear-gradient(to left, #18181b 60%, transparent);
+              padding: 4px 4px 4px 24px;
+              pointer-events: none;
+              animation: fadeScrollHint 3s ease-out forwards;
+            }
+            @keyframes fadeScrollHint {
+              0%, 70% { opacity: 1; }
+              100% { opacity: 0; }
+            }
+            .ws-compare-grid { 
+              grid-template-columns: 140px 100px 100px 100px !important; 
+              font-size: 12px !important; 
+              min-width: 440px !important;
+            }
           }
           .ws-compare-link:hover { text-decoration: underline !important; }
         `}</style>
