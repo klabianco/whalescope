@@ -243,6 +243,12 @@ export default function CongressClient({ trades, topTraders, committeeData, poli
                 asset={trade.ticker}
                 amount={trade.amount}
                 date={`Filed ${trade.filed}`}
+                txUrl={
+                  trade.chamber === 'Senate'
+                    ? 'https://efds.senate.gov/query/annual/'
+                    : 'https://disclosures-clerk.house.gov/FinancialDisclosure'
+                }
+                txLabel="View filing ↗"
                 background={
                   isFlagged
                     ? 'linear-gradient(135deg, rgba(251, 191, 36, 0.05) 0%, #111118 100%)'

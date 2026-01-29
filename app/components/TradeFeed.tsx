@@ -29,6 +29,8 @@ export interface TradeCardProps {
   date: string;
   /** Optional transaction link URL */
   txUrl?: string;
+  /** Label for tx link (default: "View tx ↗") */
+  txLabel?: string;
   /** Extra badges after actor (committee correlation, etc.) */
   extras?: React.ReactNode;
   /** Card background override */
@@ -150,6 +152,7 @@ export function TradeCard({
   amount,
   date,
   txUrl,
+  txLabel,
   extras,
   background,
   border,
@@ -213,7 +216,7 @@ export function TradeCard({
             rel="noopener noreferrer"
             style={{ color: '#60a5fa', fontSize: '12px', textDecoration: 'none', marginLeft: 'auto' }}
           >
-            View tx ↗
+            {txLabel || 'View tx ↗'}
           </a>
         )}
       </div>
