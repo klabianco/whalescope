@@ -49,9 +49,25 @@ interface CongressTrade {
   traded: string;
 }
 
+interface WhaleTrade {
+  wallet: string;
+  walletLabel?: string;
+  signature: string;
+  timestamp: number;
+  type: string;
+  description: string;
+  tokenMint?: string;
+  tokenAmount?: number;
+  action: 'BUY' | 'SELL';
+}
+
 // --- Trade Detection ---
 function getTradeId(trade: CongressTrade): string {
   return `${trade.politician}-${trade.ticker}-${trade.traded}-${trade.type}-${trade.amount}`;
+}
+
+function getWhaleTradeId(trade: WhaleTrade): string {
+  return trade.signature;
 }
 
 function loadSeenTrades(): Set<string> {
@@ -77,21 +93,41 @@ function loadCurrentTrades(): CongressTrade[] {
   return [];
 }
 
-function detectNewTrades(): CongressTrade[] {
-  const seen = loadSeenTrades();
-  const current = loadCurrentTrades();
-  const newTrades: CongressTrade[] = [];
+function loadCurrentWhaleTrades(): WhaleTrade[] {
+  const path = join(process.cwd(), 'data', 'whale-trades.json');
+  if (existsSync(path)) {
+    return JSON.parse(readFileSync(path, 'utf-8'));
+  }
+  return [];
+}
 
-  for (const trade of current) {
+function detectNewTrades(): { congress: CongressTrade[]; whales: WhaleTrade[] } {
+  const seen = loadSeenTrades();
+  
+  // Congress trades
+  const currentCongress = loadCurrentTrades();
+  const newCongress: CongressTrade[] = [];
+  for (const trade of currentCongress) {
     const id = getTradeId(trade);
     if (!seen.has(id)) {
-      newTrades.push(trade);
+      newCongress.push(trade);
+      seen.add(id);
+    }
+  }
+
+  // Whale trades
+  const currentWhales = loadCurrentWhaleTrades();
+  const newWhales: WhaleTrade[] = [];
+  for (const trade of currentWhales) {
+    const id = `whale-${getWhaleTradeId(trade)}`;
+    if (!seen.has(id)) {
+      newWhales.push(trade);
       seen.add(id);
     }
   }
 
   saveSeenTrades(seen);
-  return newTrades;
+  return { congress: newCongress, whales: newWhales };
 }
 
 // --- Formatting ---
@@ -138,9 +174,45 @@ function formatDiscordMessage(trades: CongressTrade[]): object {
   });
 
   return {
-    content: `🐋 **WhaleScope Alert** — ${trades.length} new Congress trade${trades.length > 1 ? 's' : ''}`,
+    content: `🏛️ **WhaleScope Alert** — ${trades.length} new Congress trade${trades.length > 1 ? 's' : ''}`,
     embeds,
   };
+}
+
+// --- Whale Trade Formatting ---
+function formatWhaleDiscordMessage(trades: WhaleTrade[]): object {
+  const embeds = trades.slice(0, 10).map(trade => {
+    const emoji = trade.action === 'BUY' ? '🟢' : '🔴';
+    const label = trade.walletLabel || `${trade.wallet.slice(0, 6)}...${trade.wallet.slice(-4)}`;
+    const time = new Date(trade.timestamp * 1000).toLocaleString('en-US', { timeZone: 'America/Los_Angeles' });
+    const desc = trade.description || `${trade.action} ${trade.tokenAmount?.toLocaleString() || '?'} tokens`;
+    
+    return {
+      title: `${emoji} ${label} — ${trade.action}`,
+      description: `${desc}\n**Time:** ${time}`,
+      color: trade.action === 'BUY' ? 0x22c55e : 0xef4444,
+      footer: { text: `Wallet: ${trade.wallet.slice(0, 8)}...` },
+    };
+  });
+
+  return {
+    content: `🐋 **Whale Alert** — ${trades.length} new whale trade${trades.length > 1 ? 's' : ''}`,
+    embeds,
+  };
+}
+
+function formatWhaleTelegramMessage(trades: WhaleTrade[]): string {
+  const header = `🐋 <b>Whale Alert</b> — ${trades.length} new trade${trades.length > 1 ? 's' : ''}\n\n`;
+
+  const lines = trades.slice(0, 10).map(trade => {
+    const emoji = trade.action === 'BUY' ? '🟢' : '🔴';
+    const label = trade.walletLabel || `${trade.wallet.slice(0, 6)}...${trade.wallet.slice(-4)}`;
+    const desc = trade.description || `${trade.action} ${trade.tokenAmount?.toLocaleString() || '?'} tokens`;
+
+    return `${emoji} <b>${label}</b>\n${desc}`;
+  }).join('\n\n');
+
+  return header + lines + '\n\n<a href="https://whalescope.app">View on WhaleScope →</a>';
 }
 
 // --- Delivery ---
@@ -213,52 +285,85 @@ async function getProSubscribers(): Promise<{ telegram_chat_id: string | null; d
 async function main() {
   console.log('🔔 WhaleScope Alert System\n');
 
-  // Detect new trades
-  const newTrades = detectNewTrades();
-  console.log(`🆕 New trades: ${newTrades.length}`);
+  // Detect new trades (both congress and whale)
+  const { congress: newCongress, whales: newWhales } = detectNewTrades();
+  console.log(`🏛️  New congress trades: ${newCongress.length}`);
+  console.log(`🐋 New whale trades: ${newWhales.length}`);
 
-  if (newTrades.length === 0) {
+  if (newCongress.length === 0 && newWhales.length === 0) {
     console.log('No new trades. Done.');
     return;
   }
 
-  // Log new trades
-  for (const t of newTrades) {
-    console.log(`  ${formatTradeText(t)}`);
+  // Log new congress trades
+  if (newCongress.length > 0) {
+    console.log('\n--- Congress Trades ---');
+    for (const t of newCongress) {
+      console.log(`  ${formatTradeText(t)}`);
+    }
+  }
+
+  // Log new whale trades
+  if (newWhales.length > 0) {
+    console.log('\n--- Whale Trades ---');
+    for (const t of newWhales) {
+      const label = t.walletLabel || `${t.wallet.slice(0, 8)}...`;
+      console.log(`  ${t.action === 'BUY' ? '🟢' : '🔴'} ${label}: ${t.description || t.action}`);
+    }
   }
   console.log('');
 
   // Get Pro subscribers
   const subscribers = await getProSubscribers();
   const telegramSubs = subscribers.filter(s => s.telegram_chat_id);
-  const discordSubs = subscribers.filter(s => s.discord_user_id);
   
-  console.log(`👥 Pro subscribers: ${subscribers.length} (${telegramSubs.length} Telegram, ${discordSubs.length} Discord)`);
+  console.log(`👥 Pro subscribers: ${subscribers.length} (${telegramSubs.length} Telegram)`);
 
-  // Send Telegram alerts
   let telegramSent = 0;
-  if (TELEGRAM_BOT_TOKEN && telegramSubs.length > 0) {
-    const message = formatTelegramMessage(newTrades);
-    for (const sub of telegramSubs) {
-      if (sub.telegram_chat_id && await sendTelegram(sub.telegram_chat_id, message)) {
-        telegramSent++;
+  let discordSent = 0;
+
+  // --- Congress alerts ---
+  if (newCongress.length > 0) {
+    // Telegram
+    if (TELEGRAM_BOT_TOKEN && telegramSubs.length > 0) {
+      const message = formatTelegramMessage(newCongress);
+      for (const sub of telegramSubs) {
+        if (sub.telegram_chat_id && await sendTelegram(sub.telegram_chat_id, message)) {
+          telegramSent++;
+        }
+        await new Promise(r => setTimeout(r, 50));
       }
-      // Rate limit: max 30 messages/second for Telegram
-      await new Promise(r => setTimeout(r, 50));
+    }
+
+    // Discord
+    if (DISCORD_WEBHOOK_URL) {
+      const message = formatDiscordMessage(newCongress);
+      if (await sendDiscord(message)) discordSent++;
     }
   }
 
-  // Send Discord webhook (single channel, not per-user)
-  let discordSent = 0;
-  if (DISCORD_WEBHOOK_URL) {
-    const message = formatDiscordMessage(newTrades);
-    if (await sendDiscord(message)) {
-      discordSent = 1;
+  // --- Whale alerts ---
+  if (newWhales.length > 0) {
+    // Telegram
+    if (TELEGRAM_BOT_TOKEN && telegramSubs.length > 0) {
+      const message = formatWhaleTelegramMessage(newWhales);
+      for (const sub of telegramSubs) {
+        if (sub.telegram_chat_id && await sendTelegram(sub.telegram_chat_id, message)) {
+          telegramSent++;
+        }
+        await new Promise(r => setTimeout(r, 50));
+      }
+    }
+
+    // Discord
+    if (DISCORD_WEBHOOK_URL) {
+      const message = formatWhaleDiscordMessage(newWhales);
+      if (await sendDiscord(message)) discordSent++;
     }
   }
 
   console.log(`\n✅ Alerts sent:`);
-  console.log(`   Telegram: ${telegramSent}/${telegramSubs.length}`);
+  console.log(`   Telegram: ${telegramSent}`);
   console.log(`   Discord: ${discordSent}`);
 }
 

@@ -77,82 +77,80 @@ async function sendMessage(chatId: number | string, text: string, parseMode: str
   return response.json();
 }
 
-// Handle /start command with connection code
+// Handle /start command with wallet address
 async function handleStart(chatId: number, userId: number, text: string, username?: string) {
   const parts = text.split(' ');
   
   if (parts.length < 2) {
-    // No connection code, send welcome message
+    // No wallet provided, send welcome message
     await sendMessage(chatId, `
 🐋 <b>Welcome to WhaleScope!</b>
 
-To connect your account and receive alerts:
+To connect your account and receive trade alerts:
 
-1. Log in at whalescope.io/dashboard
-2. Go to Alert Channels → Telegram
-3. Click "Connect" to get your code
-4. Send it here: /start YOUR_CODE
+1. Subscribe at <a href="https://whalescope.app/pricing">whalescope.app/pricing</a>
+2. Send your wallet address here:
+   <code>/start YOUR_WALLET_ADDRESS</code>
 
-Or upgrade to Pro at whalescope.io/pricing
+Example:
+<code>/start fkjcdhbTDWjdRb3SwNmA4dRRSca7K3qKypfPwCYDZyP</code>
+
+We'll verify your Pro subscription and link your Telegram for real-time alerts.
     `.trim());
     return;
   }
 
-  const connectionCode = parts[1];
-  
-  // Look up the connection code in the database
-  const { data: pendingConnection, error } = await supabase
-    .from('telegram_connections')
-    .select('user_id')
-    .eq('code', connectionCode)
-    .eq('used', false)
-    .gt('expires_at', new Date().toISOString())
-    .single();
+  const walletAddress = parts[1];
 
-  if (error || !pendingConnection) {
+  // Validate wallet address (basic Solana format check)
+  if (walletAddress.length < 32 || walletAddress.length > 44) {
     await sendMessage(chatId, `
-❌ <b>Invalid or expired code</b>
+❌ <b>Invalid wallet address</b>
 
-Please get a new code from your dashboard:
-whalescope.io/dashboard
+Please send a valid Solana wallet address:
+<code>/start YOUR_WALLET_ADDRESS</code>
     `.trim());
     return;
   }
 
-  // Update user's profile with Telegram chat ID
-  const { error: updateError } = await supabase
-    .from('profiles')
-    .update({ 
-      telegram_chat_id: chatId.toString(),
-      telegram_username: username || null,
-    })
-    .eq('id', pendingConnection.user_id);
+  // Call the linking API
+  try {
+    const res = await fetch('https://whalescope.app/api/telegram-link', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        wallet: walletAddress,
+        telegram_chat_id: chatId.toString(),
+      }),
+    });
 
-  if (updateError) {
-    console.error('Error updating profile:', updateError);
-    await sendMessage(chatId, '❌ Error connecting account. Please try again.');
-    return;
-  }
+    const data = await res.json();
 
-  // Mark connection code as used
-  await supabase
-    .from('telegram_connections')
-    .update({ used: true })
-    .eq('code', connectionCode);
+    if (!res.ok) {
+      await sendMessage(chatId, `
+❌ <b>${data.error || 'Failed to link account'}</b>
 
-  await sendMessage(chatId, `
+Make sure you've subscribed at <a href="https://whalescope.app/pricing">whalescope.app/pricing</a> with this wallet.
+      `.trim());
+      return;
+    }
+
+    await sendMessage(chatId, `
 ✅ <b>Account connected!</b>
 
-You'll now receive real-time alerts for your watchlist.
+You'll now receive real-time trade alerts here.
 
 <b>Commands:</b>
 /status - Check your subscription
-/mute - Pause alerts
-/unmute - Resume alerts
-/settings - Alert preferences
+/help - Show help
 
 Happy trading! 🐋
-  `.trim());
+    `.trim());
+
+  } catch (e: any) {
+    console.error('Linking error:', e.message);
+    await sendMessage(chatId, '❌ Error connecting account. Please try again later.');
+  }
 }
 
 // Handle /status command

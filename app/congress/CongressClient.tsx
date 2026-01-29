@@ -78,6 +78,7 @@ export default function CongressClient({ trades, topTraders, committeeData, poli
 
   // Split trades into public (>24h) and recent (<24h, Pro-only)
   const recentTradeCount = useMemo(() => trades.filter(isRecentTrade).length, [trades]);
+  const FREE_TRADE_LIMIT = 25;
 
   const filteredTrades = trades.filter(t => {
     // Free users don't see trades filed in last 24h
@@ -87,6 +88,10 @@ export default function CongressClient({ trades, topTraders, committeeData, poli
     if (filter === 'flagged') return hasCorrelation(t, committeeData);
     return true;
   });
+
+  // Free users only see first 25 trades
+  const visibleTrades = isPro ? filteredTrades : filteredTrades.slice(0, FREE_TRADE_LIMIT);
+  const hiddenTradeCount = isPro ? 0 : Math.max(0, filteredTrades.length - FREE_TRADE_LIMIT);
 
   // Count flagged trades
   const flaggedCount = trades.filter(t => hasCorrelation(t, committeeData)).length;
@@ -264,7 +269,7 @@ export default function CongressClient({ trades, topTraders, committeeData, poli
         </div>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          {filteredTrades.slice(0, visibleCount).map((trade, i) => {
+          {visibleTrades.slice(0, visibleCount).map((trade, i) => {
             const isFlagged = hasCorrelation(trade, committeeData);
             
             return (
@@ -338,7 +343,7 @@ export default function CongressClient({ trades, topTraders, committeeData, poli
               </div>
             );
           })}
-          {visibleCount < filteredTrades.length && (
+          {visibleCount < visibleTrades.length && (
             <button
               onClick={() => setVisibleCount(v => v + TRADES_PER_PAGE)}
               style={{
@@ -354,8 +359,28 @@ export default function CongressClient({ trades, topTraders, committeeData, poli
                 width: '100%',
               }}
             >
-              Show More ({filteredTrades.length - visibleCount} remaining)
+              Show More ({visibleTrades.length - visibleCount} remaining)
             </button>
+          )}
+          {!isPro && hiddenTradeCount > 0 && visibleCount >= visibleTrades.length && (
+            <Link href="/pricing" style={{ textDecoration: 'none' }}>
+              <div style={{
+                background: 'linear-gradient(135deg, rgba(34, 197, 94, 0.08) 0%, #111118 100%)',
+                border: '1px solid rgba(34, 197, 94, 0.3)',
+                borderRadius: '12px',
+                padding: '20px',
+                textAlign: 'center',
+                cursor: 'pointer',
+                marginTop: '8px'
+              }}>
+                <p style={{ color: '#22c55e', fontSize: '15px', fontWeight: '600', margin: '0 0 4px' }}>
+                  🔒 {hiddenTradeCount} more trade{hiddenTradeCount > 1 ? 's' : ''} available with Pro
+                </p>
+                <p style={{ color: '#71717a', fontSize: '13px', margin: 0 }}>
+                  Get full trade history, real-time alerts, and analytics →
+                </p>
+              </div>
+            </Link>
           )}
         </div>
       )}
