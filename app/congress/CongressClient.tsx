@@ -1,17 +1,15 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import CommitteeCorrelation from '../components/CommitteeCorrelation';
 import { Footer } from '../components/Footer';
 import { EmailCapture } from '../components/EmailCapture';
 import TradeAlerts from '../components/TradeAlerts';
 import { Header } from '../components/Header';
-import { useAuth } from '../providers/AuthProvider';
 import { FOLLOW_BUTTON } from '../config/theme';
 import {
   FilterTabs,
-  ProUpsellBanner,
   TradeCard,
   TradeFeedList,
   type FilterTab,
@@ -60,22 +58,9 @@ function hasCorrelation(trade: CongressTrade, committeeData: CommitteeData): boo
   return false;
 }
 
-function isRecentTrade(trade: CongressTrade): boolean {
-  const filedDate = new Date(trade.filed + 'T00:00:00');
-  const now = new Date();
-  const hoursSinceFiled = (now.getTime() - filedDate.getTime()) / (1000 * 60 * 60);
-  return hoursSinceFiled < 24;
-}
-
 export default function CongressClient({ trades, topTraders, committeeData, politicians }: Props) {
   const [filter, setFilter] = useState('all');
   const [followingPoliticians, setFollowingPoliticians] = useState<string[]>([]);
-
-  let isPro = false;
-  try {
-    const auth = useAuth();
-    isPro = auth.isPro;
-  } catch {}
 
   // Load follows from localStorage
   useState(() => {
@@ -97,11 +82,9 @@ export default function CongressClient({ trades, topTraders, committeeData, poli
     setFollowingPoliticians(newList);
   }
 
-  const recentTradeCount = useMemo(() => trades.filter(isRecentTrade).length, [trades]);
   const flaggedCount = trades.filter(t => hasCorrelation(t, committeeData)).length;
 
   const filteredTrades = trades.filter(t => {
-    if (!isPro && isRecentTrade(t)) return false;
     if (filter === 'buy') return t.type === 'Purchase';
     if (filter === 'sell') return t.type === 'Sale';
     if (filter === 'flagged') return hasCorrelation(t, committeeData);
@@ -172,9 +155,6 @@ export default function CongressClient({ trades, topTraders, committeeData, poli
           </div>
         )}
 
-        {/* Pro Upsell */}
-        {!isPro && <ProUpsellBanner count={recentTradeCount} label="trade filed" />}
-
         {/* Filter Tabs */}
         <FilterTabs tabs={tabs} active={filter} onChange={setFilter} />
 
@@ -197,7 +177,7 @@ export default function CongressClient({ trades, topTraders, committeeData, poli
         {/* Trade Feed */}
         <TradeFeedList
           trades={filteredTrades}
-          isPro={isPro}
+          isPro={false}
           emptyMessage={
             filter === 'flagged'
               ? 'No flagged trades found. Great news!'

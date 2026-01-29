@@ -292,34 +292,26 @@ export function EmptyState({ message }: { message: string }) {
 
 export function TradeFeedList<T>({
   trades,
-  isPro,
   renderCard,
   emptyMessage = 'No trades found.',
 }: {
   trades: T[];
-  isPro: boolean;
+  isPro?: boolean; // kept for API compat but no longer gates
   renderCard: (trade: T, index: number) => React.ReactNode;
   emptyMessage?: string;
 }) {
   const [visibleCount, setVisibleCount] = useState(TRADES_PER_PAGE);
-  const FREE_TRADE_LIMIT = 25;
-
-  const visibleTrades = isPro ? trades : trades.slice(0, FREE_TRADE_LIMIT);
-  const hiddenTradeCount = isPro ? 0 : Math.max(0, trades.length - FREE_TRADE_LIMIT);
 
   if (trades.length === 0) return <EmptyState message={emptyMessage} />;
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-      {visibleTrades.slice(0, visibleCount).map((trade, i) => renderCard(trade, i))}
-      {visibleCount < visibleTrades.length && (
+      {trades.slice(0, visibleCount).map((trade, i) => renderCard(trade, i))}
+      {visibleCount < trades.length && (
         <ShowMoreButton
-          remaining={visibleTrades.length - visibleCount}
+          remaining={trades.length - visibleCount}
           onClick={() => setVisibleCount(v => v + TRADES_PER_PAGE)}
         />
-      )}
-      {!isPro && hiddenTradeCount > 0 && visibleCount >= visibleTrades.length && (
-        <ProPaywall hiddenCount={hiddenTradeCount} />
       )}
     </div>
   );

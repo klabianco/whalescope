@@ -190,8 +190,8 @@ export default function PricingClient() {
               </p>
               <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 {[
-                  'Congress trade feed (delayed 24h)',
-                  'Basic whale trade feed',
+                  'Congress trade feed',
+                  'Whale trade feed',
                   'Top 50 leaderboard',
                   '3 watchlist slots',
                   'Solana only',
@@ -278,11 +278,11 @@ export default function PricingClient() {
               <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 {[
                   'Real-time congress trade alerts',
+                  'Real-time whale trade alerts',
                   'Discord community + alert channel',
                   'Telegram bot alerts',
                   'Push notifications',
                   'Email alerts',
-                  'Congress trades (no delay)',
                   'Full trade history & analytics',
                   'Unlimited watchlist',
                 ].map((feature, i) => (

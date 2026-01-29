@@ -6,11 +6,9 @@ import { useWallet } from '@solana/wallet-adapter-react';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
 import { EmailCapture } from '../components/EmailCapture';
-import { useAuth } from '../providers/AuthProvider';
 import { FOLLOW_BUTTON } from '../config/theme';
 import {
   FilterTabs,
-  ProUpsellBanner,
   TradeCard,
   TradeFeedList,
   type FilterTab,
@@ -43,11 +41,6 @@ const ACTION_BADGES: Record<string, { bg: string; color: string; label: string }
 
 const FREE_WATCHLIST_LIMIT = 3;
 
-function isRecentTrade(trade: WhaleTrade): boolean {
-  const now = Date.now() / 1000;
-  return (now - trade.timestamp) < 24 * 60 * 60;
-}
-
 function formatDate(ts: number): string {
   const date = new Date(ts * 1000);
   const now = new Date();
@@ -78,12 +71,6 @@ export default function WhalesPage() {
   const [followingWallets, setFollowingWallets] = useState<string[]>([]);
   const [limitWarning, setLimitWarning] = useState(false);
 
-  let isPro = false;
-  try {
-    const auth = useAuth();
-    isPro = auth.isPro;
-  } catch {}
-
   const storageKey = publicKey ? publicKey.toBase58() : null;
 
   // Load follows from localStorage
@@ -105,7 +92,7 @@ export default function WhalesPage() {
       setLimitWarning(false);
       return;
     }
-    if (!isPro && followingWallets.length >= FREE_WATCHLIST_LIMIT) {
+    if (followingWallets.length >= FREE_WATCHLIST_LIMIT) {
       setLimitWarning(true);
       return;
     }
@@ -114,7 +101,6 @@ export default function WhalesPage() {
     setFollowingWallets(newList);
   }
 
-  const recentTradeCount = useMemo(() => ALL_TRADES.filter(isRecentTrade).length, []);
   const uniqueWhales = useMemo(() => new Set(ALL_TRADES.map(t => t.wallet)).size, []);
 
   // Most active whales (last 30 days)
@@ -132,7 +118,6 @@ export default function WhalesPage() {
   }, []);
 
   const filteredTrades = ALL_TRADES.filter(t => {
-    if (!isPro && isRecentTrade(t)) return false;
     if (filter === 'buy') return t.action === 'BUY';
     if (filter === 'sell') return t.action === 'SELL';
     return true;
@@ -248,22 +233,13 @@ export default function WhalesPage() {
           </div>
         )}
 
-        {/* Pro Upsell */}
-        {!isPro && (
-          <ProUpsellBanner
-            count={recentTradeCount}
-            label="whale trade"
-            description="Pro members see whale moves instantly. Free users get a 24h delay."
-          />
-        )}
-
         {/* Filter Tabs */}
         <FilterTabs tabs={tabs} active={filter} onChange={setFilter} />
 
         {/* Trade Feed */}
         <TradeFeedList
           trades={filteredTrades}
-          isPro={isPro}
+          isPro={false}
           emptyMessage="No trades found for this filter."
           renderCard={(trade, i) => {
             const badge = ACTION_BADGES[trade.action] || { bg: '#333', color: '#888', label: '?' };
