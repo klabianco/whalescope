@@ -142,10 +142,15 @@ export default function PoliticianClient({ slug }: { slug: string }) {
           backgroundColor: '#4ade80',
           color: '#000',
           borderRadius: '8px',
-          fontSize: '14px',
+          fontSize: '13px',
           fontWeight: '600',
-          height: '44px',
-          padding: '0 24px'
+          height: '40px',
+          padding: '0 16px',
+          maxWidth: '160px',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          whiteSpace: 'nowrap',
+          flexShrink: 0,
         }} />
       );
     }
@@ -186,12 +191,14 @@ export default function PoliticianClient({ slug }: { slug: string }) {
           {/* Politician Info */}
           <div style={{ 
             display: 'flex', 
+            flexWrap: 'wrap',
             justifyContent: 'space-between', 
             alignItems: 'flex-start',
+            gap: '12px',
             marginBottom: '24px' 
           }}>
-            <div>
-              <h1 style={{ fontSize: '36px', marginBottom: '8px' }}>
+            <div style={{ minWidth: 0, flex: '1 1 200px' }}>
+              <h1 style={{ fontSize: '36px', marginBottom: '8px', wordBreak: 'break-word' }}>
                 {politicianInfo.name}
               </h1>
               <p style={{ color: '#888' }}>
@@ -218,7 +225,7 @@ export default function PoliticianClient({ slug }: { slug: string }) {
           {/* Stats */}
           <div style={{ 
             display: 'grid', 
-            gridTemplateColumns: 'repeat(5, 1fr)', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))', 
             gap: '12px',
             marginBottom: '24px'
           }}>
