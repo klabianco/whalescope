@@ -132,25 +132,7 @@ export default function Home() {
           <p style={{ fontSize: '17px', color: '#888', marginBottom: '24px' }}>
             157 crypto wallets · 125 politicians · real-time alerts
           </p>
-          {!connected && (
-            <button
-              onClick={() => setConnectPrompt(true)}
-              style={{
-                background: FOLLOW_BUTTON.inactiveBg,
-                color: FOLLOW_BUTTON.inactiveColor,
-                border: FOLLOW_BUTTON.inactiveBorder,
-                padding: '14px 36px',
-                borderRadius: '10px',
-                fontSize: '16px',
-                fontWeight: '700',
-                cursor: 'pointer',
-                marginBottom: '16px',
-              }}
-            >
-              Connect Wallet to Follow Whales
-            </button>
-          )}
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', flexWrap: 'wrap', marginTop: connected ? 0 : '12px' }}>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', flexWrap: 'wrap' }}>
             <Link href="/whales" style={{
               background: connected ? '#fff' : '#111118',
               color: connected ? '#000' : '#fff',
@@ -391,18 +373,6 @@ export default function Home() {
               }}
             >
               Connect Wallet
-            </button>
-            <button
-              onClick={() => setConnectPrompt(false)}
-              style={{
-                background: 'none',
-                border: 'none',
-                color: '#555',
-                fontSize: '13px',
-                cursor: 'pointer',
-              }}
-            >
-              Maybe later
             </button>
           </div>
         </div>
