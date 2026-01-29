@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useWallet } from '@solana/wallet-adapter-react';
+import { FOLLOW_BUTTON } from '../../config/theme';
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import { CommitteeInfo } from '../../components/CommitteeCorrelation';
 import TradeAlerts from '../../components/TradeAlerts';
@@ -160,9 +161,9 @@ export default function PoliticianClient({ slug }: { slug: string }) {
         onClick={toggleFollow}
         style={{
           padding: '12px 24px',
-          background: following ? '#4ade80' : '#333',
-          color: following ? '#000' : '#fff',
-          border: 'none',
+          background: following ? FOLLOW_BUTTON.activeBg : FOLLOW_BUTTON.inactiveBg,
+          color: following ? FOLLOW_BUTTON.activeColor : FOLLOW_BUTTON.inactiveColor,
+          border: following ? FOLLOW_BUTTON.activeBorder : FOLLOW_BUTTON.inactiveBorder,
           borderRadius: '8px',
           fontSize: '14px',
           fontWeight: '600',

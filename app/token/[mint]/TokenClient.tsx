@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useWallet } from '@solana/wallet-adapter-react';
+import { FOLLOW_BUTTON } from '../../config/theme';
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import { Header } from '../../components/Header';
 import { Footer } from '../../components/Footer';
@@ -230,9 +231,9 @@ export default function TokenClient({ mint }: { mint: string }) {
         onClick={() => handleFollow(address)}
         style={{
           padding: '6px 12px',
-          background: isFollowing ? '#333' : '#4ade80',
-          color: isFollowing ? '#fff' : '#000',
-          border: 'none',
+          background: isFollowing ? FOLLOW_BUTTON.activeBg : FOLLOW_BUTTON.inactiveBg,
+          color: isFollowing ? FOLLOW_BUTTON.activeColor : FOLLOW_BUTTON.inactiveColor,
+          border: isFollowing ? FOLLOW_BUTTON.activeBorder : FOLLOW_BUTTON.inactiveBorder,
           borderRadius: '6px',
           fontSize: '12px',
           fontWeight: '600',

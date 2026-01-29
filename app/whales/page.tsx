@@ -7,6 +7,7 @@ import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
 import { useAuth } from '../providers/AuthProvider';
 import whaleData from '../../data/whale-wallets.json';
+import { FOLLOW_BUTTON } from '../config/theme';
 
 const FREE_WATCHLIST_LIMIT = 3;
 
@@ -295,9 +296,9 @@ export default function WhalesPage() {
                     }}
                     style={{
                       padding: '10px 20px',
-                      background: followingWallets.includes(wallet.address) ? typeColor + '30' : '#222',
-                      color: followingWallets.includes(wallet.address) ? typeColor : '#fff',
-                      border: followingWallets.includes(wallet.address) ? `1px solid ${typeColor}50` : '1px solid transparent',
+                      background: followingWallets.includes(wallet.address) ? FOLLOW_BUTTON.activeBg : FOLLOW_BUTTON.inactiveBg,
+                      color: followingWallets.includes(wallet.address) ? FOLLOW_BUTTON.activeColor : FOLLOW_BUTTON.inactiveColor,
+                      border: followingWallets.includes(wallet.address) ? FOLLOW_BUTTON.activeBorder : FOLLOW_BUTTON.inactiveBorder,
                       borderRadius: '8px',
                       fontSize: '14px',
                       fontWeight: '600',
