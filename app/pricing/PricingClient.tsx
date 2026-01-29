@@ -152,10 +152,10 @@ export default function PricingClient() {
               </p>
               <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 {[
+                  'Congress trade feed (delayed 24h)',
                   'Basic whale trade feed',
-                  'Congress trades (24h delay)',
                   'Top 50 leaderboard',
-                  '5 watchlist slots',
+                  '3 watchlist slots',
                   'Solana only',
                 ].map((feature, i) => (
                   <li key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px', color: '#a1a1aa', fontSize: '14px' }}>
@@ -223,14 +223,11 @@ export default function PricingClient() {
               </p>
               <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 {[
-                  'Real-time trade alerts',
-                  'Congress trades (real-time)',
-                  'Full Smart Money labels',
-                  'Whale PnL & performance',
+                  'Real-time congress trade alerts (Telegram & Discord)',
+                  'Real-time whale trade alerts',
+                  'Congress trades (no delay)',
+                  'Full trade history & analytics',
                   'Unlimited watchlist',
-                  'Telegram & Discord alerts',
-                  'Multi-chain (ETH, Base, Arb)',
-                  'API access (1K calls/mo)',
                   'Priority support',
                 ].map((feature, i) => (
                   <li key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px', color: '#a1a1aa', fontSize: '14px' }}>
@@ -243,7 +240,7 @@ export default function PricingClient() {
           </div>
         </div>
 
-        {/* Comparison to Nansen */}
+        {/* Comparison Table */}
         <div style={{
           background: '#18181b',
           border: '1px solid #27272a',
@@ -252,70 +249,67 @@ export default function PricingClient() {
           marginBottom: '80px'
         }}>
           <h2 style={{ fontSize: '24px', fontWeight: '700', color: '#fff', marginBottom: '24px', textAlign: 'center' }}>
-            WhaleScope vs Nansen
+            How WhaleScope compares
           </h2>
           
           <div style={{
             display: 'grid',
-            gridTemplateColumns: '1fr 140px 140px',
-            gap: '16px'
+            gridTemplateColumns: '1fr 130px 130px 130px',
+            gap: '12px'
           }}>
             {/* Header */}
             <div style={{ color: '#71717a', fontSize: '13px', fontWeight: '600' }}></div>
-            <div style={{ color: '#22c55e', fontSize: '14px', fontWeight: '600', textAlign: 'center' }}>WhaleScope Pro</div>
-            <div style={{ color: '#71717a', fontSize: '14px', fontWeight: '600', textAlign: 'center' }}>Nansen Pro</div>
+            <div style={{ color: '#22c55e', fontSize: '13px', fontWeight: '600', textAlign: 'center' }}>WhaleScope Pro</div>
+            <div style={{ color: '#71717a', fontSize: '13px', fontWeight: '600', textAlign: 'center' }}>Unusual Whales</div>
+            <div style={{ color: '#71717a', fontSize: '13px', fontWeight: '600', textAlign: 'center' }}>Nansen Pro</div>
             
-            {/* Price */}
+            {/* Monthly Price */}
             <div style={{ color: '#a1a1aa', fontSize: '14px', padding: '12px 0', borderTop: '1px solid #27272a' }}>Monthly price</div>
             <div style={{ color: '#22c55e', fontSize: '14px', fontWeight: '600', textAlign: 'center', padding: '12px 0', borderTop: '1px solid #27272a' }}>${PRICING.pro.monthly}/mo</div>
+            <div style={{ color: '#71717a', fontSize: '14px', textAlign: 'center', padding: '12px 0', borderTop: '1px solid #27272a' }}>$40/mo</div>
             <div style={{ color: '#71717a', fontSize: '14px', textAlign: 'center', padding: '12px 0', borderTop: '1px solid #27272a' }}>$49/mo</div>
             
-            {/* Annual */}
+            {/* Annual Price */}
             <div style={{ color: '#a1a1aa', fontSize: '14px', padding: '12px 0', borderTop: '1px solid #27272a' }}>Annual price</div>
             <div style={{ color: '#22c55e', fontSize: '14px', fontWeight: '600', textAlign: 'center', padding: '12px 0', borderTop: '1px solid #27272a' }}>${PRICING.pro.yearly}/yr</div>
+            <div style={{ color: '#71717a', fontSize: '14px', textAlign: 'center', padding: '12px 0', borderTop: '1px solid #27272a' }}>$480/yr</div>
             <div style={{ color: '#71717a', fontSize: '14px', textAlign: 'center', padding: '12px 0', borderTop: '1px solid #27272a' }}>$588/yr</div>
 
-            {/* Features */}
+            {/* Congress trades */}
             <div style={{ color: '#a1a1aa', fontSize: '14px', padding: '12px 0', borderTop: '1px solid #27272a' }}>Congress trades</div>
+            <div style={{ display: 'flex', justifyContent: 'center', padding: '12px 0', borderTop: '1px solid #27272a' }}><CheckIcon /></div>
             <div style={{ display: 'flex', justifyContent: 'center', padding: '12px 0', borderTop: '1px solid #27272a' }}><CheckIcon /></div>
             <div style={{ display: 'flex', justifyContent: 'center', padding: '12px 0', borderTop: '1px solid #27272a' }}><XIcon /></div>
 
-            <div style={{ color: '#a1a1aa', fontSize: '14px', padding: '12px 0', borderTop: '1px solid #27272a' }}>Smart Money labels</div>
+            {/* Whale / Smart Money tracking */}
+            <div style={{ color: '#a1a1aa', fontSize: '14px', padding: '12px 0', borderTop: '1px solid #27272a' }}>Whale / Smart Money tracking</div>
             <div style={{ display: 'flex', justifyContent: 'center', padding: '12px 0', borderTop: '1px solid #27272a' }}><CheckIcon /></div>
+            <div style={{ display: 'flex', justifyContent: 'center', padding: '12px 0', borderTop: '1px solid #27272a' }}><XIcon /></div>
             <div style={{ display: 'flex', justifyContent: 'center', padding: '12px 0', borderTop: '1px solid #27272a' }}><CheckIcon /></div>
 
+            {/* Real-time alerts */}
             <div style={{ color: '#a1a1aa', fontSize: '14px', padding: '12px 0', borderTop: '1px solid #27272a' }}>Real-time alerts</div>
             <div style={{ display: 'flex', justifyContent: 'center', padding: '12px 0', borderTop: '1px solid #27272a' }}><CheckIcon /></div>
             <div style={{ display: 'flex', justifyContent: 'center', padding: '12px 0', borderTop: '1px solid #27272a' }}><CheckIcon /></div>
-
-            <div style={{ color: '#a1a1aa', fontSize: '14px', padding: '12px 0', borderTop: '1px solid #27272a' }}>Whale wallet tracking</div>
-            <div style={{ display: 'flex', justifyContent: 'center', padding: '12px 0', borderTop: '1px solid #27272a' }}><CheckIcon /></div>
             <div style={{ display: 'flex', justifyContent: 'center', padding: '12px 0', borderTop: '1px solid #27272a' }}><CheckIcon /></div>
 
-            <div style={{ color: '#a1a1aa', fontSize: '14px', padding: '12px 0', borderTop: '1px solid #27272a' }}>Telegram & Discord alerts</div>
+            {/* Telegram alerts */}
+            <div style={{ color: '#a1a1aa', fontSize: '14px', padding: '12px 0', borderTop: '1px solid #27272a' }}>Telegram alerts</div>
             <div style={{ display: 'flex', justifyContent: 'center', padding: '12px 0', borderTop: '1px solid #27272a' }}><CheckIcon /></div>
-            <div style={{ display: 'flex', justifyContent: 'center', padding: '12px 0', borderTop: '1px solid #27272a' }}><CheckIcon /></div>
+            <div style={{ display: 'flex', justifyContent: 'center', padding: '12px 0', borderTop: '1px solid #27272a' }}><XIcon /></div>
+            <div style={{ display: 'flex', justifyContent: 'center', padding: '12px 0', borderTop: '1px solid #27272a' }}><XIcon /></div>
 
-            <div style={{ color: '#a1a1aa', fontSize: '14px', padding: '12px 0', borderTop: '1px solid #27272a' }}>Whale PnL analytics</div>
-            <div style={{ display: 'flex', justifyContent: 'center', padding: '12px 0', borderTop: '1px solid #27272a' }}><CheckIcon /></div>
-            <div style={{ display: 'flex', justifyContent: 'center', padding: '12px 0', borderTop: '1px solid #27272a' }}><CheckIcon /></div>
-
-            <div style={{ color: '#a1a1aa', fontSize: '14px', padding: '12px 0', borderTop: '1px solid #27272a' }}>Multi-chain support</div>
-            <div style={{ display: 'flex', justifyContent: 'center', padding: '12px 0', borderTop: '1px solid #27272a' }}><CheckIcon /></div>
-            <div style={{ display: 'flex', justifyContent: 'center', padding: '12px 0', borderTop: '1px solid #27272a' }}><CheckIcon /></div>
-
-            <div style={{ color: '#a1a1aa', fontSize: '14px', padding: '12px 0', borderTop: '1px solid #27272a' }}>API access</div>
-            <div style={{ display: 'flex', justifyContent: 'center', padding: '12px 0', borderTop: '1px solid #27272a' }}><CheckIcon /></div>
-            <div style={{ display: 'flex', justifyContent: 'center', padding: '12px 0', borderTop: '1px solid #27272a' }}><CheckIcon /></div>
-
+            {/* Pay with crypto */}
             <div style={{ color: '#a1a1aa', fontSize: '14px', padding: '12px 0', borderTop: '1px solid #27272a' }}>Pay with crypto</div>
             <div style={{ display: 'flex', justifyContent: 'center', padding: '12px 0', borderTop: '1px solid #27272a' }}><CheckIcon /></div>
-            <div style={{ display: 'flex', justifyContent: 'center', padding: '12px 0', borderTop: '1px solid #27272a' }}><CheckIcon /></div>
+            <div style={{ display: 'flex', justifyContent: 'center', padding: '12px 0', borderTop: '1px solid #27272a' }}><XIcon /></div>
+            <div style={{ display: 'flex', justifyContent: 'center', padding: '12px 0', borderTop: '1px solid #27272a' }}><XIcon /></div>
 
-            {/* Savings */}
+            {/* Savings vs Unusual Whales */}
             <div style={{ color: '#fff', fontSize: '14px', fontWeight: '600', padding: '12px 0', borderTop: '1px solid #27272a' }}>Your savings</div>
+            <div style={{ color: '#22c55e', fontSize: '14px', fontWeight: '700', textAlign: 'center', padding: '12px 0', borderTop: '1px solid #27272a' }}>—</div>
+            <div style={{ color: '#22c55e', fontSize: '14px', fontWeight: '700', textAlign: 'center', padding: '12px 0', borderTop: '1px solid #27272a' }}>${480 - PRICING.pro.yearly}/yr</div>
             <div style={{ color: '#22c55e', fontSize: '14px', fontWeight: '700', textAlign: 'center', padding: '12px 0', borderTop: '1px solid #27272a' }}>${588 - PRICING.pro.yearly}/yr</div>
-            <div style={{ color: '#71717a', fontSize: '14px', textAlign: 'center', padding: '12px 0', borderTop: '1px solid #27272a' }}>—</div>
           </div>
         </div>
 

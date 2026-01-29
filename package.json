@@ -10,14 +10,15 @@
     "fetch-congress": "npx tsx scripts/fetch-congress.ts",
     "fetch-prices": "npx tsx scripts/fetch-stock-prices.ts",
     "fetch-all": "npm run fetch-whales && npm run fetch-congress && npm run fetch-prices",
-    "notify": "npx tsx scripts/notify-new-trades.ts",
+    "notify": "npx tsx scripts/send-alerts.ts",
     "fetch-and-notify": "npm run fetch-congress && npm run notify",
     "watch-payments": "npx tsx scripts/watch-payments.ts",
     "cron": "npm run fetch-and-notify && npm run watch-payments",
     "telegram-bot": "npx tsx scripts/telegram-bot.ts",
     "pages:build": "npx @cloudflare/next-on-pages",
     "pages:dev": "npx wrangler pages dev --compatibility-flags=nodejs_compat",
-    "pages:deploy": "npm run pages:build && npx wrangler pages deploy .vercel/output/static"
+    "pages:deploy": "npm run pages:build && npx wrangler pages deploy .vercel/output/static",
+    "send-alerts": "npx tsx scripts/send-alerts.ts"
   },
   "dependencies": {
     "@solana/spl-token": "^0.4.14",
