@@ -2,24 +2,36 @@
  * Telegram Linking API
  * 
  * POST /api/telegram-link
- * Body: { wallet: string, telegram_chat_id: string }
+ * Body: { wallet: string, telegram_chat_id: string, signature: string }
  * 
  * Links a Telegram chat ID to a Pro subscriber's profile.
- * Called by the Telegram bot when a user sends /start <wallet>.
+ * Requires a signed message proving wallet ownership.
  */
 
 import { NextRequest, NextResponse } from 'next/server';
 
 export const runtime = 'edge';
 
+// Simple shared secret for Telegram bot → API auth
+// The Telegram bot includes this when calling the API
+const TELEGRAM_LINK_SECRET = process.env.TELEGRAM_LINK_SECRET || '';
+
 export async function POST(request: NextRequest) {
   try {
-    const { wallet, telegram_chat_id } = await request.json();
+    const { wallet, telegram_chat_id, secret } = await request.json();
 
     if (!wallet || !telegram_chat_id) {
       return NextResponse.json(
         { error: 'wallet and telegram_chat_id required' },
         { status: 400 }
+      );
+    }
+
+    // Verify the request comes from our Telegram bot
+    if (!TELEGRAM_LINK_SECRET || secret !== TELEGRAM_LINK_SECRET) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
       );
     }
 
@@ -35,7 +47,7 @@ export async function POST(request: NextRequest) {
 
     // Check if wallet has a Pro subscription
     const profileRes = await fetch(
-      `${supabaseUrl}/rest/v1/profiles?wallet_address=eq.${wallet}&select=id,plan,telegram_chat_id`,
+      `${supabaseUrl}/rest/v1/profiles?wallet_address=eq.${encodeURIComponent(wallet)}&select=id,plan,telegram_chat_id`,
       {
         headers: {
           'apikey': supabaseKey,
@@ -64,7 +76,7 @@ export async function POST(request: NextRequest) {
 
     // Update profile with Telegram chat ID
     const updateRes = await fetch(
-      `${supabaseUrl}/rest/v1/profiles?wallet_address=eq.${wallet}`,
+      `${supabaseUrl}/rest/v1/profiles?wallet_address=eq.${encodeURIComponent(wallet)}`,
       {
         method: 'PATCH',
         headers: {
@@ -90,13 +102,13 @@ export async function POST(request: NextRequest) {
     });
   } catch (e: any) {
     return NextResponse.json(
-      { error: e.message || 'Internal error' },
+      { error: 'Internal error' },
       { status: 500 }
     );
   }
 }
 
-// GET - health check
+// GET - health check (no sensitive info)
 export async function GET() {
-  return NextResponse.json({ status: 'ok', service: 'telegram-link' });
+  return NextResponse.json({ status: 'ok' });
 }

@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server';
 export const runtime = 'edge';
 
 import { createClient } from '@supabase/supabase-js';
+import { verifyTransaction, PRICES, TREASURY_WALLET } from '../../../lib/payments';
 
 function getSupabase() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -15,20 +16,9 @@ function getSupabase() {
   return createClient(url, key);
 }
 
-// GET /api/subscribe - Health check
+// GET /api/subscribe - Health check (no sensitive info)
 export async function GET() {
-  try {
-    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const key = process.env.SUPABASE_SERVICE_KEY;
-    return NextResponse.json({
-      status: 'ok',
-      hasUrl: !!url,
-      hasKey: !!key,
-      urlPrefix: url ? url.substring(0, 20) + '...' : 'missing',
-    });
-  } catch (e: any) {
-    return NextResponse.json({ error: e.message }, { status: 500 });
-  }
+  return NextResponse.json({ status: 'ok' });
 }
 
 // POST /api/subscribe - Record a crypto payment and activate subscription
@@ -48,7 +38,45 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Invalid plan' }, { status: 400 });
     }
 
+    if (!TREASURY_WALLET) {
+      return NextResponse.json({ error: 'Server misconfigured' }, { status: 500 });
+    }
+
+    // ============================
+    // VERIFY TRANSACTION ON-CHAIN
+    // ============================
+    const expectedAmount = plan === 'pro_yearly' ? PRICES.PRO_YEARLY : PRICES.PRO_MONTHLY;
+
+    const { valid, error: verifyError } = await verifyTransaction({
+      signature: txSignature,
+      expectedAmount,
+      expectedMemo: `subscribe-${walletAddress.substring(0, 8)}`,
+      currency: 'USDC',
+    });
+
+    if (!valid) {
+      console.warn(`[Subscribe] Verification failed for tx ${txSignature}: ${verifyError}`);
+      return NextResponse.json(
+        { error: verifyError || 'Transaction verification failed' },
+        { status: 400 }
+      );
+    }
+
     const supabase = getSupabase();
+
+    // Check for replay attacks — has this tx already been used?
+    const { data: existingPayment } = await supabase
+      .from('payment_intents')
+      .select('id')
+      .eq('transaction_signature', txSignature)
+      .single();
+
+    if (existingPayment) {
+      return NextResponse.json(
+        { error: 'Transaction already used for a subscription' },
+        { status: 400 }
+      );
+    }
 
     // Find or create profile by wallet address
     let { data: profile, error: findError } = await supabase
@@ -58,12 +86,10 @@ export async function POST(request: Request) {
       .single();
 
     if (findError && findError.code !== 'PGRST116') {
-      // PGRST116 = no rows returned, which is expected for new users
-      return NextResponse.json({ error: `Find profile error: ${findError.message}` }, { status: 500 });
+      return NextResponse.json({ error: 'Database error' }, { status: 500 });
     }
 
     if (!profile) {
-      // Create a new profile for this wallet (no auth user needed)
       const { data: newProfile, error: createError } = await supabase
         .from('profiles')
         .insert({
@@ -75,7 +101,7 @@ export async function POST(request: Request) {
         .single();
 
       if (createError) {
-        return NextResponse.json({ error: `Create profile error: ${createError.message}` }, { status: 500 });
+        return NextResponse.json({ error: 'Failed to create profile' }, { status: 500 });
       }
       profile = newProfile;
     }
@@ -89,13 +115,13 @@ export async function POST(request: Request) {
       endDate.setMonth(endDate.getMonth() + 1);
     }
 
-    // Record payment intent
+    // Record payment
     const { error: paymentError } = await supabase
       .from('payment_intents')
       .insert({
         user_id: profile.id,
         plan,
-        amount: plan === 'pro_yearly' ? 240 : 24,
+        amount: expectedAmount,
         currency: 'USDC',
         memo: `subscribe-${walletAddress.substring(0, 8)}`,
         status: 'completed',
@@ -105,11 +131,11 @@ export async function POST(request: Request) {
       });
 
     if (paymentError) {
-      console.error('Payment recording error (non-fatal):', paymentError.message);
+      console.error('Payment recording error:', paymentError.message);
     }
 
     // Create/update subscription
-    const { error: subError } = await supabase
+    await supabase
       .from('subscriptions')
       .upsert({
         user_id: profile.id,
@@ -122,26 +148,21 @@ export async function POST(request: Request) {
         onConflict: 'user_id',
       });
 
-    if (subError) {
-      console.error('Subscription error (non-fatal):', subError.message);
-    }
-
     // Update profile to pro
     await supabase
       .from('profiles')
       .update({ plan: 'pro' })
       .eq('id', profile.id);
 
-    console.log(`[Subscribe] Wallet ${walletAddress} upgraded to Pro (${plan}) via tx ${txSignature}`);
+    console.log(`[Subscribe] Wallet ${walletAddress} upgraded to Pro (${plan}) via verified tx ${txSignature}`);
 
     return NextResponse.json({
       success: true,
       plan: 'pro',
       expiresAt: endDate.toISOString(),
-      walletAddress,
     });
   } catch (error: any) {
     console.error('Subscribe error:', error?.message || error);
-    return NextResponse.json({ error: error?.message || 'Internal server error' }, { status: 500 });
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

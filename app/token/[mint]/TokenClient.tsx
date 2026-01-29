@@ -27,8 +27,7 @@ interface EarlyBuyer {
   amount: number;
 }
 
-// Helius API key
-const HELIUS_KEY = '2bc6aa5c-ec94-4566-9102-18294afa2b14';
+// Helius API key is now server-side via /api/helius proxy
 
 export default function TokenClient({ mint }: { mint: string }) {
   const { publicKey, connected } = useWallet();
@@ -94,7 +93,7 @@ export default function TokenClient({ mint }: { mint: string }) {
     setLoadingHistory(true);
     try {
       const res = await fetch(
-        `https://api.helius.xyz/v0/addresses/${mintAddress}/transactions?api-key=${HELIUS_KEY}&type=SWAP`
+        `/api/helius?action=token-txns&mint=${mintAddress}`
       );
       const txs = await res.json();
       
@@ -135,11 +134,7 @@ export default function TokenClient({ mint }: { mint: string }) {
     setError(null);
     
     try {
-      const metadataRes = await fetch(`https://api.helius.xyz/v0/token-metadata?api-key=${HELIUS_KEY}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ mintAccounts: [mintAddress] })
-      });
+      const metadataRes = await fetch(`/api/helius?action=token-metadata&mint=${mintAddress}`);
       
       const metadataData = await metadataRes.json();
       const tokenMeta = metadataData[0];
@@ -152,7 +147,7 @@ export default function TokenClient({ mint }: { mint: string }) {
       };
       setTokenInfo(info);
 
-      const holdersRes = await fetch(`https://mainnet.helius-rpc.com/?api-key=${HELIUS_KEY}`, {
+      const holdersRes = await fetch(`/api/helius`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

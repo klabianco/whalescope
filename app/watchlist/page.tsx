@@ -24,8 +24,6 @@ interface FollowedPolitician {
   recentTrades: Trade[];
 }
 
-const HELIUS_KEY = '2bc6aa5c-ec94-4566-9102-18294afa2b14';
-
 export default function WatchlistPage() {
   const { publicKey, connected } = useWallet();
   const [wallets, setWallets] = useState<string[]>([]);
@@ -92,7 +90,7 @@ export default function WatchlistPage() {
   async function fetchWalletActivity(address: string) {
     try {
       const res = await fetch(
-        `https://api.helius.xyz/v0/addresses/${address}/transactions?api-key=${HELIUS_KEY}&limit=1`
+        `/api/helius?action=wallet-txns&address=${address}&limit=1`
       );
       const txs = await res.json();
       if (txs && txs.length > 0) {
