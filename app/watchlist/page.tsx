@@ -1,10 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { useWallet } from '@solana/wallet-adapter-react';
-import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import { Header } from '../components/Header';
+import tradesData from '../../data/whale-trades.json';
+import whaleWalletsData from '../../data/whale-wallets.json';
 
 interface Trade {
   politician: string;
@@ -16,6 +17,16 @@ interface Trade {
   traded: string;
 }
 
+interface WhaleTrade {
+  wallet: string;
+  walletLabel: string;
+  walletValue: string;
+  timestamp: number;
+  tokenSymbol?: string;
+  solAmount?: number;
+  action: 'BUY' | 'SELL' | 'TRANSFER' | 'UNKNOWN';
+}
+
 interface FollowedPolitician {
   slug: string;
   name: string;
@@ -25,48 +36,71 @@ interface FollowedPolitician {
 }
 
 export default function WatchlistPage() {
-  const { publicKey, connected } = useWallet();
-  const [wallets, setWallets] = useState<string[]>([]);
-  const [walletActivities, setWalletActivities] = useState<Map<string, any>>(new Map());
+  const { publicKey } = useWallet();
+  const [whaleFollows, setWhaleFollows] = useState<string[]>([]);
   const [politicians, setPoliticians] = useState<FollowedPolitician[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<'all' | 'crypto' | 'congress'>('all');
 
-  // Storage key based on wallet
-  const storageKey = publicKey ? publicKey.toBase58() : null;
+  // Storage key: wallet if connected, otherwise anonymous ID
+  const storageKey = useMemo(() => {
+    if (publicKey) return publicKey.toBase58();
+    if (typeof window === 'undefined') return null;
+    let anonId = localStorage.getItem('whales_anon_id');
+    if (!anonId) {
+      anonId = 'anon_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+      localStorage.setItem('whales_anon_id', anonId);
+    }
+    return anonId;
+  }, [publicKey]);
+
+  // Whale wallet lookup
+  const walletLookup = useMemo(() => {
+    const map = new Map<string, { name: string; value: string }>();
+    (whaleWalletsData as { wallets: { address: string; name: string; type: string }[] }).wallets
+      .forEach(w => map.set(w.address, { name: w.name, value: w.type }));
+    return map;
+  }, []);
+
+  // Recent trades per wallet
+  const recentTradesByWallet = useMemo(() => {
+    const map = new Map<string, WhaleTrade[]>();
+    (tradesData as WhaleTrade[])
+      .sort((a, b) => b.timestamp - a.timestamp)
+      .forEach(t => {
+        if (!map.has(t.wallet)) map.set(t.wallet, []);
+        const list = map.get(t.wallet)!;
+        if (list.length < 3) list.push(t);
+      });
+    return map;
+  }, []);
 
   useEffect(() => {
-    if (connected && storageKey) {
-      loadWatchlist();
-    } else {
-      setLoading(false);
-    }
-  }, [connected, storageKey]);
+    if (!storageKey) { setLoading(false); return; }
+    loadWatchlist();
+  }, [storageKey]);
 
   async function loadWatchlist() {
     if (!storageKey) return;
 
-    // Load crypto wallets (stored per user wallet)
-    const savedWallets = localStorage.getItem(`wallets_${storageKey}`);
-    const walletList = savedWallets ? JSON.parse(savedWallets) : [];
-    setWallets(walletList);
-    
-    // Fetch wallet activity
-    walletList.forEach((addr: string) => fetchWalletActivity(addr));
+    // Load whale follows
+    try {
+      const saved = localStorage.getItem(`whales_${storageKey}`);
+      if (saved) setWhaleFollows(JSON.parse(saved));
+    } catch {}
 
     // Load politicians
-    const savedPoliticians = localStorage.getItem(`politicians_${storageKey}`);
-    const politicianSlugs: string[] = savedPoliticians ? JSON.parse(savedPoliticians) : [];
-    
-    if (politicianSlugs.length > 0) {
-      try {
-        const walletParam = storageKey ? `?wallet=${storageKey}` : '';
-        const res = await fetch(`/api/congress-trades${walletParam}`);
+    try {
+      const saved = localStorage.getItem(`politicians_${storageKey}`);
+      const slugs: string[] = saved ? JSON.parse(saved) : [];
+      
+      if (slugs.length > 0) {
+        const res = await fetch('/api/congress-trades');
         const data = await res.json();
         const allTrades: Trade[] = data.trades || [];
 
         const followedList: FollowedPolitician[] = [];
-        for (const slug of politicianSlugs) {
+        for (const slug of slugs) {
           const trades = allTrades.filter(t => 
             t.politician.toLowerCase().replace(/ /g, '-') === slug
           );
@@ -81,33 +115,17 @@ export default function WatchlistPage() {
           }
         }
         setPoliticians(followedList);
-      } catch (err) {
-        console.error('Failed to load politicians:', err);
       }
-    }
+    } catch {}
     
     setLoading(false);
   }
 
-  async function fetchWalletActivity(address: string) {
-    try {
-      const res = await fetch(
-        `/api/helius?action=wallet-txns&address=${address}&limit=1`
-      );
-      const txs = await res.json();
-      if (txs && txs.length > 0) {
-        setWalletActivities(prev => new Map(prev).set(address, txs[0]));
-      }
-    } catch (err) {
-      console.error('Failed to fetch wallet activity:', err);
-    }
-  }
-
-  function removeWallet(address: string) {
+  function removeWhale(address: string) {
     if (!storageKey) return;
-    const newList = wallets.filter(w => w !== address);
-    localStorage.setItem(`wallets_${storageKey}`, JSON.stringify(newList));
-    setWallets(newList);
+    const newList = whaleFollows.filter(w => w !== address);
+    localStorage.setItem(`whales_${storageKey}`, JSON.stringify(newList));
+    setWhaleFollows(newList);
   }
 
   function removePolitician(slug: string) {
@@ -120,58 +138,26 @@ export default function WatchlistPage() {
   }
 
   function shortenAddress(addr: string): string {
-    return `${addr.slice(0, 4)}...${addr.slice(-4)}`;
+    return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
   }
 
-  function timeAgo(timestamp: number): string {
-    const seconds = Math.floor(Date.now() / 1000 - timestamp);
-    if (seconds < 60) return `${seconds}s ago`;
-    if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
-    if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`;
-    return `${Math.floor(seconds / 86400)}d ago`;
+  function formatTime(ts: number) {
+    const diffH = Math.floor((Date.now() / 1000 - ts) / 3600);
+    if (diffH < 1) return 'Just now';
+    if (diffH < 24) return `${diffH}h ago`;
+    if (diffH < 168) return `${Math.floor(diffH / 24)}d ago`;
+    return new Date(ts * 1000).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   }
 
   const showWallets = activeTab === 'all' || activeTab === 'crypto';
   const showPoliticians = activeTab === 'all' || activeTab === 'congress';
-  const isEmpty = wallets.length === 0 && politicians.length === 0;
-
-  // Not connected - show connect prompt
-  if (!connected) {
-    return (
-      <>
-        <Header />
-        <main style={{ maxWidth: '900px', margin: '0 auto', padding: '40px 20px' }}>
-          <div style={{ 
-            background: '#111118', 
-            padding: '60px 40px', 
-            borderRadius: '12px',
-            textAlign: 'center'
-          }}>
-            <div style={{ fontSize: '48px', marginBottom: '16px' }}>🔐</div>
-            <h2 style={{ color: '#fff', marginBottom: '8px' }}>Connect Your Wallet</h2>
-            <p style={{ color: '#888', marginBottom: '24px' }}>
-              Connect your Solana wallet to save your watchlist.
-            </p>
-            <WalletMultiButton style={{
-              backgroundColor: '#4ade80',
-              color: '#000',
-              borderRadius: '8px',
-              fontSize: '16px',
-              fontWeight: '600',
-              height: '48px',
-              padding: '0 32px'
-            }}>Connect Wallet</WalletMultiButton>
-          </div>
-        </main>
-      </>
-    );
-  }
+  const isEmpty = whaleFollows.length === 0 && politicians.length === 0;
 
   return (
     <>
       <Header />
       <main style={{ maxWidth: '900px', margin: '0 auto', padding: '0 20px 40px' }}>
-        <div style={{ marginBottom: '40px' }}>
+        <div style={{ marginBottom: '32px' }}>
           <h1 style={{ fontSize: '36px', marginBottom: '8px' }}>
             Your Watchlist
           </h1>
@@ -212,13 +198,12 @@ export default function WatchlistPage() {
             borderRadius: '12px',
             textAlign: 'center'
           }}>
-            
             <h3 style={{ color: '#fff', marginBottom: '8px' }}>Your watchlist is empty</h3>
             <p style={{ color: '#888', marginBottom: '24px' }}>
               Follow crypto wallets or politicians to track their moves.
             </p>
-            <div style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
-              <Link href="/search" style={{
+            <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
+              <Link href="/whales" style={{
                 display: 'inline-block',
                 background: '#fff',
                 color: '#000',
@@ -227,7 +212,7 @@ export default function WatchlistPage() {
                 fontWeight: '600',
                 textDecoration: 'none'
               }}>
-                Search Tokens
+                🐋 Crypto Whales
               </Link>
               <Link href="/congress" style={{
                 display: 'inline-block',
@@ -238,57 +223,76 @@ export default function WatchlistPage() {
                 fontWeight: '600',
                 textDecoration: 'none'
               }}>
-                Congress Trades
+                🏛️ Politicians
               </Link>
             </div>
           </div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            {/* Crypto Wallets */}
-            {showWallets && wallets.map((address) => {
-              const activity = walletActivities.get(address);
+            {/* Crypto Whale Follows */}
+            {showWallets && whaleFollows.map((address) => {
+              const info = walletLookup.get(address);
+              const trades = recentTradesByWallet.get(address) || [];
               return (
                 <div key={address} style={{
                   background: '#111118',
                   border: '1px solid #222',
                   borderRadius: '12px',
                   padding: '16px 20px',
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center'
                 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    
+                  <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    marginBottom: trades.length > 0 ? '12px' : '0'
+                  }}>
                     <div>
-                      <a 
-                        href={`https://solscan.io/account/${address}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        style={{ color: '#60a5fa', textDecoration: 'none', fontFamily: 'monospace', fontSize: '15px' }}
-                      >
-                        {shortenAddress(address)}
-                      </a>
-                      {activity && (
-                        <div style={{ color: '#888', fontSize: '13px', marginTop: '4px' }}>
-                          Last active: {timeAgo(activity.timestamp)}
-                        </div>
+                      <span style={{ color: '#fff', fontWeight: '600', fontSize: '15px' }}>
+                        {info?.name || shortenAddress(address)}
+                      </span>
+                      {info && (
+                        <span style={{ color: '#555', fontSize: '13px', marginLeft: '8px' }}>
+                          {shortenAddress(address)}
+                        </span>
                       )}
                     </div>
+                    <button
+                      onClick={() => removeWhale(address)}
+                      style={{
+                        padding: '6px 12px',
+                        background: '#7f1d1d',
+                        color: '#f87171',
+                        border: 'none',
+                        borderRadius: '6px',
+                        fontSize: '12px',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      Unfollow
+                    </button>
                   </div>
-                  <button
-                    onClick={() => removeWallet(address)}
-                    style={{
-                      padding: '6px 12px',
-                      background: '#7f1d1d',
-                      color: '#f87171',
-                      border: 'none',
-                      borderRadius: '6px',
-                      fontSize: '12px',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    Unfollow
-                  </button>
+                  {trades.length > 0 && (
+                    <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                      {trades.map((t, i) => (
+                        <span key={i} style={{
+                          padding: '4px 10px',
+                          background: '#0a0a0f',
+                          borderRadius: '4px',
+                          fontSize: '12px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '4px',
+                        }}>
+                          <span style={{ color: t.action === 'BUY' ? '#4ade80' : '#f87171' }}>
+                            {t.action === 'BUY' ? '↑' : '↓'}
+                          </span>
+                          <span style={{ color: '#ccc' }}>{t.tokenSymbol || 'SOL'}</span>
+                          <span style={{ color: '#444' }}>·</span>
+                          <span style={{ color: '#555' }}>{formatTime(t.timestamp)}</span>
+                        </span>
+                      ))}
+                    </div>
+                  )}
                 </div>
               );
             })}
@@ -307,24 +311,21 @@ export default function WatchlistPage() {
                   alignItems: 'center',
                   marginBottom: pol.recentTrades.length > 0 ? '12px' : '0'
                 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    
-                    <Link 
-                      href={`/congress/${pol.slug}`}
-                      style={{ textDecoration: 'none' }}
-                    >
-                      <span style={{ color: '#fff', fontWeight: '600' }}>
-                        {pol.name}
-                      </span>
-                      <span style={{ 
-                        color: pol.party === 'D' ? '#60a5fa' : '#f87171',
-                        fontSize: '13px',
-                        marginLeft: '8px'
-                      }}>
-                        ({pol.party}) · {pol.chamber}
-                      </span>
-                    </Link>
-                  </div>
+                  <Link 
+                    href={`/congress/${pol.slug}`}
+                    style={{ textDecoration: 'none' }}
+                  >
+                    <span style={{ color: '#fff', fontWeight: '600' }}>
+                      {pol.name}
+                    </span>
+                    <span style={{ 
+                      color: pol.party === 'D' ? '#60a5fa' : '#f87171',
+                      fontSize: '13px',
+                      marginLeft: '8px'
+                    }}>
+                      ({pol.party}) · {pol.chamber}
+                    </span>
+                  </Link>
                   <button
                     onClick={() => removePolitician(pol.slug)}
                     style={{
@@ -342,19 +343,21 @@ export default function WatchlistPage() {
                 </div>
                 
                 {pol.recentTrades.length > 0 && (
-                  <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginLeft: '32px' }}>
+                  <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                     {pol.recentTrades.map((trade, i) => (
                       <span key={i} style={{
-                        padding: '4px 8px',
+                        padding: '4px 10px',
                         background: '#0a0a0f',
                         borderRadius: '4px',
-                        fontSize: '12px'
+                        fontSize: '12px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '4px',
                       }}>
                         <span style={{ color: trade.type === 'Purchase' ? '#4ade80' : '#f87171' }}>
                           {trade.type === 'Purchase' ? '↑' : '↓'}
                         </span>
-                        {' '}
-                        <span style={{ color: '#888' }}>{trade.ticker}</span>
+                        <span style={{ color: '#ccc' }}>{trade.ticker}</span>
                       </span>
                     ))}
                   </div>
@@ -364,13 +367,27 @@ export default function WatchlistPage() {
           </div>
         )}
 
+        {!isEmpty && !publicKey && (
+          <div style={{
+            background: '#111118',
+            border: '1px solid #1e3a5f',
+            padding: '16px 20px',
+            borderRadius: '10px',
+            marginTop: '24px',
+            fontSize: '13px',
+            color: '#888',
+          }}>
+            💡 Your watchlist is saved to this browser. Connect a Solana wallet to sync across devices.
+          </div>
+        )}
+
         {!isEmpty && (
           <div style={{
             background: 'linear-gradient(135deg, #1e3a5f 0%, #1a1a2e 100%)',
             padding: '24px',
             borderRadius: '12px',
             textAlign: 'center',
-            marginTop: '40px'
+            marginTop: '24px'
           }}>
             <p style={{ color: '#888', marginBottom: '12px' }}>
               🔔 Want alerts when your watchlist makes moves?
