@@ -113,7 +113,8 @@ export default function WatchlistPage() {
 
   const showWallets = activeTab === 'all' || activeTab === 'crypto';
   const showPoliticians = activeTab === 'all' || activeTab === 'congress';
-  const isEmpty = whaleFollows.length === 0 && politicians.length === 0;
+  const totalFollowed = whaleFollows.length + follows.politicians.length;
+  const isEmpty = totalFollowed === 0;
 
   return (
     <>

@@ -25,21 +25,43 @@ function loadFollows(key: string): FollowsData {
   try {
     // Try unified key first
     const unified = localStorage.getItem(`follows_${key}`);
-    if (unified) return JSON.parse(unified);
-    
-    // Migrate from old keys
-    const whales = JSON.parse(localStorage.getItem(`whales_${key}`) || '[]');
-    const politicians = JSON.parse(localStorage.getItem(`politicians_${key}`) || localStorage.getItem('congress_following') || '[]');
-    
-    if (whales.length > 0 || politicians.length > 0) {
-      const data = { whales, politicians };
-      localStorage.setItem(`follows_${key}`, JSON.stringify(data));
-      // Clean up old keys
+    if (unified) {
+      // Clean up any lingering old keys
       localStorage.removeItem(`whales_${key}`);
       localStorage.removeItem(`politicians_${key}`);
       localStorage.removeItem('congress_following');
-      return data;
+      return JSON.parse(unified);
     }
+    
+    // Migrate from old keys — only take up to FREE_FOLLOW_LIMIT total
+    const whales: string[] = JSON.parse(localStorage.getItem(`whales_${key}`) || '[]');
+    const oldPols1: string[] = JSON.parse(localStorage.getItem(`politicians_${key}`) || '[]');
+    const oldPols2: string[] = JSON.parse(localStorage.getItem('congress_following') || '[]');
+    // Dedupe politicians from both old keys
+    const politicians = [...new Set([...oldPols1, ...oldPols2])];
+    
+    // Only migrate up to the limit
+    const combined: FollowsData = { whales: [], politicians: [] };
+    let count = 0;
+    for (const w of whales) {
+      if (count >= FREE_FOLLOW_LIMIT) break;
+      combined.whales.push(w);
+      count++;
+    }
+    for (const p of politicians) {
+      if (count >= FREE_FOLLOW_LIMIT) break;
+      combined.politicians.push(p);
+      count++;
+    }
+    
+    if (combined.whales.length > 0 || combined.politicians.length > 0) {
+      localStorage.setItem(`follows_${key}`, JSON.stringify(combined));
+    }
+    // Always clean up old keys
+    localStorage.removeItem(`whales_${key}`);
+    localStorage.removeItem(`politicians_${key}`);
+    localStorage.removeItem('congress_following');
+    return combined;
   } catch {}
   return { whales: [], politicians: [] };
 }
