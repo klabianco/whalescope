@@ -1,10 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
+import { EmailCapture } from '../components/EmailCapture';
 import { PRICING, PRICING_DISPLAY } from '../config/pricing';
+import { trackPricingView, trackStartProClick } from '../lib/tracking';
 
 type BillingPeriod = 'monthly' | 'yearly';
 
@@ -22,6 +24,10 @@ const XIcon = () => (
 
 export default function PricingClient() {
   const [billing, setBilling] = useState<BillingPeriod>('yearly');
+
+  useEffect(() => {
+    trackPricingView();
+  }, []);
 
   return (
     <>
@@ -200,7 +206,11 @@ export default function PricingClient() {
               )}
             </div>
 
-            <Link href={`/subscribe?plan=${billing === 'yearly' ? 'pro_yearly' : 'pro_monthly'}`} style={{ textDecoration: 'none' }}>
+            <Link 
+              href={`/subscribe?plan=${billing === 'yearly' ? 'pro_yearly' : 'pro_monthly'}`} 
+              style={{ textDecoration: 'none' }}
+              onClick={() => trackStartProClick(billing === 'yearly' ? 'pro_yearly' : 'pro_monthly')}
+            >
               <button style={{
                 width: '100%',
                 padding: '14px 24px',
@@ -365,6 +375,16 @@ export default function PricingClient() {
               </div>
             ))}
           </div>
+        </div>
+
+        {/* Email Capture */}
+        <div style={{ maxWidth: '600px', margin: '0 auto 48px' }}>
+          <EmailCapture 
+            source="pricing"
+            headline="Not ready for Pro yet?"
+            subtext="Get a free weekly email with the best congress trades and whale moves. Upgrade anytime."
+            buttonText="Get Free Alerts"
+          />
         </div>
 
       </main>

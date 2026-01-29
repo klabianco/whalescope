@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, Suspense } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useWallet, useConnection } from '@solana/wallet-adapter-react';
 import { useWalletModal } from '@solana/wallet-adapter-react-ui';
@@ -8,6 +8,7 @@ import { PublicKey, Transaction } from '@solana/web3.js';
 import { createTransferInstruction, getAssociatedTokenAddress, TOKEN_PROGRAM_ID } from '@solana/spl-token';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
+import { trackSubscribeView, trackWalletConnect, trackPaymentStart, trackPaymentSuccess } from '../lib/tracking';
 
 const WALLET = new PublicKey(process.env.NEXT_PUBLIC_TREASURY_WALLET || 'CPcrV6UeL8CcEvC7rCV6iyUDxbkT5bkJifbz5PUs6zfg');
 const USDC_MINT = new PublicKey('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v');
@@ -30,6 +31,18 @@ function SubscribeContent() {
   const [errorMsg, setErrorMsg] = useState('');
   const [txSig, setTxSig] = useState('');
 
+  // Track page view
+  useEffect(() => {
+    trackSubscribeView(plan);
+  }, [plan]);
+
+  // Track wallet connection
+  useEffect(() => {
+    if (connected && publicKey) {
+      trackWalletConnect();
+    }
+  }, [connected, publicKey]);
+
   const handlePay = async () => {
     if (!publicKey) {
       setVisible(true);
@@ -38,6 +51,7 @@ function SubscribeContent() {
 
     setStatus('processing');
     setErrorMsg('');
+    trackPaymentStart(plan);
 
     try {
       const fromAta = await getAssociatedTokenAddress(USDC_MINT, publicKey);
@@ -85,6 +99,7 @@ function SubscribeContent() {
       }
 
       setStatus('success');
+      trackPaymentSuccess(plan);
     } catch (err: any) {
       console.error(err);
       setErrorMsg(err.message || 'Transaction failed');

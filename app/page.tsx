@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
+import { EmailCapture } from './components/EmailCapture';
 
 interface CongressTrade {
   politician: string;
@@ -291,6 +292,16 @@ export default function Home() {
           )}
         </div>
 
+        {/* Email Capture */}
+        <div style={{ marginBottom: '32px' }}>
+          <EmailCapture 
+            source="homepage"
+            headline="Get free weekly trade alerts"
+            subtext="Congress trades + whale moves delivered to your inbox. No spam, no account needed."
+            buttonText="Subscribe Free"
+          />
+        </div>
+
         {/* CTA */}
         <div style={{
           background: '#111118',
@@ -300,10 +311,10 @@ export default function Home() {
           textAlign: 'center',
         }}>
           <h3 style={{ fontSize: '24px', marginBottom: '12px', fontWeight: '600' }}>
-            Get alerts when Congress trades
+            Want real-time alerts?
           </h3>
           <p style={{ color: '#666', marginBottom: '24px', fontSize: '16px' }}>
-            Real-time alerts via Telegram & Discord. From $24/month.
+            Get instant Telegram & Discord alerts when Congress trades. From $24/month.
           </p>
           <Link href="/pricing" style={{
             display: 'inline-block',

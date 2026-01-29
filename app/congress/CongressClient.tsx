@@ -4,6 +4,7 @@ import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import CommitteeCorrelation from '../components/CommitteeCorrelation';
 import { Footer } from '../components/Footer';
+import { EmailCapture } from '../components/EmailCapture';
 import TradeAlerts from '../components/TradeAlerts';
 import { Header } from '../components/Header';
 import { useAuth } from '../providers/AuthProvider';
@@ -385,12 +386,22 @@ export default function CongressClient({ trades, topTraders, committeeData, poli
         </div>
       )}
 
+      {/* Email Capture */}
+      <div style={{ marginTop: '40px' }}>
+        <EmailCapture 
+          source="congress"
+          headline="Get weekly congress trade alerts"
+          subtext="The biggest trades from Capitol Hill, delivered free to your inbox every week."
+          buttonText="Get Free Alerts"
+        />
+      </div>
+
       {/* Data Notice */}
       <div style={{
         background: '#1a1a2e',
         padding: '16px 20px',
         borderRadius: '12px',
-        marginTop: '40px',
+        marginTop: '24px',
         textAlign: 'center'
       }}>
         <p style={{ color: '#888', fontSize: '13px' }}>
