@@ -10,7 +10,7 @@ export const Header: FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const navLinks = [
-    { href: '/whales', label: 'Smart Money' },
+    { href: '/whales', label: 'Whales' },
     { href: '/congress', label: 'Congress' },
     { href: '/leaderboard', label: 'Leaderboard' },
     { href: '/search', label: 'Tokens' },

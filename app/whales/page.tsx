@@ -181,10 +181,10 @@ export default function WhalesPage() {
         {/* Page Title */}
         <div style={{ marginBottom: '32px' }}>
           <h1 style={{ fontSize: '36px', margin: '0 0 8px' }}>
-            Smart Money
+            Whale Tracker
           </h1>
           <p style={{ color: '#888' }}>
-            Track the biggest players. Crypto whales & Congress trades.
+            The biggest crypto wallets and most active Congress traders — all in one place.
           </p>
         </div>
 
