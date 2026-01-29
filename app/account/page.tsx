@@ -365,6 +365,100 @@ export default function AccountPage() {
               )}
             </div>
 
+            {/* Pro Benefits — Discord & Telegram (only for active Pro) */}
+            {isPro && !isExpired && (
+              <div style={{
+                background: '#18181b',
+                border: '1px solid #27272a',
+                borderRadius: '12px',
+                padding: '28px',
+                marginBottom: '16px',
+              }}>
+                <h2 style={{ color: '#fff', fontSize: '18px', fontWeight: '600', margin: '0 0 6px 0' }}>
+                  Your Pro Benefits
+                </h2>
+                <p style={{ color: '#71717a', fontSize: '13px', margin: '0 0 20px 0' }}>
+                  Exclusive channels for Pro members — get alerts wherever you are.
+                </p>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                  {/* Discord */}
+                  <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    background: '#111118',
+                    borderRadius: '8px',
+                    padding: '16px',
+                  }}>
+                    <div>
+                      <div style={{ color: '#fff', fontSize: '14px', fontWeight: '600', marginBottom: '2px' }}>
+                        🎮 Discord Community
+                      </div>
+                      <div style={{ color: '#71717a', fontSize: '12px' }}>
+                        Real-time trade alerts in #alerts
+                      </div>
+                    </div>
+                    <a
+                      href="https://discord.gg/prKfxkYFUw"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        padding: '8px 16px',
+                        background: 'rgba(34, 197, 94, 0.15)',
+                        color: '#4ade80',
+                        border: '1px solid rgba(34, 197, 94, 0.3)',
+                        borderRadius: '8px',
+                        fontSize: '13px',
+                        fontWeight: '600',
+                        textDecoration: 'none',
+                        whiteSpace: 'nowrap',
+                      }}
+                    >
+                      Join Discord
+                    </a>
+                  </div>
+
+                  {/* Telegram */}
+                  <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    background: '#111118',
+                    borderRadius: '8px',
+                    padding: '16px',
+                  }}>
+                    <div>
+                      <div style={{ color: '#fff', fontSize: '14px', fontWeight: '600', marginBottom: '2px' }}>
+                        📱 Telegram Bot
+                      </div>
+                      <div style={{ color: '#71717a', fontSize: '12px' }}>
+                        Get whale alerts as DMs
+                      </div>
+                    </div>
+                    <a
+                      href="https://t.me/WrenTheAi_bot"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        padding: '8px 16px',
+                        background: 'rgba(34, 197, 94, 0.15)',
+                        color: '#4ade80',
+                        border: '1px solid rgba(34, 197, 94, 0.3)',
+                        borderRadius: '8px',
+                        fontSize: '13px',
+                        fontWeight: '600',
+                        textDecoration: 'none',
+                        whiteSpace: 'nowrap',
+                      }}
+                    >
+                      Connect Telegram
+                    </a>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* Wallet Info */}
             <div style={{
               background: '#18181b',

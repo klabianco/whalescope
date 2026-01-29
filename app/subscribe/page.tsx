@@ -190,6 +190,77 @@ function SubscribeContent() {
             >
               View transaction →
             </a>
+
+            {/* Get Started with Pro — onboarding cards */}
+            <div style={{ marginTop: '28px', borderTop: '1px solid rgba(34, 197, 94, 0.2)', paddingTop: '24px' }}>
+              <h4 style={{ color: '#fff', fontSize: '16px', fontWeight: '600', marginBottom: '16px' }}>
+                Get Started with Pro
+              </h4>
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
+                gap: '12px',
+              }}>
+                <a
+                  href="https://discord.gg/prKfxkYFUw"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    background: '#18181b',
+                    border: '1px solid #27272a',
+                    borderRadius: '10px',
+                    padding: '16px 12px',
+                    textDecoration: 'none',
+                    textAlign: 'center',
+                    transition: 'border-color 0.2s',
+                    cursor: 'pointer',
+                    display: 'block',
+                  }}
+                >
+                  <div style={{ fontSize: '24px', marginBottom: '8px' }}>🎮</div>
+                  <div style={{ color: '#fff', fontSize: '13px', fontWeight: '600', marginBottom: '4px' }}>Join Discord</div>
+                  <div style={{ color: '#71717a', fontSize: '11px', lineHeight: '1.4' }}>Get real-time trade alerts in #alerts</div>
+                </a>
+                <a
+                  href="https://t.me/WrenTheAi_bot"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    background: '#18181b',
+                    border: '1px solid #27272a',
+                    borderRadius: '10px',
+                    padding: '16px 12px',
+                    textDecoration: 'none',
+                    textAlign: 'center',
+                    transition: 'border-color 0.2s',
+                    cursor: 'pointer',
+                    display: 'block',
+                  }}
+                >
+                  <div style={{ fontSize: '24px', marginBottom: '8px' }}>📱</div>
+                  <div style={{ color: '#fff', fontSize: '13px', fontWeight: '600', marginBottom: '4px' }}>Connect Telegram</div>
+                  <div style={{ color: '#71717a', fontSize: '11px', lineHeight: '1.4' }}>Get alerts as DMs from our bot</div>
+                </a>
+                <a
+                  href="/watchlist"
+                  style={{
+                    background: '#18181b',
+                    border: '1px solid #27272a',
+                    borderRadius: '10px',
+                    padding: '16px 12px',
+                    textDecoration: 'none',
+                    textAlign: 'center',
+                    transition: 'border-color 0.2s',
+                    cursor: 'pointer',
+                    display: 'block',
+                  }}
+                >
+                  <div style={{ fontSize: '24px', marginBottom: '8px' }}>👀</div>
+                  <div style={{ color: '#fff', fontSize: '13px', fontWeight: '600', marginBottom: '4px' }}>Set up Watchlist</div>
+                  <div style={{ color: '#71717a', fontSize: '11px', lineHeight: '1.4' }}>Track your favorite wallets</div>
+                </a>
+              </div>
+            </div>
           </div>
         ) : (
           <>
