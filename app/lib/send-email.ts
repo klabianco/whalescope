@@ -98,7 +98,7 @@ export async function sendWelcomeEmail(email: string): Promise<{ success: boolea
                     <a href="https://discord.gg/prKfxkYFUw" style="color:#22c55e;font-size:14px;text-decoration:none;">🎮 Discord</a>
                   </td>
                   <td>
-                    <a href="https://t.me/WrenTheAi_bot" style="color:#22c55e;font-size:14px;text-decoration:none;">📱 Telegram</a>
+                    <a href="https://t.me/WhaleScopeAlerts_bot" style="color:#22c55e;font-size:14px;text-decoration:none;">📱 Telegram</a>
                   </td>
                 </tr>
               </table>

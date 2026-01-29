@@ -223,7 +223,7 @@ function SubscribeContent() {
                   <div style={{ color: '#71717a', fontSize: '11px', lineHeight: '1.4' }}>Get real-time trade alerts in #alerts</div>
                 </a>
                 <a
-                  href="https://t.me/WrenTheAi_bot"
+                  href="https://t.me/WhaleScopeAlerts_bot"
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{

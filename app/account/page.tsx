@@ -440,7 +440,7 @@ export default function AccountPage() {
                       </div>
                     </div>
                     <a
-                      href="https://t.me/WrenTheAi_bot"
+                      href="https://t.me/WhaleScopeAlerts_bot"
                       target="_blank"
                       rel="noopener noreferrer"
                       style={{
