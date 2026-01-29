@@ -49,6 +49,7 @@ export default function Home() {
   const [congressTrades, setCongressTrades] = useState<CongressTrade[]>([]);
   const [followingWallets, setFollowingWallets] = useState<string[]>([]);
   const [limitWarning, setLimitWarning] = useState(false);
+  const [connectPrompt, setConnectPrompt] = useState(false);
   const { publicKey, connected } = useWallet();
   const storageKey = publicKey?.toBase58();
 
@@ -133,7 +134,7 @@ export default function Home() {
           </p>
           {!connected && (
             <button
-              onClick={() => document.querySelector<HTMLButtonElement>('.wallet-adapter-button')?.click()}
+              onClick={() => setConnectPrompt(true)}
               style={{
                 background: FOLLOW_BUTTON.inactiveBg,
                 color: FOLLOW_BUTTON.inactiveColor,
@@ -225,7 +226,7 @@ export default function Home() {
                       <button
                         onClick={() => {
                           if (connected) toggleFollow(trade.wallet);
-                          else document.querySelector<HTMLButtonElement>('.wallet-adapter-button')?.click();
+                          else setConnectPrompt(true);
                         }}
                         style={{
                           background: isFollowing ? FOLLOW_BUTTON.activeBg : FOLLOW_BUTTON.inactiveBg,
@@ -339,6 +340,78 @@ export default function Home() {
         />
 
       </main>
+
+      {/* Custom connect prompt — explains WHY before opening wallet modal */}
+      {connectPrompt && (
+        <div
+          onClick={() => setConnectPrompt(false)}
+          style={{
+            position: 'fixed',
+            inset: 0,
+            background: 'rgba(0,0,0,0.7)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 1000,
+          }}
+        >
+          <div
+            onClick={e => e.stopPropagation()}
+            style={{
+              background: '#111118',
+              border: '1px solid #333',
+              borderRadius: '16px',
+              padding: '32px',
+              maxWidth: '400px',
+              width: '90%',
+              textAlign: 'center',
+            }}
+          >
+            <div style={{ fontSize: '36px', marginBottom: '12px' }}>🐋</div>
+            <h2 style={{ color: '#fff', fontSize: '20px', fontWeight: '700', marginBottom: '8px' }}>
+              Follow whales to get alerts
+            </h2>
+            <p style={{ color: '#888', fontSize: '14px', lineHeight: '1.5', marginBottom: '24px' }}>
+              Connect your Solana wallet to follow whale wallets and get notified when they make moves. Free — up to 3 wallets.
+            </p>
+            <button
+              onClick={() => {
+                setConnectPrompt(false);
+                setTimeout(() => {
+                  document.querySelector<HTMLButtonElement>('.wallet-adapter-button')?.click();
+                }, 150);
+              }}
+              style={{
+                background: FOLLOW_BUTTON.inactiveBg,
+                color: FOLLOW_BUTTON.inactiveColor,
+                border: FOLLOW_BUTTON.inactiveBorder,
+                padding: '14px 32px',
+                borderRadius: '10px',
+                fontSize: '16px',
+                fontWeight: '700',
+                cursor: 'pointer',
+                width: '100%',
+                marginBottom: '12px',
+              }}
+            >
+              Connect Wallet
+            </button>
+            <button
+              onClick={() => setConnectPrompt(false)}
+              style={{
+                background: 'none',
+                border: 'none',
+                color: '#555',
+                fontSize: '13px',
+                cursor: 'pointer',
+              }}
+            >
+              Maybe later
+            </button>
+          </div>
+        </div>
+      )}
+
       <Footer />
     </>
   );
