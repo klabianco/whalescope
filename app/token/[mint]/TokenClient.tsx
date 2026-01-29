@@ -56,10 +56,24 @@ export default function TokenClient({ mint }: { mint: string }) {
 
   function handleFollow(address: string) {
     if (!storageKey) return;
-    const current = followedWallets;
-    const newList = current.includes(address)
-      ? current.filter(w => w !== address)
-      : [...current, address];
+    // Unfollowing always allowed
+    if (followedWallets.includes(address)) {
+      const newList = followedWallets.filter(w => w !== address);
+      localStorage.setItem(`wallets_${storageKey}`, JSON.stringify(newList));
+      setFollowedWallets(newList);
+      return;
+    }
+    // Check limit (read politicians too for total count)
+    let totalFollowed = followedWallets.length;
+    try {
+      const savedPols = localStorage.getItem(`politicians_${storageKey}`);
+      if (savedPols) totalFollowed += JSON.parse(savedPols).length;
+    } catch {}
+    if (totalFollowed >= 3) {
+      alert('Free plan limit: 3 watchlist slots. Upgrade to Pro for unlimited.');
+      return;
+    }
+    const newList = [...followedWallets, address];
     localStorage.setItem(`wallets_${storageKey}`, JSON.stringify(newList));
     setFollowedWallets(newList);
   }

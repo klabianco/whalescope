@@ -6,6 +6,9 @@ import { useWallet } from '@solana/wallet-adapter-react';
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
+import { useAuth } from '../providers/AuthProvider';
+
+const FREE_WATCHLIST_LIMIT = 3;
 
 interface Whale {
   name: string;
@@ -55,7 +58,14 @@ export default function WhalesPage() {
   const [followingPoliticians, setFollowingPoliticians] = useState<string[]>([]);
   const [tab, setTab] = useState<'crypto' | 'congress'>('crypto');
   const [politicians, setPoliticians] = useState<{name: string; party: string; chamber: string; slug: string; tradeCount: number}[]>([]);
+  const [limitWarning, setLimitWarning] = useState(false);
   
+  let isPro = false;
+  try {
+    const auth = useAuth();
+    isPro = auth.isPro;
+  } catch {}
+
   const storageKey = publicKey ? publicKey.toBase58() : null;
 
   useEffect(() => {
@@ -102,18 +112,42 @@ export default function WhalesPage() {
 
   function toggleFollowWallet(address: string) {
     if (!storageKey) return;
-    const newList = followingWallets.includes(address)
-      ? followingWallets.filter(a => a !== address)
-      : [...followingWallets, address];
+    // Unfollowing is always allowed
+    if (followingWallets.includes(address)) {
+      const newList = followingWallets.filter(a => a !== address);
+      localStorage.setItem(`wallets_${storageKey}`, JSON.stringify(newList));
+      setFollowingWallets(newList);
+      setLimitWarning(false);
+      return;
+    }
+    // Check limit for free users
+    const totalFollowed = followingWallets.length + followingPoliticians.length;
+    if (!isPro && totalFollowed >= FREE_WATCHLIST_LIMIT) {
+      setLimitWarning(true);
+      return;
+    }
+    const newList = [...followingWallets, address];
     localStorage.setItem(`wallets_${storageKey}`, JSON.stringify(newList));
     setFollowingWallets(newList);
   }
 
   function toggleFollowPolitician(slug: string) {
     if (!storageKey) return;
-    const newList = followingPoliticians.includes(slug)
-      ? followingPoliticians.filter(s => s !== slug)
-      : [...followingPoliticians, slug];
+    // Unfollowing is always allowed
+    if (followingPoliticians.includes(slug)) {
+      const newList = followingPoliticians.filter(s => s !== slug);
+      localStorage.setItem(`politicians_${storageKey}`, JSON.stringify(newList));
+      setFollowingPoliticians(newList);
+      setLimitWarning(false);
+      return;
+    }
+    // Check limit for free users
+    const totalFollowed = followingWallets.length + followingPoliticians.length;
+    if (!isPro && totalFollowed >= FREE_WATCHLIST_LIMIT) {
+      setLimitWarning(true);
+      return;
+    }
+    const newList = [...followingPoliticians, slug];
     localStorage.setItem(`politicians_${storageKey}`, JSON.stringify(newList));
     setFollowingPoliticians(newList);
   }
@@ -131,6 +165,40 @@ export default function WhalesPage() {
             Track the biggest players. Crypto whales & Congress trades.
           </p>
         </div>
+
+      {/* Watchlist Limit Warning */}
+      {limitWarning && (
+        <div style={{
+          background: 'rgba(251, 191, 36, 0.1)',
+          border: '1px solid rgba(251, 191, 36, 0.3)',
+          borderRadius: '12px',
+          padding: '12px 16px',
+          marginBottom: '16px',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: '8px'
+        }}>
+          <p style={{ color: '#fbbf24', fontSize: '14px', margin: 0 }}>
+            Free plan limit: {FREE_WATCHLIST_LIMIT} watchlist slots. Upgrade for unlimited.
+          </p>
+          <Link href="/pricing" style={{ textDecoration: 'none' }}>
+            <button style={{
+              background: '#fbbf24',
+              color: '#000',
+              border: 'none',
+              borderRadius: '6px',
+              padding: '6px 14px',
+              fontSize: '13px',
+              fontWeight: '600',
+              cursor: 'pointer'
+            }}>
+              Upgrade to Pro
+            </button>
+          </Link>
+        </div>
+      )}
 
       {/* Tabs */}
       <div style={{ 
