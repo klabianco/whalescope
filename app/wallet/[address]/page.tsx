@@ -1,56 +1,49 @@
-import { readFileSync, existsSync } from 'fs';
-import { join } from 'path';
 import WalletClient from './WalletClient';
+import whaleData from '../../../data/whale-wallets.json';
 
-// Pre-generate pages for known whale wallets
+interface WalletEntry {
+  address: string;
+  name: string;
+  type: string;
+  totalUSD: string;
+  totalUSDRaw: number;
+  topHoldings?: string[] | null;
+  solscanUrl: string;
+}
+
+const wallets = whaleData.wallets as WalletEntry[];
+
+// Pre-generate pages for all tracked whale wallets
 export function generateStaticParams() {
-  try {
-    const whalesPath = join(process.cwd(), 'data', 'known-whales.json');
-    if (!existsSync(whalesPath)) return [];
-    const whales = JSON.parse(readFileSync(whalesPath, 'utf-8'));
-    return whales.map((w: { address: string }) => ({ address: w.address }));
-  } catch {
-    return [];
-  }
+  return wallets.map((w) => ({ address: w.address }));
 }
 
-// Load wallet labels from verified data file
-function getWalletData(): Record<string, { label: string; description: string }> {
-  try {
-    const whalesPath = join(process.cwd(), 'data', 'known-whales.json');
-    if (!existsSync(whalesPath)) return {};
-    const whales = JSON.parse(readFileSync(whalesPath, 'utf-8'));
-    const result: Record<string, { label: string; description: string }> = {};
-    for (const w of whales) {
-      result[w.address] = {
-        label: w.name,
-        description: w.description
-      };
-    }
-    return result;
-  } catch {
-    return {};
-  }
-}
+// Allow dynamic params for any wallet address not in our DB
+export const dynamicParams = true;
 
-function shortenAddress(addr: string): string {
-  return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
+function getWalletInfo(address: string): { label: string; description: string } {
+  const found = wallets.find((w) => w.address === address);
+  if (found) {
+    const desc = found.type === 'unknown_whale'
+      ? `Whale · ${found.totalUSD} tracked value`
+      : `${found.type.charAt(0).toUpperCase() + found.type.slice(1).replace('_', ' ')} · ${found.totalUSD} tracked value`;
+    return { label: found.name, description: desc };
+  }
+  return {
+    label: `${address.slice(0, 6)}...${address.slice(-4)}`,
+    description: 'Solana wallet'
+  };
 }
 
 export default async function WalletPage({ params }: { params: Promise<{ address: string }> }) {
   const { address } = await params;
-  const walletData = getWalletData();
-  
-  const walletInfo = walletData[address] || { 
-    label: shortenAddress(address), 
-    description: 'Tracked wallet' 
-  };
+  const info = getWalletInfo(address);
 
   return (
-    <WalletClient 
+    <WalletClient
       address={address}
-      walletLabel={walletInfo.label}
-      walletDescription={walletInfo.description}
+      walletLabel={info.label}
+      walletDescription={info.description}
     />
   );
 }
