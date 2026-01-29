@@ -13,7 +13,8 @@ export const Header: FC = () => {
     { href: '/whales', label: 'Whales' },
     { href: '/congress', label: 'Congress' },
     { href: '/leaderboard', label: 'Leaderboard' },
-    { href: '/search', label: 'Tokens' },
+    { href: '/search', label: 'Search' },
+    { href: '/firehose', label: '🔥 Firehose' },
     { href: '/pricing', label: 'Pricing' },
     ...(publicKey ? [
       { href: '/watchlist', label: 'Watchlist' },
@@ -63,7 +64,7 @@ export const Header: FC = () => {
             fontSize: '14px',
             fontWeight: '600',
             height: '40px'
-          }}>Connect Wallet</WalletMultiButton>
+          }} />
         </nav>
 
         {/* Mobile hamburger button */}
@@ -128,7 +129,7 @@ export const Header: FC = () => {
               fontWeight: '600',
               height: '40px',
               width: '100%',
-            }}>Connect Wallet</WalletMultiButton>
+            }} />
           </div>
         </nav>
       )}

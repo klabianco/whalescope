@@ -37,6 +37,8 @@ export interface TradeCardProps {
   background?: string;
   /** Card border override */
   border?: string;
+  /** Optional USD value string (e.g. "$7,234") */
+  usdValue?: string;
 }
 
 // ── Shared components ──
@@ -156,6 +158,7 @@ export function TradeCard({
   extras,
   background,
   border,
+  usdValue,
 }: TradeCardProps) {
   return (
     <div style={{
@@ -193,12 +196,12 @@ export function TradeCard({
         {extras}
       </div>
 
-      {/* Row 2: Asset | Amount | Date | Tx link */}
+      {/* Row 2: Asset + Amount + USD value */}
       <div style={{
         display: 'flex',
-        alignItems: 'center',
-        gap: '16px',
-        flexWrap: 'wrap',
+        alignItems: 'baseline',
+        gap: '10px',
+        marginBottom: '8px',
       }}>
         <span style={{ color: '#4ade80', fontWeight: '600', fontSize: '16px' }}>
           {asset}
@@ -206,6 +209,17 @@ export function TradeCard({
         <span style={{ color: '#fff', fontWeight: '500', fontSize: '14px' }}>
           {amount}
         </span>
+        <span style={{ color: '#888', fontSize: '13px' }}>
+          {usdValue || ''}
+        </span>
+      </div>
+
+      {/* Row 3: Date + Tx link — always same line */}
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+      }}>
         <span style={{ color: '#666', fontSize: '13px' }}>
           {date}
         </span>
@@ -214,7 +228,7 @@ export function TradeCard({
             href={txUrl}
             target="_blank"
             rel="noopener noreferrer"
-            style={{ color: '#60a5fa', fontSize: '12px', textDecoration: 'none', marginLeft: 'auto' }}
+            style={{ color: '#60a5fa', fontSize: '12px', textDecoration: 'none' }}
           >
             {txLabel || 'View tx ↗'}
           </a>

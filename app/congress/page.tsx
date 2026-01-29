@@ -90,11 +90,25 @@ function calculateTopTraders(trades: CongressTrade[]) {
     .slice(0, 6);
 }
 
+// Get full list of tracked politicians (for the count display)
+function getAllPoliticians(): string[] {
+  try {
+    const fs = require('fs');
+    const path = require('path');
+    const dataPath = path.join(process.cwd(), 'data', 'congress-trades.json');
+    if (!fs.existsSync(dataPath)) return [];
+    const trades = JSON.parse(fs.readFileSync(dataPath, 'utf-8'));
+    return Array.from(new Set(trades.map((t: any) => t.politician)));
+  } catch {
+    return [];
+  }
+}
+
 export default async function CongressPage() {
   const trades = await getFreeTierTrades();
   const topTraders = calculateTopTraders(trades);
   const committeeData = getCommitteeData();
-  const politicians = Array.from(new Set(trades.map(t => t.politician)));
+  const politicians = getAllPoliticians();
   
   return <CongressClient trades={trades} topTraders={topTraders} committeeData={committeeData} politicians={politicians} />;
 }

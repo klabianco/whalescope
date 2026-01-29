@@ -1,6 +1,8 @@
+import { Suspense } from 'react';
 import { readFileSync, existsSync } from 'fs';
 import { join } from 'path';
 import LeaderboardClient from './LeaderboardClient';
+import CryptoLeaderboard from './CryptoLeaderboard';
 
 interface CongressTrade {
   politician: string;
@@ -110,16 +112,14 @@ function calculateLeaderboard(trades: CongressTrade[], priceCache: PriceCache) {
   }
   
   const leaderboard = Array.from(politicianData.entries()).map(([name, data]) => {
-    // Calculate weighted average return for different periods
+    // Calculate equal-weighted average return (each trade counts equally)
+    // This prevents high-volume traders like Pelosi from dominating rankings
     const calcReturn = (trades: typeof data.trades, cutoff: Date) => {
       const filtered = trades.filter(t => t.date >= cutoff && t.return !== null);
       if (filtered.length === 0) return null;
       
-      const totalAmount = filtered.reduce((sum, t) => sum + t.amount, 0);
-      if (totalAmount === 0) return null;
-      
-      const weightedReturn = filtered.reduce((sum, t) => sum + (t.return || 0) * t.amount, 0) / totalAmount;
-      return weightedReturn;
+      const avgReturn = filtered.reduce((sum, t) => sum + (t.return || 0), 0) / filtered.length;
+      return avgReturn;
     };
     
     const return30d = calcReturn(data.trades, thirtyDaysAgo);
@@ -162,10 +162,26 @@ function getTrades(): CongressTrade[] {
   }
 }
 
+function getCryptoLeaderboard() {
+  try {
+    const lbPath = join(process.cwd(), 'data', 'crypto-leaderboard.json');
+    if (!existsSync(lbPath)) return [];
+    const data = JSON.parse(readFileSync(lbPath, 'utf-8'));
+    return data.entries || [];
+  } catch {
+    return [];
+  }
+}
+
 export default function LeaderboardPage() {
   const trades = getTrades();
   const priceCache = loadPriceCache();
   const leaderboard = calculateLeaderboard(trades, priceCache).slice(0, 50);
+  const cryptoLeaderboard = getCryptoLeaderboard();
   
-  return <LeaderboardClient leaderboard={leaderboard} />;
+  return (
+    <Suspense>
+      <LeaderboardClient leaderboard={leaderboard} cryptoLeaderboard={cryptoLeaderboard} />
+    </Suspense>
+  );
 }

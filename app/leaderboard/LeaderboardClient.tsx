@@ -1,9 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
+import CryptoLeaderboard from './CryptoLeaderboard';
 
 interface LeaderboardEntry {
   name: string;
@@ -16,9 +18,27 @@ interface LeaderboardEntry {
   returnYTD: number | null;
 }
 
+interface CryptoEntry {
+  address: string;
+  name: string;
+  type: string;
+  totalUSD: string;
+  totalUSDRaw: number;
+  topHoldings: string[];
+  tradeCount: number;
+  buyCount: number;
+  sellCount: number;
+  totalCost: number;
+  totalCurrentValue: number;
+  roiPct: number;
+}
+
 interface Props {
   leaderboard: LeaderboardEntry[];
+  cryptoLeaderboard: CryptoEntry[];
 }
+
+type LeaderboardTab = 'congress' | 'crypto';
 
 type TimeFrame = '30d' | '90d' | 'ytd';
 
@@ -42,9 +62,27 @@ function getReturnColor(value: number | null): string {
   return '#ef4444';
 }
 
-export default function LeaderboardClient({ leaderboard }: Props) {
+export default function LeaderboardClient({ leaderboard, cryptoLeaderboard }: Props) {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  
+  const initialTab = (searchParams.get('tab') === 'crypto' ? 'crypto' : 'congress') as LeaderboardTab;
+  const [tab, setTab] = useState<LeaderboardTab>(initialTab);
   const [timeFrame, setTimeFrame] = useState<TimeFrame>('ytd');
   const [sortBy, setSortBy] = useState<'return' | 'volume' | 'trades'>('return');
+
+  // Sync tab to URL param
+  function switchTab(newTab: LeaderboardTab) {
+    setTab(newTab);
+    const params = new URLSearchParams(searchParams.toString());
+    if (newTab === 'congress') {
+      params.delete('tab');
+    } else {
+      params.set('tab', newTab);
+    }
+    const qs = params.toString();
+    router.replace(`/leaderboard${qs ? `?${qs}` : ''}`, { scroll: false });
+  }
   
   const getReturn = (entry: LeaderboardEntry) => {
     switch (timeFrame) {
@@ -119,15 +157,50 @@ export default function LeaderboardClient({ leaderboard }: Props) {
             WebkitTextFillColor: 'transparent',
             letterSpacing: '-1px'
           }}>
-            Congressional Trading Leaderboard
+            {tab === 'congress' ? 'Congressional Trading Leaderboard' : 'Crypto Whale Leaderboard'}
           </h1>
           <p style={{ color: '#71717a', fontSize: '16px', maxWidth: '500px', margin: '0 auto' }}>
-            Estimated portfolio returns based on publicly disclosed trades
+            {tab === 'congress'
+              ? 'Estimated portfolio returns based on publicly disclosed trades'
+              : 'Top Solana wallets ranked by holdings and trading activity'}
           </p>
         </div>
 
-        {/* Podium - Top 3 */}
-        {topPerformers.length >= 3 && (
+        {/* Congress / Crypto Toggle */}
+        <div style={{
+          display: 'flex', justifyContent: 'center', marginBottom: '40px',
+        }}>
+          <div style={{
+            display: 'inline-flex', background: '#18181b', padding: '4px', borderRadius: '12px', border: '1px solid #27272a',
+          }}>
+            <button
+              onClick={() => switchTab('congress')}
+              style={{
+                padding: '12px 28px', background: tab === 'congress' ? '#27272a' : 'transparent',
+                color: tab === 'congress' ? '#fff' : '#71717a', border: 'none', borderRadius: '8px',
+                fontSize: '15px', fontWeight: tab === 'congress' ? '600' : '400', cursor: 'pointer',
+              }}
+            >
+              🏛️ Congress
+            </button>
+            <button
+              onClick={() => switchTab('crypto')}
+              style={{
+                padding: '12px 28px', background: tab === 'crypto' ? '#27272a' : 'transparent',
+                color: tab === 'crypto' ? '#fff' : '#71717a', border: 'none', borderRadius: '8px',
+                fontSize: '15px', fontWeight: tab === 'crypto' ? '600' : '400', cursor: 'pointer',
+              }}
+            >
+              🐋 Crypto
+            </button>
+          </div>
+        </div>
+
+        {/* Crypto Leaderboard */}
+        {tab === 'crypto' && <CryptoLeaderboard entries={cryptoLeaderboard} />}
+
+        {/* Congress Podium - Top 3 */}
+        {tab === 'congress' && topPerformers.length >= 3 && (
           <div className="podium-grid" style={{ 
             display: 'grid',
             gridTemplateColumns: '1fr 1.2fr 1fr',
@@ -335,6 +408,7 @@ export default function LeaderboardClient({ leaderboard }: Props) {
           </div>
         )}
 
+        {tab === 'congress' && <>
         {/* Controls */}
         <div className="controls-wrap" style={{ 
           display: 'flex', 
@@ -495,6 +569,7 @@ export default function LeaderboardClient({ leaderboard }: Props) {
             considered financial advice or a recommendation to follow any politician&apos;s trades.
           </p>
         </div>
+        </>}
 
       </main>
       <Footer />

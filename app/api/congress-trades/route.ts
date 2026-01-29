@@ -76,20 +76,30 @@ export async function GET(request: NextRequest) {
       .from('congress_trades')
       .select('*', { count: 'exact', head: true });
 
+    // Check for politician slug filter (used by politician detail pages)
+    const politicianSlug = request.nextUrl.searchParams.get('politician');
+    const limitParam = request.nextUrl.searchParams.get('limit');
+
     let query = supabase
       .from('congress_trades')
       .select('*')
       .order('filed_date', { ascending: false });
 
-    if (!isPro) {
-      // Free users: exclude trades filed in last 24 hours
+    if (politicianSlug) {
+      // Politician detail page: return all trades for this politician (no plan restriction)
+      // We filter client-side by slug since Supabase doesn't have a slug column
+      // But we can use ilike on politician name (slug = name lowercased with dashes)
+      const nameGuess = politicianSlug.replace(/-/g, ' ');
+      query = query.ilike('politician', `%${nameGuess}%`);
+    } else if (!isPro) {
+      // Free users on main feed: exclude trades filed in last 24 hours
       const yesterday = new Date();
       yesterday.setDate(yesterday.getDate() - 1);
       const yesterdayStr = yesterday.toISOString().split('T')[0];
       
       query = query
         .lte('filed_date', yesterdayStr)
-        .limit(FREE_TRADE_LIMIT);
+        .limit(limitParam ? parseInt(limitParam) : FREE_TRADE_LIMIT);
     }
 
     const { data: trades, error } = await query;

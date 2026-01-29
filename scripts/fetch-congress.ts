@@ -50,9 +50,9 @@ const COMPANY_LOOKUP: Record<string, string> = {
   'BSCQ': 'Invesco BulletShares 2026',
 };
 
-// Party lookup by BioGuideID or name (known politicians)
-const PARTY_LOOKUP: Record<string, 'D' | 'R'> = {
-  // Democrats
+// Comprehensive party lookup for all known congress members in the dataset
+const PARTY_LOOKUP: Record<string, 'D' | 'R' | 'I'> = {
+  // === HOUSE - DEMOCRATS ===
   'Nancy Pelosi': 'D',
   'Josh Gottheimer': 'D',
   'Alexandria Ocasio-Cortez': 'D',
@@ -61,8 +61,32 @@ const PARTY_LOOKUP: Record<string, 'D' | 'R'> = {
   'Rick Larsen': 'D',
   'Cleo Fields': 'D',
   'Jonathan Jackson': 'D',
-  'Steve Cohen': 'D', // TN-09
-  // Republicans
+  'Steve Cohen': 'D',
+  'Adam Smith': 'D',
+  'April Mcclain Delaney': 'D',
+  'Debbie Dingell': 'D',
+  'Debbie Wasserman Schultz': 'D',
+  'Dwight Evans': 'D',
+  'Ed Case': 'D',
+  'Eleanor Holmes Norton': 'D',
+  'Gerald E. Connolly': 'D',
+  'Greg Landsman': 'D',
+  'Jake Auchincloss': 'D',
+  'Jared Moskowitz': 'D',
+  'Judy Chu': 'D',
+  'Julie Johnson': 'D',
+  'Katherine M. Clark': 'D',
+  'Kelly Louise Morrison': 'D',
+  'Laura Friedman': 'D',
+  'Linda T. Sanchez': 'D',
+  'Lloyd Doggett': 'D',
+  'Ritchie John Torres': 'D',
+  'Susie Lee': 'D',
+  'Terri A. Sewell': 'D',
+  'Thomas Suozzi': 'D',
+  'Valerie Hoyle': 'D',
+
+  // === HOUSE - REPUBLICANS ===
   'Tommy Tuberville': 'R',
   'Dan Crenshaw': 'R',
   'Michael McCaul': 'R',
@@ -74,48 +98,112 @@ const PARTY_LOOKUP: Record<string, 'D' | 'R'> = {
   'James French Hill': 'R',
   'John James': 'R',
   'Rick W. Allen': 'R',
+  'Richard W. Allen': 'R',
   'Mike Kelly': 'R',
   'Steve Womack': 'R',
   'Gary Palmer': 'R',
-  'John Hoeven': 'R',
-  'Markwayne Mullin': 'R',
-  'Shelley Moore Capito': 'R',
   'Tim Moore': 'R',
   'Roger Williams': 'R',
   'Dan Newhouse': 'R',
   'Virginia Foxx': 'R',
   'Robert E. Latta': 'R',
-  // Senators
+  'Andrew Garbarino': 'R',
+  'August Lee Pfluger Ii': 'R',
+  'Austin Scott': 'R',
+  'Brandon Gill': 'R',
+  'Bruce Westerman': 'R',
+  'Byron Donalds': 'R',
+  'Cliff Bentz': 'R',
+  'Dale Whitney Strong': 'R',
+  'David Rouzer': 'R',
+  'Greg Steube': 'R',
+  'James Comer': 'R',
+  'James D Jordan': 'R',
+  'Jefferson Shreve': 'R',
+  'John Mcguire': 'R',
+  'John W. Rose': 'R',
+  'Julia Letlow': 'R',
+  'Laurel Lee': 'R',
+  'Lisa Mcclain': 'R',
+  'Michael Patrick Guest': 'R',
+  'Mike Kennedy': 'R',
+  'Pete Sessions': 'R',
+  'Peter Allen Stauber': 'R',
+  'Richard Dean Dr Mccormick': 'R',
+  'Rob Bresnahan': 'R',
+  'Robert B. Aderholt': 'R',
+  'Scott Desjarlais': 'R',
+  'Scott Scott Franklin': 'R',
+  'Thomas H. Kean Jr': 'R',
+  'Victoria Spartz': 'R',
+
+  // === SENATE - DEMOCRATS ===
   'Gary Peters': 'D',
-  'Lindsey Graham': 'R',
-  'Tommy Tuberville': 'R',
-  'John Hoeven': 'R',
-  'Shelley Moore Capito': 'R',
-  'Markwayne Mullin': 'R',
-  'Bill Hagerty': 'R',
-  'Mark Kelly': 'D',
   'Jacky Rosen': 'D',
   'John Fetterman': 'D',
-  'Kyrsten Sinema': 'I',
-  'Joe Manchin': 'D',
-  'Susan Collins': 'R',
-  'Mitt Romney': 'R',
-  'John Thune': 'R',
-  'Mike Crapo': 'R',
-  'Tim Scott': 'R',
-  'Ted Cruz': 'R',
-  'Marco Rubio': 'R',
-  'Rand Paul': 'R',
-  'Pete Ricketts': 'R',
-  'Katie Britt': 'R',
-  'John Boozman': 'R',
-  'Angus King': 'I',
-  'A. Mitchell Jr. McConnell': 'R',
   'John Hickenlooper': 'D',
-  'David H. McCormick': 'R',
+  'Mark Kelly': 'D',
   'Sheldon Whitehouse': 'D',
   'Tina Smith': 'D',
-  // Add more as needed
+  'Adam B. Schiff': 'D',
+  'Chris Coons': 'D',
+  'Claire McCaskill': 'D',
+  'Heidi Heitkamp': 'D',
+  'John F. Reed': 'D',
+  'Maria Cantwell': 'D',
+  'Mark Warner': 'D',
+  'Ron Wyden': 'D',
+  'Tammy Duckworth': 'D',
+  'Thomas R. Carper': 'D',
+  'Tim Kaine': 'D',
+  'Tom Udall': 'D',
+
+  // === SENATE - REPUBLICANS ===
+  'A. Mitchell Jr. McConnell': 'R',
+  'Bill Cassidy': 'R',
+  'Bill Hagerty': 'R',
+  'David H. McCormick': 'R',
+  'John Boozman': 'R',
+  'John Hoeven': 'R',
+  'John Thune': 'R',
+  'Katie Britt': 'R',
+  'Lindsey Graham': 'R',
+  'Marco Rubio': 'R',
+  'Markwayne Mullin': 'R',
+  'Mike Crapo': 'R',
+  'Mitt Romney': 'R',
+  'Pete Ricketts': 'R',
+  'Rand Paul': 'R',
+  'Shelley Moore Capito': 'R',
+  'Ted Cruz': 'R',
+  'Tim Scott': 'R',
+  'Ashley B. Moody': 'R',
+  'Bernardo Moreno': 'R',
+  'Cynthia Lummis': 'R',
+  'Dan Sullivan': 'R',
+  'David Perdue': 'R',
+  'Dean Heller': 'R',
+  'Deb Fischer': 'R',
+  'J.D. Vance': 'R',
+  'James Conley Justice II': 'R',
+  'James M. Inhofe': 'R',
+  'Jerry Moran': 'R',
+  'John Kennedy': 'R',
+  'Jon Kyl': 'R',
+  'Kelly Loeffler': 'R',
+  'Pat Roberts': 'R',
+  'Pat Toomey': 'R',
+  'Patrick Toomey': 'R',
+  'Rick Scott': 'R',
+  'Roy Blunt': 'R',
+  'Susan Collins': 'R',
+  'Susan M. Collins': 'R',
+  'Thom Tillis': 'R',
+
+  // === INDEPENDENTS ===
+  'Angus King': 'I',
+  'Kyrsten Sinema': 'I',
+  'Joe Manchin': 'D', // caucused with Democrats
 };
 
 interface CongressTrade {
@@ -157,7 +245,7 @@ async function fetchFromQuiver(apiKey: string): Promise<CongressTrade[]> {
   const houseTrades: QuiverTrade[] = await houseRes.json();
   console.log(`  Got ${houseTrades.length} House trades`);
   
-  for (const t of houseTrades.slice(0, 100)) {
+  for (const t of houseTrades) {
     if (!t.Representative || !t.Ticker) continue;
     const party = PARTY_LOOKUP[t.Representative];
     if (!party) {
@@ -190,7 +278,7 @@ async function fetchFromQuiver(apiKey: string): Promise<CongressTrade[]> {
   const senateTrades: QuiverTrade[] = await senateRes.json();
   console.log(`  Got ${senateTrades.length} Senate trades`);
   
-  for (const t of senateTrades.slice(0, 100)) {
+  for (const t of senateTrades) {
     const name = t.Senator || t.Representative;
     if (!name || !t.Ticker) continue;
     const party = PARTY_LOOKUP[name];
@@ -334,8 +422,8 @@ async function main() {
           company: t.company || '',
           trade_type: t.type,
           amount: t.amount || '',
-          filed_date: t.filed,
-          traded_date: t.traded || null,
+          filed_date: t.filed && t.filed.length > 0 ? t.filed : (t.traded && t.traded.length > 0 ? t.traded : '1970-01-01'),
+          traded_date: t.traded && t.traded.length > 0 ? t.traded : null,
           trade_hash: createHash('md5').update(hashStr).digest('hex'),
         };
       });

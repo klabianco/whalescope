@@ -1,0 +1,38 @@
+{
+  "lastUpdated": "2026-01-29T19:42:51.646Z",
+  "methodology": "swap-only",
+  "entries": [
+    {
+      "address": "MfDuWeqSHEqTFVYZ7LoexgAK9dxk7cy4DFJWjWMGVWa",
+      "name": "Wintermute Automated Liquidity Bot",
+      "type": "unknown_whale",
+      "totalUSD": "$23.8M",
+      "totalUSDRaw": 23765932.654515952,
+      "topHoldings": [
+        "SOL 40,830"
+      ],
+      "tradeCount": 27,
+      "buyCount": 27,
+      "sellCount": 0,
+      "totalCost": 23044,
+      "totalCurrentValue": 23049,
+      "roiPct": 0.000215
+    },
+    {
+      "address": "CnXMWB8W7bcnADsZsJAJYkcuu8jr392ZFvxDBiumW3ww",
+      "name": "CnXMWB8W...W3ww",
+      "type": "unknown_whale",
+      "totalUSD": "$23.5M",
+      "totalUSDRaw": 23492207.950537145,
+      "topHoldings": [
+        "USDT $6,629,131"
+      ],
+      "tradeCount": 1,
+      "buyCount": 1,
+      "sellCount": 0,
+      "totalCost": 361195,
+      "totalCurrentValue": 359841,
+      "roiPct": -0.00375
+    }
+  ]
+}

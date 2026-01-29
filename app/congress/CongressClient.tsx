@@ -104,8 +104,11 @@ export default function CongressClient({ trades, topTraders, committeeData, poli
       <main style={{ maxWidth: '900px', margin: '0 auto', padding: '0 20px 40px' }}>
         <div style={{ textAlign: 'center', marginBottom: '40px' }}>
           <h1 style={{ fontSize: '36px', marginBottom: '8px' }}>Congress Tracker</h1>
-          <p style={{ color: '#888', marginBottom: '16px' }}>
+          <p style={{ color: '#888', marginBottom: '8px' }}>
             See what politicians are buying and selling
+          </p>
+          <p style={{ color: '#4ade80', fontSize: '14px', fontWeight: '600', marginBottom: '16px' }}>
+            Tracking {politicians.length} members of Congress
           </p>
           <div style={{ display: 'flex', justifyContent: 'center', gap: '16px' }}>
             <Link href="/leaderboard" style={{ color: '#4ade80', textDecoration: 'none' }}>

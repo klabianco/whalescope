@@ -56,6 +56,14 @@ export interface WhaleTrade {
   tokenAmount?: number;
   solAmount?: number;
   action: "BUY" | "SELL" | "TRANSFER" | "UNKNOWN";
+  // Swap-specific fields for ROI calculation
+  isSwap?: boolean;
+  soldMint?: string;
+  soldSymbol?: string;
+  soldAmount?: number;
+  boughtMint?: string;
+  boughtSymbol?: string;
+  boughtAmount?: number;
 }
 
 // Stablecoins to exclude
@@ -135,17 +143,94 @@ function parseTradeAction(tx: ParsedTransaction, walletAddress: string): WhaleTr
   return "UNKNOWN";
 }
 
-function getTokenInfo(tx: ParsedTransaction, walletAddress: string): { mint?: string; symbol?: string; amount?: number; solAmount?: number } {
+interface TokenInfo {
+  mint?: string;
+  symbol?: string;
+  amount?: number;
+  solAmount?: number;
+  // Swap details
+  isSwap: boolean;
+  soldMint?: string;
+  soldSymbol?: string;
+  soldAmount?: number;
+  boughtMint?: string;
+  boughtSymbol?: string;
+  boughtAmount?: number;
+}
+
+const SOL_MINT = "So11111111111111111111111111111111111111112";
+
+function getTokenInfo(tx: ParsedTransaction, walletAddress: string): TokenInfo {
   const transfers = tx.tokenTransfers || [];
+  const nativeTransfers = tx.nativeTransfers || [];
+  const isSwap = tx.type === "SWAP" || (tx.description || '').toLowerCase().includes("swap");
   
-  // For swaps, find the non-SOL token involved
+  // Find what the wallet SENT (sold) and RECEIVED (bought)
+  const sentTokens = transfers.filter(t => t.fromUserAccount === walletAddress);
+  const receivedTokens = transfers.filter(t => t.toUserAccount === walletAddress);
+  const sentSOL = nativeTransfers
+    .filter(t => t.fromUserAccount === walletAddress)
+    .reduce((sum, t) => sum + t.amount, 0) / 1e9;
+  const receivedSOL = nativeTransfers
+    .filter(t => t.toUserAccount === walletAddress)
+    .reduce((sum, t) => sum + t.amount, 0) / 1e9;
+  
+  // Net SOL movement (negative = wallet sent SOL, positive = wallet received SOL)
+  const netSOL = receivedSOL - sentSOL;
+  
+  if (isSwap) {
+    // Determine sold side
+    let soldMint: string | undefined;
+    let soldSymbol: string | undefined;
+    let soldAmount: number | undefined;
+    let boughtMint: string | undefined;
+    let boughtSymbol: string | undefined;
+    let boughtAmount: number | undefined;
+    
+    // What did they send?
+    if (sentTokens.length > 0) {
+      const mainSent = sentTokens.sort((a, b) => b.tokenAmount - a.tokenAmount)[0];
+      soldMint = mainSent.mint;
+      soldSymbol = TOKEN_SYMBOLS[mainSent.mint];
+      soldAmount = mainSent.tokenAmount;
+    } else if (netSOL < -0.001) {
+      // Sent SOL
+      soldMint = SOL_MINT;
+      soldSymbol = "SOL";
+      soldAmount = Math.abs(netSOL);
+    }
+    
+    // What did they receive?
+    if (receivedTokens.length > 0) {
+      const mainReceived = receivedTokens.sort((a, b) => b.tokenAmount - a.tokenAmount)[0];
+      boughtMint = mainReceived.mint;
+      boughtSymbol = TOKEN_SYMBOLS[mainReceived.mint];
+      boughtAmount = mainReceived.tokenAmount;
+    } else if (netSOL > 0.001) {
+      // Received SOL
+      boughtMint = SOL_MINT;
+      boughtSymbol = "SOL";
+      boughtAmount = netSOL;
+    }
+    
+    // Primary token for display = the bought token (what they acquired)
+    return {
+      mint: boughtMint || soldMint,
+      symbol: boughtSymbol || soldSymbol,
+      amount: boughtAmount || soldAmount,
+      solAmount: Math.abs(netSOL) > 0.001 ? Math.abs(netSOL) : undefined,
+      isSwap: true,
+      soldMint, soldSymbol, soldAmount,
+      boughtMint, boughtSymbol, boughtAmount,
+    };
+  }
+  
+  // Non-swap: plain transfer
   const nonSolTransfer = transfers.find(t => 
-    t.mint !== "So11111111111111111111111111111111111111112" &&
+    t.mint !== SOL_MINT &&
     (t.toUserAccount === walletAddress || t.fromUserAccount === walletAddress)
   );
   
-  // Get SOL amount from native transfers
-  const nativeTransfers = tx.nativeTransfers || [];
   const solTransfer = nativeTransfers.find(t => 
     t.toUserAccount === walletAddress || t.fromUserAccount === walletAddress
   );
@@ -157,19 +242,20 @@ function getTokenInfo(tx: ParsedTransaction, walletAddress: string): { mint?: st
       symbol: TOKEN_SYMBOLS[nonSolTransfer.mint] || undefined,
       amount: nonSolTransfer.tokenAmount,
       solAmount,
+      isSwap: false,
     };
   }
   
-  // If only SOL transfers
   if (solTransfer) {
     return {
-      mint: "So11111111111111111111111111111111111111112",
+      mint: SOL_MINT,
       symbol: "SOL",
       amount: solTransfer.amount / 1e9,
+      isSwap: false,
     };
   }
   
-  return {};
+  return { isSwap: false };
 }
 
 async function fetchAllWhaleTrades(): Promise<WhaleTrade[]> {
@@ -210,6 +296,13 @@ async function fetchAllWhaleTrades(): Promise<WhaleTrade[]> {
           tokenAmount: tokenInfo.amount,
           solAmount: tokenInfo.solAmount,
           action,
+          isSwap: tokenInfo.isSwap,
+          soldMint: tokenInfo.soldMint,
+          soldSymbol: tokenInfo.soldSymbol,
+          soldAmount: tokenInfo.soldAmount,
+          boughtMint: tokenInfo.boughtMint,
+          boughtSymbol: tokenInfo.boughtSymbol,
+          boughtAmount: tokenInfo.boughtAmount,
         });
         tradeCount++;
       }
@@ -246,7 +339,10 @@ async function main() {
   const buys = trades.filter(t => t.action === 'BUY').length;
   const sells = trades.filter(t => t.action === 'SELL').length;
   const transfers = trades.filter(t => t.action === 'TRANSFER').length;
+  const swaps = trades.filter(t => t.isSwap).length;
+  const swapsWithBothSides = trades.filter(t => t.isSwap && t.soldMint && t.boughtMint).length;
   console.log(`\n📊 Summary: ${buys} buys, ${sells} sells, ${transfers} transfers`);
+  console.log(`🔄 Swaps: ${swaps} total, ${swapsWithBothSides} with both sold+bought data`);
   
   // Print recent
   console.log("\n🕐 Most recent trades:");

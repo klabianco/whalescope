@@ -37,20 +37,30 @@ export default function SearchPage() {
   return (
     <>
       <Header />
+      <style>{`
+        @media (max-width: 640px) {
+          .ws-search-form { flex-direction: column !important; }
+          .ws-search-btn { width: 100% !important; }
+          .ws-search-heading { font-size: 28px !important; }
+          .ws-search-sub { font-size: 16px !important; }
+          .ws-popular-grid { display: grid !important; grid-template-columns: repeat(3, 1fr) !important; }
+          .ws-popular-link { text-align: center !important; padding: 14px 12px !important; }
+        }
+      `}</style>
       <main style={{ maxWidth: '900px', margin: '0 auto', padding: '0 20px 40px' }}>
         {/* Hero */}
-        <div style={{ textAlign: 'center', marginBottom: '60px' }}>
-          <h1 style={{ fontSize: '36px', fontWeight: '700', marginBottom: '16px' }}>
+        <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+          <h1 className="ws-search-heading" style={{ fontSize: '36px', fontWeight: '700', marginBottom: '12px' }}>
             Token Search
           </h1>
-          <p style={{ fontSize: '18px', color: '#888' }}>
+          <p className="ws-search-sub" style={{ fontSize: '18px', color: '#888' }}>
             Search any Solana token. See who&apos;s holding.
           </p>
         </div>
 
       {/* Search Box */}
       <form onSubmit={handleSearch} style={{ marginBottom: '40px' }}>
-        <div style={{ display: 'flex', gap: '12px' }}>
+        <div className="ws-search-form" style={{ display: 'flex', gap: '12px' }}>
           <input
             type="text"
             value={query}
@@ -64,10 +74,12 @@ export default function SearchPage() {
               border: '1px solid #333',
               borderRadius: '12px',
               color: '#fff',
-              outline: 'none'
+              outline: 'none',
+              minWidth: 0,
             }}
           />
           <button
+            className="ws-search-btn"
             type="submit"
             style={{
               padding: '16px 32px',
@@ -77,7 +89,8 @@ export default function SearchPage() {
               border: 'none',
               borderRadius: '12px',
               fontWeight: '600',
-              cursor: 'pointer'
+              cursor: 'pointer',
+              flexShrink: 0,
             }}
           >
             Search
@@ -93,20 +106,22 @@ export default function SearchPage() {
         <h2 style={{ fontSize: '18px', color: '#888', marginBottom: '16px' }}>
           Popular Tokens
         </h2>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
+        <div className="ws-popular-grid" style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
           {popularTokens.map((token) => (
             <Link
               key={token.mint}
               href={`/token/${token.mint}`}
+              className="ws-popular-link"
               style={{
-                padding: '12px 20px',
+                padding: '14px 24px',
                 background: '#111118',
                 border: '1px solid #333',
-                borderRadius: '8px',
+                borderRadius: '10px',
                 color: '#fff',
                 textDecoration: 'none',
-                fontWeight: '500',
-                transition: 'border-color 0.2s'
+                fontWeight: '600',
+                fontSize: '15px',
+                transition: 'border-color 0.2s',
               }}
             >
               {token.symbol}
