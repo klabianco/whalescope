@@ -10,15 +10,31 @@
 
 import { readFileSync, writeFileSync, existsSync } from 'fs';
 import { join } from 'path';
-import { createClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
-// --- Config ---
+// --- Load local config ---
+function loadLocalConfig(): Record<string, string> {
+  try {
+    const configPath = join(process.env.HOME || '', '.config', 'whalescope', 'config.json');
+    if (existsSync(configPath)) {
+      return JSON.parse(readFileSync(configPath, 'utf-8'));
+    }
+  } catch {}
+  return {};
+}
+
+const localConfig = loadLocalConfig();
+
+// --- Config (env vars override local config) ---
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://mamjtxguzewxslbattal.supabase.co';
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY || '';
-const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || '';
-const DISCORD_WEBHOOK_URL = process.env.DISCORD_WEBHOOK_URL || '';
+const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || localConfig.telegram_bot_token || '';
+const DISCORD_WEBHOOK_URL = process.env.DISCORD_WEBHOOK_URL || localConfig.discord_webhook_url || '';
 
-const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+let supabase: SupabaseClient | null = null;
+if (SUPABASE_KEY) {
+  supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+}
 
 // --- Types ---
 interface CongressTrade {
@@ -175,7 +191,7 @@ async function sendDiscord(message: object): Promise<boolean> {
 
 // --- Subscriber Lookup ---
 async function getProSubscribers(): Promise<{ telegram_chat_id: string | null; discord_user_id: string | null }[]> {
-  if (!SUPABASE_KEY) {
+  if (!supabase || !SUPABASE_KEY) {
     console.log('  No Supabase key — skipping subscriber lookup');
     return [];
   }
