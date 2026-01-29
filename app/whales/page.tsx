@@ -117,6 +117,20 @@ export default function WhalesPage() {
   const recentTradeCount = useMemo(() => ALL_TRADES.filter(isRecentTrade).length, []);
   const uniqueWhales = useMemo(() => new Set(ALL_TRADES.map(t => t.wallet)).size, []);
 
+  // Most active whales (last 30 days)
+  const topWhales = useMemo(() => {
+    const oneMonthAgo = Date.now() / 1000 - 30 * 24 * 60 * 60;
+    const counts: Record<string, { label: string; value: string; count: number }> = {};
+    ALL_TRADES.filter(t => t.timestamp > oneMonthAgo).forEach(t => {
+      if (!counts[t.wallet]) counts[t.wallet] = { label: t.walletLabel, value: t.walletValue, count: 0 };
+      counts[t.wallet].count++;
+    });
+    return Object.entries(counts)
+      .sort((a, b) => b[1].count - a[1].count)
+      .slice(0, 8)
+      .map(([address, info]) => ({ address, ...info }));
+  }, []);
+
   const filteredTrades = ALL_TRADES.filter(t => {
     if (!isPro && isRecentTrade(t)) return false;
     if (filter === 'buy') return t.action === 'BUY';
@@ -172,6 +186,65 @@ export default function WhalesPage() {
                 padding: '6px 14px', fontSize: '13px', fontWeight: '600', cursor: 'pointer',
               }}>Upgrade to Pro</button>
             </Link>
+          </div>
+        )}
+
+        {/* Most Active Whales */}
+        {topWhales.length > 0 && (
+          <div style={{ marginBottom: '40px' }}>
+            <h2 style={{ fontSize: '20px', marginBottom: '16px', color: '#fff' }}>
+              Most Active Whales
+            </h2>
+            <div style={{ display: 'flex', gap: '12px', overflowX: 'auto', paddingBottom: '8px' }}>
+              {topWhales.map((whale) => {
+                const isFollowing = followingWallets.includes(whale.address);
+                const displayName = whale.label || shortAddress(whale.address);
+                return (
+                  <div
+                    key={whale.address}
+                    style={{
+                      background: '#111118',
+                      border: '1px solid #222',
+                      borderRadius: '12px',
+                      padding: '16px 20px',
+                      minWidth: '180px',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '8px',
+                    }}
+                  >
+                    <button
+                      onClick={() => {
+                        if (connected) toggleFollow(whale.address);
+                        else document.querySelector<HTMLButtonElement>('.wallet-adapter-button')?.click();
+                      }}
+                      style={{
+                        padding: '4px 10px',
+                        background: isFollowing ? FOLLOW_BUTTON.activeBg : FOLLOW_BUTTON.inactiveBg,
+                        color: isFollowing ? FOLLOW_BUTTON.activeColor : FOLLOW_BUTTON.inactiveColor,
+                        border: isFollowing ? FOLLOW_BUTTON.activeBorder : FOLLOW_BUTTON.inactiveBorder,
+                        borderRadius: '6px',
+                        fontSize: '12px',
+                        fontWeight: '600',
+                        cursor: 'pointer',
+                        alignSelf: 'flex-start',
+                      }}
+                    >
+                      {isFollowing ? '✓ Following' : 'Follow'}
+                    </button>
+                    <Link
+                      href={`/wallet/${whale.address}`}
+                      style={{ textDecoration: 'none' }}
+                    >
+                      <span style={{ color: '#fff', fontWeight: '600' }}>{displayName}</span>
+                    </Link>
+                    <div style={{ color: '#888', fontSize: '13px' }}>
+                      {whale.count} trades
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         )}
 
