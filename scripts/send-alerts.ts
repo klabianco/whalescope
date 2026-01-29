@@ -11,6 +11,7 @@
 import { readFileSync, writeFileSync, existsSync } from 'fs';
 import { join } from 'path';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import { sendPushNotifications } from './send-push-notification';
 
 // --- Load local config ---
 function loadLocalConfig(): Record<string, string> {
@@ -362,9 +363,35 @@ async function main() {
     }
   }
 
+  // --- Web Push notifications ---
+  let pushResult = { sent: 0, failed: 0, cleaned: 0 };
+
+  if (newCongress.length > 0) {
+    const pushTitle = `🏛️ ${newCongress.length} New Congress Trade${newCongress.length > 1 ? 's' : ''}`;
+    const first = newCongress[0];
+    const pushBody = newCongress.length === 1
+      ? `${first.politician}: ${first.type} $${first.ticker} (${first.amount})`
+      : `${first.politician} ${first.type.toLowerCase()}d $${first.ticker} and ${newCongress.length - 1} more`;
+    pushResult = await sendPushNotifications(pushTitle, pushBody, 'https://whalescope.app/congress');
+  }
+
+  if (newWhales.length > 0) {
+    const pushTitle = `🐋 ${newWhales.length} New Whale Trade${newWhales.length > 1 ? 's' : ''}`;
+    const first = newWhales[0];
+    const label = first.walletLabel || `${first.wallet.slice(0, 6)}...`;
+    const pushBody = newWhales.length === 1
+      ? `${label}: ${first.description || first.action}`
+      : `${label} and ${newWhales.length - 1} more whale trades`;
+    const whalePush = await sendPushNotifications(pushTitle, pushBody, 'https://whalescope.app');
+    pushResult.sent += whalePush.sent;
+    pushResult.failed += whalePush.failed;
+    pushResult.cleaned += whalePush.cleaned;
+  }
+
   console.log(`\n✅ Alerts sent:`);
   console.log(`   Telegram: ${telegramSent}`);
   console.log(`   Discord: ${discordSent}`);
+  console.log(`   Push: ${pushResult.sent} (${pushResult.failed} failed, ${pushResult.cleaned} cleaned)`);
 }
 
 main().catch(console.error);

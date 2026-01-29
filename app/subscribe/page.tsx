@@ -8,6 +8,7 @@ import { PublicKey, Transaction } from '@solana/web3.js';
 import { createTransferInstruction, getAssociatedTokenAddress, TOKEN_PROGRAM_ID } from '@solana/spl-token';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
+import { PushNotificationButton } from '../components/PushNotificationButton';
 import { trackSubscribeView, trackWalletConnect, trackPaymentStart, trackPaymentSuccess } from '../lib/tracking';
 
 const WALLET = new PublicKey(process.env.NEXT_PUBLIC_TREASURY_WALLET || 'CPcrV6UeL8CcEvC7rCV6iyUDxbkT5bkJifbz5PUs6zfg');
@@ -259,6 +260,9 @@ function SubscribeContent() {
                   <div style={{ color: '#fff', fontSize: '13px', fontWeight: '600', marginBottom: '4px' }}>Set up Watchlist</div>
                   <div style={{ color: '#71717a', fontSize: '11px', lineHeight: '1.4' }}>Track your favorite wallets</div>
                 </a>
+              </div>
+              <div style={{ marginTop: '12px' }}>
+                <PushNotificationButton />
               </div>
             </div>
           </div>

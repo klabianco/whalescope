@@ -6,6 +6,7 @@ import { useWallet } from '@solana/wallet-adapter-react';
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
+import { PushNotificationButton } from '../components/PushNotificationButton';
 
 interface AccountData {
   plan: string;
@@ -455,6 +456,9 @@ export default function AccountPage() {
                       Connect Telegram
                     </a>
                   </div>
+
+                  {/* Push Notifications */}
+                  <PushNotificationButton />
                 </div>
               </div>
             )}
