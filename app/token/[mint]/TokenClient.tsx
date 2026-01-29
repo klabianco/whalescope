@@ -213,11 +213,12 @@ export default function TokenClient({ mint }: { mint: string }) {
       return (
         <WalletMultiButton style={{
           padding: '6px 12px',
-          background: '#333',
-          color: '#fff',
+          background: '#4ade80',
+          color: '#000',
           border: 'none',
           borderRadius: '6px',
           fontSize: '12px',
+          fontWeight: '600',
           height: 'auto'
         }}>Follow</WalletMultiButton>
       );
@@ -229,11 +230,12 @@ export default function TokenClient({ mint }: { mint: string }) {
         onClick={() => handleFollow(address)}
         style={{
           padding: '6px 12px',
-          background: isFollowing ? '#333' : '#222',
-          color: '#fff',
+          background: isFollowing ? '#333' : '#4ade80',
+          color: isFollowing ? '#fff' : '#000',
           border: 'none',
           borderRadius: '6px',
           fontSize: '12px',
+          fontWeight: '600',
           cursor: 'pointer'
         }}
       >
