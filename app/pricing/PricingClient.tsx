@@ -190,8 +190,8 @@ export default function PricingClient() {
               </p>
               <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 {[
-                  'Congress trade feed',
-                  'Whale trade feed',
+                  'Congress trades (24h delay)',
+                  'Whale trades (24h delay)',
                   'Top 50 leaderboard',
                   '3 watchlist slots',
                   'Solana only',
