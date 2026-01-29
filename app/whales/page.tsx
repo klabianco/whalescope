@@ -172,7 +172,6 @@ export default function WhalesPage() {
                 actorMeta={<span style={{ color: '#555' }}>{trade.walletValue}</span>}
                 timestamp={formatTime(trade.timestamp)}
                 highlight={symbol}
-                highlightMeta={trade.description ? trade.description.slice(0, 60) : undefined}
                 bottomRight={
                   <div style={{ textAlign: 'right' }}>
                     <div style={{ color: '#fff', fontWeight: '500' }}>
