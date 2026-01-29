@@ -389,20 +389,24 @@ export default function WatchlistPage() {
             textAlign: 'center',
             marginTop: '24px'
           }}>
-            <p style={{ color: '#888', marginBottom: '12px' }}>
-              🔔 Want alerts when your watchlist makes moves?
+            <p style={{ color: '#fff', fontWeight: '600', fontSize: '16px', marginBottom: '8px' }}>
+              🔔 Get alerts when your watchlist makes moves
             </p>
-            <button style={{
-              background: '#fff',
-              color: '#000',
-              padding: '12px 24px',
-              borderRadius: '8px',
-              fontWeight: '600',
-              border: 'none',
-              cursor: 'pointer'
-            }}>
-              Coming Soon
-            </button>
+            <p style={{ color: '#888', fontSize: '13px', marginBottom: '16px' }}>
+              Email digests or real-time Telegram alerts.
+            </p>
+            <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
+              <Link href="/pricing" style={{
+                background: '#fff',
+                color: '#000',
+                padding: '12px 24px',
+                borderRadius: '8px',
+                fontWeight: '600',
+                textDecoration: 'none',
+              }}>
+                Upgrade to Pro
+              </Link>
+            </div>
           </div>
         )}
       </main>
