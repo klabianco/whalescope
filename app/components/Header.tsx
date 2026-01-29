@@ -63,7 +63,7 @@ export const Header: FC = () => {
             fontSize: '14px',
             fontWeight: '600',
             height: '40px'
-          }} />
+          }}>Connect Wallet</WalletMultiButton>
         </nav>
 
         {/* Mobile hamburger button */}
@@ -128,7 +128,7 @@ export const Header: FC = () => {
               fontWeight: '600',
               height: '40px',
               width: '100%',
-            }} />
+            }}>Connect Wallet</WalletMultiButton>
           </div>
         </nav>
       )}

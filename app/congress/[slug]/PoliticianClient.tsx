@@ -151,7 +151,7 @@ export default function PoliticianClient({ slug }: { slug: string }) {
           textOverflow: 'ellipsis',
           whiteSpace: 'nowrap',
           flexShrink: 0,
-        }} />
+        }}>Follow</WalletMultiButton>
       );
     }
     

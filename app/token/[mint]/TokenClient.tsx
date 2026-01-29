@@ -219,7 +219,7 @@ export default function TokenClient({ mint }: { mint: string }) {
           borderRadius: '6px',
           fontSize: '12px',
           height: 'auto'
-        }} />
+        }}>Follow</WalletMultiButton>
       );
     }
     
