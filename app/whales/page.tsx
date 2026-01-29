@@ -36,8 +36,6 @@ const TRADES: WhaleTrade[] = (tradesData as WhaleTrade[])
 const ACTION_BADGES: Record<string, { bg: string; color: string; label: string }> = {
   BUY: { bg: '#064e3b', color: '#4ade80', label: 'BUY' },
   SELL: { bg: '#7f1d1d', color: '#f87171', label: 'SELL' },
-  TRANSFER: { bg: '#1e1b4b', color: '#a78bfa', label: 'TRANSFER' },
-  UNKNOWN: { bg: '#333', color: '#888', label: '???' },
 };
 
 function isRecentTrade(trade: WhaleTrade): boolean {
@@ -80,11 +78,13 @@ export default function WhalesPage() {
   const recentTradeCount = useMemo(() => TRADES.filter(isRecentTrade).length, []);
   const uniqueWhales = useMemo(() => new Set(TRADES.map(t => t.wallet)).size, []);
 
-  const filteredTrades = TRADES.filter(t => {
+  // Only show buys and sells (no transfers)
+  const buysSells = TRADES.filter(t => t.action === 'BUY' || t.action === 'SELL');
+
+  const filteredTrades = buysSells.filter(t => {
     if (!isPro && isRecentTrade(t)) return false;
     if (filter === 'buy') return t.action === 'BUY';
     if (filter === 'sell') return t.action === 'SELL';
-    if (filter === 'transfer') return t.action === 'TRANSFER';
     return true;
   });
 
@@ -92,7 +92,6 @@ export default function WhalesPage() {
     { key: 'all', label: 'All Trades' },
     { key: 'buy', label: 'Buys' },
     { key: 'sell', label: 'Sells' },
-    { key: 'transfer', label: 'Transfers' },
   ];
 
   return (
@@ -124,8 +123,8 @@ export default function WhalesPage() {
         }}>
           {[
             { value: uniqueWhales, label: 'Whales Tracked', color: '#fff' },
-            { value: TRADES.length, label: 'Recent Trades', color: '#fff' },
-            { value: TRADES.filter(t => t.action === 'BUY').length, label: 'Buys', color: '#4ade80' },
+            { value: buysSells.length, label: 'Recent Trades', color: '#fff' },
+            { value: buysSells.filter(t => t.action === 'BUY').length, label: 'Buys', color: '#4ade80' },
           ].map(({ value, label, color }) => (
             <div key={label} style={{
               background: '#111118',

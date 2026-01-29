@@ -107,12 +107,23 @@ function parseTradeAction(tx: ParsedTransaction, walletAddress: string): WhaleTr
     
     if (received && !sent) return "BUY";
     if (sent && !received) return "SELL";
-    // Both directions = swap between tokens
-    if (received && sent) return "BUY"; // acquired a new token
+    if (received && sent) return "BUY";
   }
   
+  // Classify transfers by direction (outbound = sell, inbound = buy)
   if (tx.type === "TRANSFER" || desc.includes("transfer")) {
-    return "TRANSFER";
+    const tokenTransfers = tx.tokenTransfers || [];
+    const nativeTransfers = tx.nativeTransfers || [];
+    
+    const sentToken = tokenTransfers.find(t => t.fromUserAccount === walletAddress);
+    const receivedToken = tokenTransfers.find(t => t.toUserAccount === walletAddress);
+    const sentNative = nativeTransfers.find(t => t.fromUserAccount === walletAddress);
+    const receivedNative = nativeTransfers.find(t => t.toUserAccount === walletAddress);
+    
+    if (sentToken && !receivedToken) return "SELL";
+    if (receivedToken && !sentToken) return "BUY";
+    if (sentNative && !receivedNative) return "SELL";
+    if (receivedNative && !sentNative) return "BUY";
   }
   
   return "UNKNOWN";
