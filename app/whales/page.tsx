@@ -29,24 +29,24 @@ interface CongressTrade {
   traded: string;
 }
 
+// Wallet labels based on verified on-chain data only. No unverified entity claims.
 const CRYPTO_WHALES: Whale[] = [
-  { name: "Jump Crypto", type: "Market Maker", address: "5Q544fKrFoe6tsEbD7S8EmxGTJYAKtTVhAW5Q5pge4j1", description: "Major crypto trading firm", market: 'crypto' },
-  { name: "Wintermute", type: "Market Maker", address: "CuieVDEDtLo7FypA9SbLM9saXFdb1dsshEkyErMqkRQq", description: "Algorithmic trading firm", market: 'crypto' },
-  { name: "Binance", type: "Exchange", address: "5tzFkiKscXHK5ZXCGbXZxdw7gTjjD1mBwuoFbhUvuAi9", description: "Binance hot wallet", market: 'crypto' },
-  { name: "Coinbase Prime", type: "Exchange", address: "GJRs4FwHtemZ5ZE9x3FNvJ8TMwitKTh21yxdRPqn7npE", description: "Institutional custody", market: 'crypto' },
-  { name: "Solana Foundation", type: "Foundation", address: "GK2zqSsXLA2rwVZk347RYhh6jJpRsCA69FjLW93ZGi3B", description: "Official foundation wallet", market: 'crypto' },
-  { name: "Multicoin Capital", type: "VC", address: "AKnL4NNf3DGWZJS6cPknBuEGnVsV4A4m5tgebLHaRSZ9", description: "Crypto VC fund", market: 'crypto' },
-  { name: "Paradigm", type: "VC", address: "HN7cABqLq46Es1jh92dQQisAq662SmxELLLsHHe4YWrH", description: "Major crypto VC", market: 'crypto' },
-  { name: "Kraken", type: "Exchange", address: "FWznbcNXWQuHTawe9RxvQ2LdCENssh12dsznf4RiouN5", description: "Kraken exchange", market: 'crypto' },
-  { name: "Galaxy Digital", type: "VC", address: "E6aTzkZKdCECgpDtBZtVpqiHwfoxx3XpEfH4yjnBPMNE", description: "Novogratz's fund", market: 'crypto' },
-  { name: "Polychain Capital", type: "VC", address: "FYSvSgMqmPEhNWHQkdehrPQdrb6WVSzMBLRNV6aHMFJN", description: "Major crypto VC", market: 'crypto' },
+  { name: "Whale #1 (Exchange Pattern)", type: "Exchange", address: "5tzFkiKscXHK5ZXCGbXZxdw7gTjjD1mBwuoFbhUvuAi9", description: "1.1M+ SOL. High-volume daily transfers.", market: 'crypto' },
+  { name: "Whale #2 (Exchange Pattern)", type: "Exchange", address: "AC5RDfQFmDS1deWZos921JfqscXdByf8BKHs5ACWjtW2", description: "286K+ SOL. Active daily transfers.", market: 'crypto' },
+  { name: "Whale #3 (DeFi Trader)", type: "Active Trader", address: "5Q544fKrFoe6tsEbD7S8EmxGTJYAKtTVhAW5Q5pge4j1", description: "Active Raydium DEX trader. High tx volume.", market: 'crypto' },
+  { name: "Whale #4 (Top Holder)", type: "Whale", address: "MJKqp326RZCHnAAbew9MDdui3iCKWco7fsK9sVuZTX2", description: "#1 SOL holder. 5.17M SOL (1.01% supply).", market: 'crypto' },
+  { name: "Whale #5 (Top Holder)", type: "Whale", address: "52C9T2T7JRojtxumYnYZhyUmrN7kqzvCLc4Ksvjk7TxD", description: "#2 SOL holder. 4.37M SOL (0.85% supply).", market: 'crypto' },
+  { name: "Whale #6 (Top Holder)", type: "Whale", address: "8BseXT9EtoEhBTKFFYkwTnjKSUZwhtmdKY2Jrj8j45Rt", description: "#3 SOL holder. 3.93M SOL (0.77% supply).", market: 'crypto' },
+  { name: "Whale #7 (Top Holder)", type: "Whale", address: "GitYucwpNcg6Dx1Y15UQ9TQn8LZMX1uuqQNn8rXxEWNC", description: "#4 SOL holder. 3.63M SOL (0.71% supply).", market: 'crypto' },
+  { name: "Whale #8 (Top Holder)", type: "Whale", address: "9QgXqrgdbVU8KcpfskqJpAXKzbaYQJecgMAruSWoXDkM", description: "#5 SOL holder. 3.14M SOL (0.61% supply).", market: 'crypto' },
+  { name: "Whale #9 (High Volume)", type: "Active Trader", address: "5VCwKtCXgCJ6kit5FybXjvriW3xELsFDhYrPSqtJNmcD", description: "7,359 SOL single transfer. High activity.", market: 'crypto' },
+  { name: "Whale #10 (Top Holder)", type: "Whale", address: "9uRJ5aGgeu2i3J98hsC5FDxd2PmRjVy9fQwNAy7fzLG3", description: "#6 SOL holder. 2.87M SOL (0.56% supply).", market: 'crypto' },
 ];
 
 const TYPE_COLORS: Record<string, string> = {
-  'Market Maker': '#60a5fa',
   'Exchange': '#fbbf24',
-  'Foundation': '#a78bfa',
-  'VC': '#4ade80',
+  'Active Trader': '#60a5fa',
+  'Whale': '#4ade80',
   'Congress-D': '#60a5fa',
   'Congress-R': '#f87171',
   'Congress-I': '#a78bfa',
