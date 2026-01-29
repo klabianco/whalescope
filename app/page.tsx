@@ -49,6 +49,7 @@ export default function Home() {
   const [congressTrades, setCongressTrades] = useState<CongressTrade[]>([]);
   const [followingWallets, setFollowingWallets] = useState<string[]>([]);
   const [limitWarning, setLimitWarning] = useState(false);
+  const [toast, setToast] = useState<{ message: string; show: boolean }>({ message: '', show: false });
   const { publicKey } = useWallet();
 
   // Storage key: wallet address if connected, otherwise a persistent anonymous ID
@@ -101,6 +102,11 @@ export default function Home() {
     } catch {}
   }, [publicKey]);
 
+  function showToast(message: string) {
+    setToast({ message, show: true });
+    setTimeout(() => setToast(t => ({ ...t, show: false })), 4000);
+  }
+
   function toggleFollow(address: string) {
     if (!storageKey) return;
     if (followingWallets.includes(address)) {
@@ -108,6 +114,7 @@ export default function Home() {
       localStorage.setItem(`whales_${storageKey}`, JSON.stringify(newList));
       setFollowingWallets(newList);
       setLimitWarning(false);
+      showToast('Removed from your watchlist');
       return;
     }
     if (followingWallets.length >= FREE_WATCHLIST_LIMIT) {
@@ -117,6 +124,7 @@ export default function Home() {
     const newList = [...followingWallets, address];
     localStorage.setItem(`whales_${storageKey}`, JSON.stringify(newList));
     setFollowingWallets(newList);
+    showToast('Added to your watchlist');
   }
 
   const whaleTrades = useMemo(() => {
@@ -346,6 +354,43 @@ export default function Home() {
         />
 
       </main>
+
+      {/* Toast notification */}
+      {toast.show && (
+        <div style={{
+          position: 'fixed',
+          bottom: '24px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          background: '#1a1a24',
+          border: '1px solid #333',
+          borderRadius: '10px',
+          padding: '12px 20px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '12px',
+          zIndex: 1000,
+          boxShadow: '0 4px 20px rgba(0,0,0,0.5)',
+          animation: 'fadeInUp 0.2s ease-out',
+        }}>
+          <span style={{ color: '#fff', fontSize: '14px' }}>{toast.message}</span>
+          <Link href="/watchlist" style={{
+            color: '#4ade80',
+            fontSize: '14px',
+            fontWeight: '600',
+            textDecoration: 'none',
+            whiteSpace: 'nowrap',
+          }}>
+            View Watchlist →
+          </Link>
+        </div>
+      )}
+      <style>{`
+        @keyframes fadeInUp {
+          from { opacity: 0; transform: translateX(-50%) translateY(10px); }
+          to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+      `}</style>
 
       <Footer />
     </>
