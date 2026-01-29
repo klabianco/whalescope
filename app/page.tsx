@@ -369,10 +369,10 @@ export default function Home() {
           >
             <div style={{ fontSize: '36px', marginBottom: '12px' }}>🐋</div>
             <h2 style={{ color: '#fff', fontSize: '20px', fontWeight: '700', marginBottom: '8px' }}>
-              Follow whales to get alerts
+              Your wallet is your account
             </h2>
             <p style={{ color: '#888', fontSize: '14px', lineHeight: '1.5', marginBottom: '24px' }}>
-              Connect your Solana wallet to follow whale wallets and get notified when they make moves. Free — up to 3 wallets.
+              No signup needed. Connect your Solana wallet to save your watchlist and get alerts when whales trade.
             </p>
             <button
               onClick={() => {
