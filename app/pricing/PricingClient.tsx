@@ -256,6 +256,8 @@ export default function PricingClient() {
                   'Real-time congress trade alerts',
                   'Discord community + alert channel',
                   'Telegram bot alerts',
+                  'Push notifications',
+                  'Email alerts',
                   'Congress trades (no delay)',
                   'Full trade history & analytics',
                   'Unlimited watchlist',
