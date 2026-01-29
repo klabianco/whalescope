@@ -172,20 +172,25 @@ export default function WhalesPage() {
                 actorMeta={<span style={{ color: '#555' }}>{trade.walletValue}</span>}
                 timestamp={formatTime(trade.timestamp)}
                 highlight={symbol}
-                highlightMeta={
-                  trade.tokenAmount !== undefined
-                    ? `${formatAmount(trade.tokenAmount)} ${symbol}`
-                    : undefined
-                }
+                highlightMeta={trade.description ? trade.description.slice(0, 60) : undefined}
                 bottomRight={
-                  <a
-                    href={`https://solscan.io/tx/${trade.signature}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{ color: '#60a5fa', fontSize: '12px', textDecoration: 'none' }}
-                  >
-                    View tx ↗
-                  </a>
+                  <div style={{ textAlign: 'right' }}>
+                    <div style={{ color: '#fff', fontWeight: '500' }}>
+                      {trade.tokenAmount !== undefined
+                        ? `${formatAmount(trade.tokenAmount)} ${symbol}`
+                        : '—'}
+                    </div>
+                    <div style={{ color: '#666', fontSize: '12px' }}>
+                      <a
+                        href={`https://solscan.io/tx/${trade.signature}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ color: '#60a5fa', textDecoration: 'none' }}
+                      >
+                        View on Solscan ↗
+                      </a>
+                    </div>
+                  </div>
                 }
               />
             );
