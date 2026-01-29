@@ -15,7 +15,10 @@ export const Header: FC = () => {
     { href: '/leaderboard', label: 'Leaderboard' },
     { href: '/search', label: 'Tokens' },
     { href: '/pricing', label: 'Pricing' },
-    ...(publicKey ? [{ href: '/watchlist', label: 'Watchlist' }] : []),
+    ...(publicKey ? [
+      { href: '/watchlist', label: 'Watchlist' },
+      { href: '/account', label: 'Account' },
+    ] : []),
   ];
 
   return (
