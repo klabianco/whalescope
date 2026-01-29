@@ -157,7 +157,7 @@ export default function LeaderboardClient({ leaderboard, cryptoLeaderboard }: Pr
             WebkitTextFillColor: 'transparent',
             letterSpacing: '-1px'
           }}>
-            {tab === 'congress' ? 'Congressional Trading Leaderboard' : 'Crypto Whale Leaderboard'}
+            {tab === 'congress' ? 'Politician Trading Leaderboard' : 'Crypto Whale Leaderboard'}
           </h1>
           <p style={{ color: '#71717a', fontSize: '16px', maxWidth: '500px', margin: '0 auto' }}>
             {tab === 'congress'
@@ -181,7 +181,7 @@ export default function LeaderboardClient({ leaderboard, cryptoLeaderboard }: Pr
                 fontSize: '15px', fontWeight: tab === 'congress' ? '600' : '400', cursor: 'pointer',
               }}
             >
-              🏛️ Congress
+              🏛️ Politicians
             </button>
             <button
               onClick={() => switchTab('crypto')}

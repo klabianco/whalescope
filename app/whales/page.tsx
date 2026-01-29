@@ -276,7 +276,7 @@ export default function WhalesPage() {
       <Header />
       <main style={{ maxWidth: '900px', margin: '0 auto', padding: '0 20px 40px' }}>
         <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-          <h1 style={{ fontSize: '36px', marginBottom: '8px' }}>Whale Tracker</h1>
+          <h1 style={{ fontSize: '36px', marginBottom: '8px' }}>Crypto Tracker</h1>
           <p style={{ color: '#888', marginBottom: '8px' }}>
             Real-time trades from the biggest wallets on Solana
           </p>

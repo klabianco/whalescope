@@ -85,8 +85,8 @@ export default function Home() {
             borderRadius: '12px',
             textDecoration: 'none',
           }}>
-            <div style={{ color: '#fff', fontWeight: '600', fontSize: '18px', marginBottom: '8px' }}>Smart Money</div>
-            <div style={{ color: '#888', fontSize: '14px' }}>Track crypto whales & Congress trades</div>
+            <div style={{ color: '#fff', fontWeight: '600', fontSize: '18px', marginBottom: '8px' }}>Crypto</div>
+            <div style={{ color: '#888', fontSize: '14px' }}>Track crypto whale wallets in real-time</div>
           </Link>
           
           <Link href="/search" style={{

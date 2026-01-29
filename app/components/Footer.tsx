@@ -23,10 +23,10 @@ export const Footer = () => {
         flexWrap: 'wrap'
       }}>
         <Link href="/whales" style={{ color: '#666', textDecoration: 'none', fontSize: '14px' }}>
-          Smart Money
+          Crypto
         </Link>
         <Link href="/congress" style={{ color: '#666', textDecoration: 'none', fontSize: '14px' }}>
-          Congress
+          Politicians
         </Link>
         <Link href="/leaderboard" style={{ color: '#666', textDecoration: 'none', fontSize: '14px' }}>
           Leaderboard

@@ -190,7 +190,7 @@ export default function PricingClient() {
               </p>
               <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 {[
-                  'Congress trades (24h delay)',
+                  'Politician trades (24h delay)',
                   'Whale trades (24h delay)',
                   'Top 50 leaderboard',
                   '3 watchlist slots',
@@ -277,7 +277,7 @@ export default function PricingClient() {
               </p>
               <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 {[
-                  'Real-time congress trade alerts',
+                  'Real-time politician trade alerts',
                   'Real-time whale trade alerts',
                   'Discord community + alert channel',
                   'Telegram bot alerts',
@@ -338,7 +338,7 @@ export default function PricingClient() {
             <div style={{ color: '#71717a', fontSize: '14px', textAlign: 'center', padding: '12px 0', borderTop: '1px solid #27272a' }}>$588/yr</div>
 
             {/* Congress trades */}
-            <div style={{ color: '#a1a1aa', fontSize: '14px', padding: '12px 0', borderTop: '1px solid #27272a' }}>Congress trades</div>
+            <div style={{ color: '#a1a1aa', fontSize: '14px', padding: '12px 0', borderTop: '1px solid #27272a' }}>Politician trades</div>
             <div style={{ display: 'flex', justifyContent: 'center', padding: '12px 0', borderTop: '1px solid #27272a' }}><CheckIcon /></div>
             <div style={{ display: 'flex', justifyContent: 'center', padding: '12px 0', borderTop: '1px solid #27272a' }}><CheckIcon /></div>
             <div style={{ display: 'flex', justifyContent: 'center', padding: '12px 0', borderTop: '1px solid #27272a' }}><XIcon /></div>
@@ -438,7 +438,7 @@ export default function PricingClient() {
           <EmailCapture 
             source="pricing"
             headline="Not ready for Pro yet?"
-            subtext="Get a free weekly email with the best congress trades and whale moves. Upgrade anytime."
+            subtext="Get a free weekly email with the best politician trades and whale moves. Upgrade anytime."
             buttonText="Get Free Alerts"
           />
         </div>

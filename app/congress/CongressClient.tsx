@@ -103,12 +103,12 @@ export default function CongressClient({ trades, topTraders, committeeData, poli
       <Header />
       <main style={{ maxWidth: '900px', margin: '0 auto', padding: '0 20px 40px' }}>
         <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-          <h1 style={{ fontSize: '36px', marginBottom: '8px' }}>Congress Tracker</h1>
+          <h1 style={{ fontSize: '36px', marginBottom: '8px' }}>Politician Tracker</h1>
           <p style={{ color: '#888', marginBottom: '8px' }}>
             See what politicians are buying and selling
           </p>
           <p style={{ color: '#4ade80', fontSize: '14px', fontWeight: '600', marginBottom: '16px' }}>
-            Tracking {politicians.length} members of Congress
+            Tracking {politicians.length} politicians
           </p>
           <div style={{ display: 'flex', justifyContent: 'center', gap: '16px' }}>
             <Link href="/leaderboard" style={{ color: '#4ade80', textDecoration: 'none' }}>
@@ -247,7 +247,7 @@ export default function CongressClient({ trades, topTraders, committeeData, poli
         <div style={{ marginTop: '40px' }}>
           <EmailCapture
             source="congress"
-            headline="Get weekly congress trade alerts"
+            headline="Get weekly politician trade alerts"
             subtext="The biggest trades from Capitol Hill, delivered free to your inbox every week."
             buttonText="Get Free Alerts"
           />
