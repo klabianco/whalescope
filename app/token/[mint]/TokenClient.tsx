@@ -284,7 +284,8 @@ export default function TokenClient({ mint }: { mint: string }) {
                   justifyContent: 'space-between',
                   alignItems: 'center'
                 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <FollowButton address={holder.address} />
                     <span style={{ 
                       color: '#666', 
                       fontSize: '14px',
@@ -312,7 +313,6 @@ export default function TokenClient({ mint }: { mint: string }) {
                         {holder.percentage.toFixed(2)}%
                       </div>
                     </div>
-                    <FollowButton address={holder.address} />
                   </div>
                 </div>
               ))}
@@ -348,7 +348,8 @@ export default function TokenClient({ mint }: { mint: string }) {
                   justifyContent: 'space-between',
                   alignItems: 'center'
                 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <FollowButton address={buyer.address} />
                     <span style={{ 
                       color: i < 3 ? '#fbbf24' : '#666', 
                       fontSize: '14px',
@@ -370,21 +371,18 @@ export default function TokenClient({ mint }: { mint: string }) {
                       </div>
                     </div>
                   </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                    <div style={{ textAlign: 'right' }}>
-                      <div style={{ color: '#fff', fontWeight: '600' }}>
-                        {formatNumber(buyer.amount)}
-                      </div>
-                      <a 
-                        href={`https://solscan.io/tx/${buyer.signature}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        style={{ color: '#888', fontSize: '12px', textDecoration: 'none' }}
-                      >
-                        View tx →
-                      </a>
+                  <div style={{ textAlign: 'right' }}>
+                    <div style={{ color: '#fff', fontWeight: '600' }}>
+                      {formatNumber(buyer.amount)}
                     </div>
-                    <FollowButton address={buyer.address} />
+                    <a 
+                      href={`https://solscan.io/tx/${buyer.signature}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ color: '#888', fontSize: '12px', textDecoration: 'none' }}
+                    >
+                      View tx →
+                    </a>
                   </div>
                 </div>
               ))}
