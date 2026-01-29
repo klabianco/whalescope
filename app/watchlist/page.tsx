@@ -369,71 +369,62 @@ export default function WatchlistPage() {
 
         {!isEmpty && !publicKey && (
           <div style={{
-            background: '#111118',
-            border: '1px solid #1e3a5f',
-            padding: '16px 20px',
-            borderRadius: '10px',
-            marginTop: '24px',
-            fontSize: '13px',
-            color: '#888',
-          }}>
-            💡 Your watchlist is saved to this browser. Connect a Solana wallet to sync across devices.
-          </div>
-        )}
-
-        {!isEmpty && (
-          <div style={{
             background: 'linear-gradient(135deg, #1e3a5f 0%, #1a1a2e 100%)',
-            padding: '24px',
+            padding: '28px',
             borderRadius: '12px',
             textAlign: 'center',
             marginTop: '24px'
           }}>
-            {publicKey ? (
-              <>
-                <p style={{ color: '#fff', fontWeight: '600', fontSize: '16px', marginBottom: '8px' }}>
-                  🔔 Get alerts when your watchlist makes moves
-                </p>
-                <p style={{ color: '#888', fontSize: '13px', marginBottom: '16px' }}>
-                  Email digests or real-time Telegram alerts.
-                </p>
-                <Link href="/pricing" style={{
-                  display: 'inline-block',
-                  background: '#fff',
-                  color: '#000',
-                  padding: '12px 24px',
-                  borderRadius: '8px',
-                  fontWeight: '600',
-                  textDecoration: 'none',
-                }}>
-                  Upgrade to Pro
-                </Link>
-              </>
-            ) : (
-              <>
-                <p style={{ color: '#fff', fontWeight: '600', fontSize: '16px', marginBottom: '8px' }}>
-                  🔔 Want alerts when your watchlist makes moves?
-                </p>
-                <p style={{ color: '#888', fontSize: '13px', marginBottom: '16px' }}>
-                  Connect your wallet to unlock real-time alerts via email or Telegram.
-                </p>
-                <button
-                  onClick={() => document.querySelector<HTMLButtonElement>('.wallet-adapter-button')?.click()}
-                  style={{
-                    background: '#4ade80',
-                    color: '#000',
-                    padding: '12px 24px',
-                    borderRadius: '8px',
-                    fontWeight: '600',
-                    border: 'none',
-                    cursor: 'pointer',
-                    fontSize: '15px',
-                  }}
-                >
-                  Connect Wallet
-                </button>
-              </>
-            )}
+            <p style={{ color: '#fff', fontWeight: '600', fontSize: '17px', marginBottom: '8px' }}>
+              You're following {whaleFollows.length + politicians.length} {whaleFollows.length + politicians.length === 1 ? 'account' : 'accounts'}.
+              Get notified when they trade.
+            </p>
+            <p style={{ color: '#888', fontSize: '13px', marginBottom: '16px' }}>
+              Connect your wallet to get real-time alerts via email or Telegram, and sync your watchlist across devices.
+            </p>
+            <button
+              onClick={() => document.querySelector<HTMLButtonElement>('.wallet-adapter-button')?.click()}
+              style={{
+                background: '#4ade80',
+                color: '#000',
+                padding: '12px 24px',
+                borderRadius: '8px',
+                fontWeight: '600',
+                border: 'none',
+                cursor: 'pointer',
+                fontSize: '15px',
+              }}
+            >
+              Connect Wallet
+            </button>
+          </div>
+        )}
+
+        {!isEmpty && publicKey && (
+          <div style={{
+            background: 'linear-gradient(135deg, #1e3a5f 0%, #1a1a2e 100%)',
+            padding: '28px',
+            borderRadius: '12px',
+            textAlign: 'center',
+            marginTop: '24px'
+          }}>
+            <p style={{ color: '#fff', fontWeight: '600', fontSize: '17px', marginBottom: '8px' }}>
+              🔔 Get alerts when your {whaleFollows.length + politicians.length} follows make moves
+            </p>
+            <p style={{ color: '#888', fontSize: '13px', marginBottom: '16px' }}>
+              Real-time email digests or Telegram alerts.
+            </p>
+            <Link href="/pricing" style={{
+              display: 'inline-block',
+              background: '#fff',
+              color: '#000',
+              padding: '12px 24px',
+              borderRadius: '8px',
+              fontWeight: '600',
+              textDecoration: 'none',
+            }}>
+              Upgrade to Pro
+            </Link>
           </div>
         )}
       </main>

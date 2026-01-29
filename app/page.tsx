@@ -124,7 +124,7 @@ export default function Home() {
     const newList = [...followingWallets, address];
     localStorage.setItem(`whales_${storageKey}`, JSON.stringify(newList));
     setFollowingWallets(newList);
-    showToast('Added to your watchlist');
+    showToast(`Following! ${newList.length} of ${FREE_WATCHLIST_LIMIT} free slots used.`);
   }
 
   const whaleTrades = useMemo(() => {
