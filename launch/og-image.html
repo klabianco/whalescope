@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1200px;
+    height: 630px;
+    background: #09090b;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+  }
+  
+  /* Subtle gradient overlay */
+  .bg-gradient {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(ellipse at 30% 20%, rgba(59, 130, 246, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 80%, rgba(139, 92, 246, 0.06) 0%, transparent 50%);
+  }
+
+  .content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .logo-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .whale-emoji {
+    font-size: 72px;
+    line-height: 1;
+  }
+
+  .brand-name {
+    font-size: 64px;
+    font-weight: 700;
+    color: #f4f4f5;
+    letter-spacing: -1px;
+  }
+
+  .tagline {
+    font-size: 28px;
+    color: #a1a1aa;
+    font-weight: 400;
+    margin-top: -8px;
+  }
+
+  .cards {
+    display: flex;
+    gap: 16px;
+    margin-top: 20px;
+  }
+
+  .card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 16px 20px;
+    width: 220px;
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+
+  .card-icon {
+    font-size: 20px;
+  }
+
+  .card-label {
+    font-size: 13px;
+    color: #71717a;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+  }
+
+  .card-ticker {
+    font-size: 22px;
+    font-weight: 700;
+    color: #f4f4f5;
+  }
+
+  .card-detail {
+    font-size: 14px;
+    color: #a1a1aa;
+    margin-top: 4px;
+  }
+
+  .card-amount {
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 6px;
+  }
+
+  .buy { color: #4ade80; }
+  .sell { color: #f87171; }
+  .whale-move { color: #60a5fa; }
+
+  .footer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+  }
+
+  .footer-text {
+    font-size: 16px;
+    color: #52525b;
+  }
+
+  .footer-url {
+    font-size: 16px;
+    color: #3b82f6;
+    font-weight: 500;
+  }
+</style>
+</head>
+<body>
+  <div class="bg-gradient"></div>
+  <div class="content">
+    <div class="logo-row">
+      <span class="whale-emoji">🐋</span>
+      <span class="brand-name">WhaleScope</span>
+    </div>
+    <div class="tagline">Track Congress Trades & Crypto Whales</div>
+    
+    <div class="cards">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-icon">🏛️</span>
+          <span class="card-label">Congress</span>
+        </div>
+        <div class="card-ticker">NVDA</div>
+        <div class="card-detail">Rep. Pelosi</div>
+        <div class="card-amount buy">BUY · $500K–$1M</div>
+      </div>
+      
+      <div class="card">
+        <div class="card-header">
+          <span class="card-icon">🐋</span>
+          <span class="card-label">Whale</span>
+        </div>
+        <div class="card-ticker">ETH</div>
+        <div class="card-detail">0x7a25...f3e1</div>
+        <div class="card-amount whale-move">MOVED · 12,400 ETH</div>
+      </div>
+      
+      <div class="card">
+        <div class="card-header">
+          <span class="card-icon">🏛️</span>
+          <span class="card-label">Congress</span>
+        </div>
+        <div class="card-ticker">MSFT</div>
+        <div class="card-detail">Sen. Tuberville</div>
+        <div class="card-amount sell">SELL · $250K–$500K</div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span class="card-icon">🐋</span>
+          <span class="card-label">Whale</span>
+        </div>
+        <div class="card-ticker">BTC</div>
+        <div class="card-detail">0x3f8b...a2c9</div>
+        <div class="card-amount whale-move">MOVED · 850 BTC</div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <span class="footer-url">whalescope.app</span>
+      <span class="footer-text">· Free forever · Pro alerts $24/mo</span>
+    </div>
+  </div>
+</body>
+</html>
