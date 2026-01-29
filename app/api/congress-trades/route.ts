@@ -1,34 +1,19 @@
 /**
- * Server-side congress trades API
+ * Server-side congress trades API — reads from Supabase
  * 
  * Free users: trades older than 24h, max 25 results
  * Pro users: all trades, no limits
- * 
- * Auth via wallet address query param checked against Supabase
  */
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
 export const runtime = 'edge';
 
-interface CongressTrade {
-  politician: string;
-  party: string;
-  chamber: string;
-  state?: string;
-  ticker: string;
-  company: string;
-  type: string;
-  amount: string;
-  filed: string;
-  traded: string;
-}
-
-function isRecentTrade(trade: CongressTrade): boolean {
-  const filedDate = new Date(trade.filed + 'T00:00:00');
-  const now = new Date();
-  const hoursSinceFiled = (now.getTime() - filedDate.getTime()) / (1000 * 60 * 60);
-  return hoursSinceFiled < 24;
+function getSupabase() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_KEY!
+  );
 }
 
 async function getUserPlan(request: NextRequest): Promise<string> {
@@ -51,7 +36,6 @@ async function getUserPlan(request: NextRequest): Promise<string> {
       }
     }
 
-    // Check for Supabase auth token
     const authHeader = request.headers.get('authorization');
     if (authHeader?.startsWith('Bearer ')) {
       const token = authHeader.substring(7);
@@ -83,36 +67,61 @@ const FREE_TRADE_LIMIT = 25;
 
 export async function GET(request: NextRequest) {
   try {
-    // Fetch trades from the public static file (same origin)
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://whalescope.app';
-    const tradesRes = await fetch(`${appUrl}/congress-trades.json`, {
-      headers: { 'User-Agent': 'WhaleScope-API/1.0' },
-    });
-
-    if (!tradesRes.ok) {
-      return NextResponse.json({ trades: [], total: 0 });
-    }
-
-    const allTrades: CongressTrade[] = await tradesRes.json();
-
+    const supabase = getSupabase();
     const plan = await getUserPlan(request);
     const isPro = plan === 'pro' || plan === 'enterprise';
 
-    let trades: CongressTrade[];
-    let hiddenCount = 0;
+    // Get total count
+    const { count: totalCount } = await supabase
+      .from('congress_trades')
+      .select('*', { count: 'exact', head: true });
 
-    if (isPro) {
-      trades = allTrades;
-    } else {
-      const nonRecentTrades = allTrades.filter(t => !isRecentTrade(t));
-      const recentCount = allTrades.length - nonRecentTrades.length;
-      trades = nonRecentTrades.slice(0, FREE_TRADE_LIMIT);
-      hiddenCount = nonRecentTrades.length - trades.length + recentCount;
+    let query = supabase
+      .from('congress_trades')
+      .select('*')
+      .order('filed_date', { ascending: false });
+
+    if (!isPro) {
+      // Free users: exclude trades filed in last 24 hours
+      const yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1);
+      const yesterdayStr = yesterday.toISOString().split('T')[0];
+      
+      query = query
+        .lte('filed_date', yesterdayStr)
+        .limit(FREE_TRADE_LIMIT);
+    }
+
+    const { data: trades, error } = await query;
+
+    if (error) {
+      console.error('Supabase query error:', error);
+      return NextResponse.json({ error: 'Failed to load trades' }, { status: 500 });
+    }
+
+    // Transform to match the client-expected format
+    const formattedTrades = (trades || []).map(t => ({
+      politician: t.politician,
+      party: t.party,
+      chamber: t.chamber,
+      state: t.state || '',
+      ticker: t.ticker,
+      company: t.company || '',
+      type: t.trade_type,
+      amount: t.amount || '',
+      filed: t.filed_date,
+      traded: t.traded_date || '',
+    }));
+
+    // Calculate hidden count for free users
+    let hiddenCount = 0;
+    if (!isPro && totalCount) {
+      hiddenCount = totalCount - formattedTrades.length;
     }
 
     return NextResponse.json({
-      trades,
-      total: allTrades.length,
+      trades: formattedTrades,
+      total: totalCount || 0,
       hiddenCount,
       isPro,
     });

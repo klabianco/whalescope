@@ -60,8 +60,10 @@ export default function WatchlistPage() {
     
     if (politicianSlugs.length > 0) {
       try {
-        const res = await fetch('/congress-trades.json');
-        const allTrades: Trade[] = await res.json();
+        const walletParam = storageKey ? `?wallet=${storageKey}` : '';
+        const res = await fetch(`/api/congress-trades${walletParam}`);
+        const data = await res.json();
+        const allTrades: Trade[] = data.trades || [];
 
         const followedList: FollowedPolitician[] = [];
         for (const slug of politicianSlugs) {

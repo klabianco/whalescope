@@ -1,3 +1,6 @@
+# Don't deploy trade data publicly — served via /api/congress-trades
+public/congress-trades.json
+
 node_modules/
 .next/
 .env

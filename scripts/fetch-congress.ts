@@ -4,6 +4,8 @@
 
 import { writeFileSync, readFileSync, existsSync } from 'fs';
 import { join } from 'path';
+import { createClient } from '@supabase/supabase-js';
+import { createHash } from 'crypto';
 
 interface QuiverTrade {
   Representative?: string;
@@ -303,14 +305,61 @@ async function main() {
     trades = generateSampleData();
   }
   
-  // Save trades to both data/ and public/ directories
+  // Save trades to data/ directory (local backup only)
   const dataPath = join(process.cwd(), 'data', 'congress-trades.json');
-  const publicPath = join(process.cwd(), 'public', 'congress-trades.json');
   const tradesJson = JSON.stringify(trades, null, 2);
   writeFileSync(dataPath, tradesJson);
-  writeFileSync(publicPath, tradesJson);
   console.log(`\nSaved ${trades.length} trades to ${dataPath}`);
-  console.log(`Copied to ${publicPath} for client-side access`);
+
+  // Sync to Supabase (primary data source)
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseKey = process.env.SUPABASE_SERVICE_KEY;
+  
+  if (supabaseUrl && supabaseKey) {
+    console.log('\nSyncing to Supabase...');
+    const supabase = createClient(supabaseUrl, supabaseKey);
+    
+    let inserted = 0;
+    let skipped = 0;
+    
+    for (let i = 0; i < trades.length; i += 50) {
+      const batch = trades.slice(i, i + 50).map(t => {
+        const hashStr = `${t.politician}-${t.ticker}-${t.type}-${t.filed}-${t.traded}-${t.amount}`;
+        return {
+          politician: t.politician,
+          party: t.party,
+          chamber: t.chamber,
+          state: t.state || '',
+          ticker: t.ticker,
+          company: t.company || '',
+          trade_type: t.type,
+          amount: t.amount || '',
+          filed_date: t.filed,
+          traded_date: t.traded || null,
+          trade_hash: createHash('md5').update(hashStr).digest('hex'),
+        };
+      });
+
+      const { data, error } = await supabase
+        .from('congress_trades')
+        .upsert(batch, { onConflict: 'trade_hash', ignoreDuplicates: true })
+        .select('id');
+
+      if (error) {
+        console.error(`  Batch error:`, error.message);
+        skipped += batch.length;
+      } else {
+        inserted += data?.length || 0;
+      }
+    }
+    
+    console.log(`  Synced: ${inserted} inserted/updated, ${skipped} errors`);
+  } else {
+    console.log('\n⚠️  No Supabase config — trades only saved locally');
+  }
+  
+  // NOTE: No longer writing to public/ — data is served via /api/congress-trades from Supabase
+  console.log('\n✅ Congress trades are served from Supabase via /api/congress-trades');
 }
 
 main().catch(console.error);

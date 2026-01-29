@@ -1,5 +1,7 @@
-import { readFileSync, existsSync } from 'fs';
-import { join } from 'path';
+'use client';
+
+import { useState, useEffect } from 'react';
+import { useWallet } from '@solana/wallet-adapter-react';
 import CongressClient from './CongressClient';
 
 interface CongressTrade {
@@ -23,28 +25,6 @@ interface CommitteeData {
   members: Record<string, string[]>;
 }
 
-function getTrades(): CongressTrade[] {
-  try {
-    const dataPath = join(process.cwd(), 'data', 'congress-trades.json');
-    if (!existsSync(dataPath)) return [];
-    const data = readFileSync(dataPath, 'utf-8');
-    return JSON.parse(data);
-  } catch {
-    return [];
-  }
-}
-
-function getCommitteeData(): CommitteeData {
-  try {
-    const dataPath = join(process.cwd(), 'data', 'committee-data.json');
-    if (!existsSync(dataPath)) return { committees: {}, members: {} };
-    const data = readFileSync(dataPath, 'utf-8');
-    return JSON.parse(data);
-  } catch {
-    return { committees: {}, members: {} };
-  }
-}
-
 function calculateTopTraders(trades: CongressTrade[]) {
   const traderMap = new Map<string, { party: string; count: number }>();
   
@@ -61,9 +41,46 @@ function calculateTopTraders(trades: CongressTrade[]) {
 }
 
 export default function CongressPage() {
-  const trades = getTrades();
+  const { publicKey } = useWallet();
+  const [trades, setTrades] = useState<CongressTrade[]>([]);
+  const [committeeData, setCommitteeData] = useState<CommitteeData>({ committees: {}, members: {} });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadData() {
+      try {
+        // Fetch trades from server-side API (respects plan gating)
+        const walletParam = publicKey ? `?wallet=${publicKey.toBase58()}` : '';
+        const tradesRes = await fetch(`/api/congress-trades${walletParam}`);
+        const tradesData = await tradesRes.json();
+        setTrades(tradesData.trades || []);
+      } catch (err) {
+        console.error('Failed to load trades:', err);
+      }
+
+      try {
+        // Committee data is non-sensitive, load from static
+        const committeeRes = await fetch('/committee-data.json');
+        if (committeeRes.ok) {
+          setCommitteeData(await committeeRes.json());
+        }
+      } catch {}
+
+      setLoading(false);
+    }
+
+    loadData();
+  }, [publicKey]);
+
+  if (loading) {
+    return (
+      <main style={{ maxWidth: '900px', margin: '0 auto', padding: '40px 20px', textAlign: 'center' }}>
+        <p style={{ color: '#888' }}>Loading congress trades...</p>
+      </main>
+    );
+  }
+
   const topTraders = calculateTopTraders(trades);
-  const committeeData = getCommitteeData();
   const politicians = Array.from(new Set(trades.map(t => t.politician)));
   
   return <CongressClient trades={trades} topTraders={topTraders} committeeData={committeeData} politicians={politicians} />;
