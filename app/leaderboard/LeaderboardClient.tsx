@@ -70,8 +70,32 @@ export default function LeaderboardClient({ leaderboard }: Props) {
 
   return (
     <>
+      <style>{`
+        @media (min-width: 640px) {
+          .leaderboard-row {
+            grid-template-columns: 60px 1fr 100px 90px 100px 130px !important;
+            padding-left: 24px !important;
+            padding-right: 24px !important;
+          }
+          .leaderboard-row .hide-mobile { display: block !important; }
+          .podium-grid { gap: 20px !important; padding: 0 20px !important; }
+        }
+        @media (max-width: 639px) {
+          .podium-grid {
+            grid-template-columns: 1fr 1fr 1fr !important;
+            gap: 8px !important;
+          }
+          .podium-card { padding: 16px 8px !important; }
+          .podium-card .podium-name { font-size: 13px !important; }
+          .podium-card .podium-return { font-size: 22px !important; }
+          .podium-card-first { padding: 20px 8px !important; }
+          .podium-card-first .podium-return { font-size: 28px !important; }
+          .podium-card .podium-meta { display: none; }
+          .controls-wrap { flex-direction: column !important; }
+        }
+      `}</style>
       <Header />
-      <main style={{ maxWidth: '1000px', margin: '0 auto', padding: '0 24px 60px' }}>
+      <main style={{ maxWidth: '1000px', margin: '0 auto', padding: '0 16px 60px' }}>
         {/* Hero Section */}
         <div style={{ textAlign: 'center', marginBottom: '48px' }}>
           <div style={{ 
@@ -104,16 +128,16 @@ export default function LeaderboardClient({ leaderboard }: Props) {
 
         {/* Podium - Top 3 */}
         {topPerformers.length >= 3 && (
-          <div style={{ 
+          <div className="podium-grid" style={{ 
             display: 'grid',
             gridTemplateColumns: '1fr 1.2fr 1fr',
-            gap: '20px',
+            gap: '12px',
             marginBottom: '48px',
             alignItems: 'end',
-            padding: '0 20px'
+            padding: '0'
           }}>
             {/* 2nd Place */}
-            <div style={{
+            <div className="podium-card" style={{
               background: 'linear-gradient(180deg, #27272a 0%, #18181b 100%)',
               padding: '28px 20px',
               borderRadius: '20px',
@@ -140,7 +164,7 @@ export default function LeaderboardClient({ leaderboard }: Props) {
                 2ND PLACE
               </div>
               <Link href={`/congress/${encodeURIComponent(topPerformers[1].name.toLowerCase().replace(/ /g, '-'))}`} style={{ textDecoration: 'none' }}>
-                <div style={{ color: '#fff', fontWeight: '600', fontSize: '17px', marginBottom: '6px' }}>
+                <div className="podium-name" style={{ color: '#fff', fontWeight: '600', fontSize: '17px', marginBottom: '6px' }}>
                   {topPerformers[1].name}
                 </div>
               </Link>
@@ -161,7 +185,7 @@ export default function LeaderboardClient({ leaderboard }: Props) {
                   {topPerformers[1].party === 'D' ? 'Democrat' : 'Republican'} · {topPerformers[1].chamber}
                 </span>
               </div>
-              <div style={{ 
+              <div className="podium-return" style={{ 
                 color: getReturnColor(getReturn(topPerformers[1])),
                 fontSize: '32px',
                 fontWeight: '700',
@@ -169,13 +193,13 @@ export default function LeaderboardClient({ leaderboard }: Props) {
               }}>
                 {formatReturn(getReturn(topPerformers[1]))}
               </div>
-              <div style={{ color: '#71717a', fontSize: '13px', marginTop: '8px' }}>
+              <div className="podium-meta" style={{ color: '#71717a', fontSize: '13px', marginTop: '8px' }}>
                 {topPerformers[1].tradeCount} trades · {formatVolume(topPerformers[1].totalVolume)}
               </div>
             </div>
 
             {/* 1st Place */}
-            <div style={{
+            <div className="podium-card podium-card-first" style={{
               background: 'linear-gradient(180deg, #422006 0%, #1c1917 100%)',
               padding: '36px 24px',
               borderRadius: '24px',
@@ -212,7 +236,7 @@ export default function LeaderboardClient({ leaderboard }: Props) {
                 TOP PERFORMER
               </div>
               <Link href={`/congress/${encodeURIComponent(topPerformers[0].name.toLowerCase().replace(/ /g, '-'))}`} style={{ textDecoration: 'none' }}>
-                <div style={{ color: '#fff', fontWeight: '700', fontSize: '20px', marginBottom: '8px' }}>
+                <div className="podium-name" style={{ color: '#fff', fontWeight: '700', fontSize: '20px', marginBottom: '8px' }}>
                   {topPerformers[0].name}
                 </div>
               </Link>
@@ -233,7 +257,7 @@ export default function LeaderboardClient({ leaderboard }: Props) {
                   {topPerformers[0].party === 'D' ? 'Democrat' : 'Republican'} · {topPerformers[0].chamber}
                 </span>
               </div>
-              <div style={{ 
+              <div className="podium-return" style={{ 
                 color: '#fbbf24',
                 fontSize: '44px',
                 fontWeight: '700',
@@ -242,13 +266,13 @@ export default function LeaderboardClient({ leaderboard }: Props) {
               }}>
                 {formatReturn(getReturn(topPerformers[0]))}
               </div>
-              <div style={{ color: '#a3a3a3', fontSize: '14px', marginTop: '12px' }}>
+              <div className="podium-meta" style={{ color: '#a3a3a3', fontSize: '14px', marginTop: '12px' }}>
                 {topPerformers[0].tradeCount} trades · {formatVolume(topPerformers[0].totalVolume)}
               </div>
             </div>
 
             {/* 3rd Place */}
-            <div style={{
+            <div className="podium-card" style={{
               background: 'linear-gradient(180deg, #292524 0%, #1c1917 100%)',
               padding: '24px 20px',
               borderRadius: '20px',
@@ -275,7 +299,7 @@ export default function LeaderboardClient({ leaderboard }: Props) {
                 3RD PLACE
               </div>
               <Link href={`/congress/${encodeURIComponent(topPerformers[2].name.toLowerCase().replace(/ /g, '-'))}`} style={{ textDecoration: 'none' }}>
-                <div style={{ color: '#fff', fontWeight: '600', fontSize: '16px', marginBottom: '6px' }}>
+                <div className="podium-name" style={{ color: '#fff', fontWeight: '600', fontSize: '16px', marginBottom: '6px' }}>
                   {topPerformers[2].name}
                 </div>
               </Link>
@@ -296,7 +320,7 @@ export default function LeaderboardClient({ leaderboard }: Props) {
                   {topPerformers[2].party === 'D' ? 'Democrat' : 'Republican'} · {topPerformers[2].chamber}
                 </span>
               </div>
-              <div style={{ 
+              <div className="podium-return" style={{ 
                 color: getReturnColor(getReturn(topPerformers[2])),
                 fontSize: '28px',
                 fontWeight: '700',
@@ -304,7 +328,7 @@ export default function LeaderboardClient({ leaderboard }: Props) {
               }}>
                 {formatReturn(getReturn(topPerformers[2]))}
               </div>
-              <div style={{ color: '#71717a', fontSize: '13px', marginTop: '8px' }}>
+              <div className="podium-meta" style={{ color: '#71717a', fontSize: '13px', marginTop: '8px' }}>
                 {topPerformers[2].tradeCount} trades · {formatVolume(topPerformers[2].totalVolume)}
               </div>
             </div>
@@ -312,15 +336,15 @@ export default function LeaderboardClient({ leaderboard }: Props) {
         )}
 
         {/* Controls */}
-        <div style={{ 
+        <div className="controls-wrap" style={{ 
           display: 'flex', 
           justifyContent: 'space-between',
           alignItems: 'center',
           marginBottom: '24px',
           flexWrap: 'wrap',
-          gap: '16px',
+          gap: '12px',
           background: '#18181b',
-          padding: '16px 20px',
+          padding: '12px 16px',
           borderRadius: '12px',
           border: '1px solid #27272a'
         }}>
@@ -383,10 +407,10 @@ export default function LeaderboardClient({ leaderboard }: Props) {
           border: '1px solid #27272a'
         }}>
           {/* Table Header */}
-          <div style={{
+          <div className="leaderboard-row" style={{
             display: 'grid',
-            gridTemplateColumns: '60px 1fr 100px 90px 100px 130px',
-            padding: '16px 24px',
+            gridTemplateColumns: '44px 1fr 80px 60px',
+            padding: '16px 16px',
             background: '#18181b',
             borderBottom: '1px solid #27272a',
             fontSize: '11px',
@@ -399,8 +423,6 @@ export default function LeaderboardClient({ leaderboard }: Props) {
             <div>Politician</div>
             <div style={{ textAlign: 'center' }}>Party</div>
             <div style={{ textAlign: 'right' }}>Trades</div>
-            <div style={{ textAlign: 'right' }}>Volume</div>
-            <div style={{ textAlign: 'right' }}>Return ({timeFrame.toUpperCase()})</div>
           </div>
 
           {/* Table Body */}
@@ -410,10 +432,10 @@ export default function LeaderboardClient({ leaderboard }: Props) {
               href={`/congress/${encodeURIComponent(entry.name.toLowerCase().replace(/ /g, '-'))}`}
               style={{ textDecoration: 'none' }}
             >
-              <div style={{
+              <div className="leaderboard-row" style={{
                 display: 'grid',
-                gridTemplateColumns: '60px 1fr 100px 90px 100px 130px',
-                padding: '18px 24px',
+                gridTemplateColumns: '44px 1fr 80px 60px',
+                padding: '14px 16px',
                 borderBottom: index < sortedLeaderboard.length - 1 ? '1px solid #1f1f23' : 'none',
                 alignItems: 'center',
                 transition: 'background 0.15s ease',
@@ -425,40 +447,28 @@ export default function LeaderboardClient({ leaderboard }: Props) {
                 <div style={{ 
                   color: index < 3 ? '#fbbf24' : '#52525b',
                   fontWeight: '600',
-                  fontSize: '15px',
+                  fontSize: '14px',
                   fontFamily: 'ui-monospace, monospace'
                 }}>
                   #{index + 1}
                 </div>
-                <div style={{ color: '#fafafa', fontWeight: '500', fontSize: '15px' }}>
+                <div style={{ color: '#fafafa', fontWeight: '500', fontSize: '14px' }}>
                   {entry.name}
                 </div>
                 <div style={{ textAlign: 'center' }}>
                   <span style={{
                     background: entry.party === 'D' ? 'rgba(59, 130, 246, 0.15)' : entry.party === 'R' ? 'rgba(239, 68, 68, 0.15)' : 'rgba(113, 113, 122, 0.15)',
                     color: entry.party === 'D' ? '#60a5fa' : entry.party === 'R' ? '#f87171' : '#a1a1aa',
-                    padding: '5px 10px',
+                    padding: '4px 8px',
                     borderRadius: '6px',
-                    fontSize: '12px',
+                    fontSize: '11px',
                     fontWeight: '500'
                   }}>
                     {entry.party === 'D' ? 'Dem' : entry.party === 'R' ? 'Rep' : entry.party} · {entry.chamber === 'House' ? 'H' : 'S'}
                   </span>
                 </div>
-                <div style={{ textAlign: 'right', color: '#71717a', fontSize: '14px', fontFamily: 'ui-monospace, monospace' }}>
+                <div style={{ textAlign: 'right', color: '#71717a', fontSize: '13px', fontFamily: 'ui-monospace, monospace' }}>
                   {entry.tradeCount}
-                </div>
-                <div style={{ textAlign: 'right', color: '#71717a', fontSize: '14px' }}>
-                  {formatVolume(entry.totalVolume)}
-                </div>
-                <div style={{ 
-                  textAlign: 'right',
-                  color: getReturnColor(getReturn(entry)),
-                  fontWeight: '600',
-                  fontSize: '16px',
-                  fontFamily: 'ui-monospace, monospace'
-                }}>
-                  {formatReturn(getReturn(entry))}
                 </div>
               </div>
             </Link>
