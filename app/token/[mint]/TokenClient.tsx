@@ -2,11 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useWallet } from '@solana/wallet-adapter-react';
 import { FOLLOW_BUTTON } from '../../config/theme';
-import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import { Header } from '../../components/Header';
 import { Footer } from '../../components/Footer';
+import { FollowToast } from '../../components/FollowToast';
+import { useFollows } from '../../hooks/useFollows';
 
 interface Holder {
   address: string;
@@ -31,7 +31,7 @@ interface EarlyBuyer {
 // Helius API key is now server-side via /api/helius proxy
 
 export default function TokenClient({ mint }: { mint: string }) {
-  const { publicKey, connected } = useWallet();
+  const { toast, toggleWhale, isFollowingWhale } = useFollows();
   const [tokenInfo, setTokenInfo] = useState<TokenInfo | null>(null);
   const [holders, setHolders] = useState<Holder[]>([]);
   const [earlyBuyers, setEarlyBuyers] = useState<EarlyBuyer[]>([]);
@@ -39,44 +39,6 @@ export default function TokenClient({ mint }: { mint: string }) {
   const [loadingHistory, setLoadingHistory] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'holders' | 'early'>('holders');
-  const [followedWallets, setFollowedWallets] = useState<string[]>([]);
-
-  const storageKey = publicKey ? publicKey.toBase58() : null;
-
-  useEffect(() => {
-    if (storageKey) {
-      try {
-        const saved = localStorage.getItem(`wallets_${storageKey}`);
-        setFollowedWallets(saved ? JSON.parse(saved) : []);
-      } catch {
-        setFollowedWallets([]);
-      }
-    }
-  }, [storageKey]);
-
-  function handleFollow(address: string) {
-    if (!storageKey) return;
-    // Unfollowing always allowed
-    if (followedWallets.includes(address)) {
-      const newList = followedWallets.filter(w => w !== address);
-      localStorage.setItem(`wallets_${storageKey}`, JSON.stringify(newList));
-      setFollowedWallets(newList);
-      return;
-    }
-    // Check limit (read politicians too for total count)
-    let totalFollowed = followedWallets.length;
-    try {
-      const savedPols = localStorage.getItem(`politicians_${storageKey}`);
-      if (savedPols) totalFollowed += JSON.parse(savedPols).length;
-    } catch {}
-    if (totalFollowed >= 3) {
-      alert('Free plan limit: 3 watchlist slots. Upgrade to Pro for unlimited.');
-      return;
-    }
-    const newList = [...followedWallets, address];
-    localStorage.setItem(`wallets_${storageKey}`, JSON.stringify(newList));
-    setFollowedWallets(newList);
-  }
 
   useEffect(() => {
     if (mint) {
@@ -210,25 +172,10 @@ export default function TokenClient({ mint }: { mint: string }) {
 
   // Follow button component
   const FollowButton = ({ address }: { address: string }) => {
-    if (!connected) {
-      return (
-        <WalletMultiButton style={{
-          padding: '6px 12px',
-          background: '#4ade80',
-          color: '#000',
-          border: 'none',
-          borderRadius: '6px',
-          fontSize: '12px',
-          fontWeight: '600',
-          height: 'auto'
-        }}>Follow</WalletMultiButton>
-      );
-    }
-    
-    const isFollowing = followedWallets.includes(address);
+    const isFollowing = isFollowingWhale(address);
     return (
       <button
-        onClick={() => handleFollow(address)}
+        onClick={() => toggleWhale(address)}
         style={{
           padding: '6px 12px',
           background: isFollowing ? FOLLOW_BUTTON.activeBg : FOLLOW_BUTTON.inactiveBg,
@@ -240,7 +187,7 @@ export default function TokenClient({ mint }: { mint: string }) {
           cursor: 'pointer'
         }}
       >
-        {isFollowing ? 'Following' : 'Follow'}
+        {isFollowing ? '✓ Following' : 'Follow'}
       </button>
     );
   };
@@ -447,6 +394,7 @@ export default function TokenClient({ mint }: { mint: string }) {
       )}
 
     </main>
+    <FollowToast message={toast.message} show={toast.show} />
     <Footer />
     </>
   );

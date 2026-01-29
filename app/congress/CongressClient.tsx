@@ -5,9 +5,11 @@ import Link from 'next/link';
 import CommitteeCorrelation from '../components/CommitteeCorrelation';
 import { Footer } from '../components/Footer';
 import { EmailCapture } from '../components/EmailCapture';
+import { FollowToast } from '../components/FollowToast';
 import TradeAlerts from '../components/TradeAlerts';
 import { Header } from '../components/Header';
 import { FOLLOW_BUTTON } from '../config/theme';
+import { useFollows } from '../hooks/useFollows';
 import {
   FilterTabs,
   TradeCard,
@@ -60,27 +62,7 @@ function hasCorrelation(trade: CongressTrade, committeeData: CommitteeData): boo
 
 export default function CongressClient({ trades, topTraders, committeeData, politicians }: Props) {
   const [filter, setFilter] = useState('all');
-  const [followingPoliticians, setFollowingPoliticians] = useState<string[]>([]);
-
-  // Load follows from localStorage
-  useState(() => {
-    try {
-      const saved = localStorage.getItem('congress_following');
-      if (saved) setFollowingPoliticians(JSON.parse(saved));
-    } catch {}
-  });
-
-  function toggleFollow(name: string) {
-    if (followingPoliticians.includes(name)) {
-      const newList = followingPoliticians.filter(n => n !== name);
-      localStorage.setItem('congress_following', JSON.stringify(newList));
-      setFollowingPoliticians(newList);
-      return;
-    }
-    const newList = [...followingPoliticians, name];
-    localStorage.setItem('congress_following', JSON.stringify(newList));
-    setFollowingPoliticians(newList);
-  }
+  const { toast, togglePolitician, isFollowingPolitician } = useFollows();
 
   const flaggedCount = trades.filter(t => hasCorrelation(t, committeeData)).length;
 
@@ -188,14 +170,15 @@ export default function CongressClient({ trades, topTraders, committeeData, poli
           }
           renderCard={(trade, i) => {
             const isFlagged = hasCorrelation(trade, committeeData);
-            const isFollowing = followingPoliticians.includes(trade.politician);
+            const slug = trade.politician.toLowerCase().replace(/ /g, '-');
+            const isFollowing = isFollowingPolitician(slug);
 
             return (
               <TradeCard
                 key={i}
                 followButton={
                   <button
-                    onClick={() => toggleFollow(trade.politician)}
+                    onClick={() => togglePolitician(slug)}
                     style={{
                       padding: '4px 10px',
                       background: isFollowing ? FOLLOW_BUTTON.activeBg : FOLLOW_BUTTON.inactiveBg,
@@ -270,6 +253,7 @@ export default function CongressClient({ trades, topTraders, committeeData, poli
           </p>
         </div>
       </main>
+      <FollowToast message={toast.message} show={toast.show} />
       <Footer />
     </>
   );

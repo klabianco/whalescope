@@ -2,11 +2,12 @@
 
 import { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
-import { useWallet } from '@solana/wallet-adapter-react';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
 import { EmailCapture } from '../components/EmailCapture';
+import { FollowToast } from '../components/FollowToast';
 import { FOLLOW_BUTTON } from '../config/theme';
+import { useFollows } from '../hooks/useFollows';
 import {
   FilterTabs,
   TradeCard,
@@ -74,7 +75,6 @@ const ACTION_BADGES: Record<string, { bg: string; color: string; label: string }
   SELL: { bg: '#7f1d1d', color: '#f87171', label: 'SELL' },
 };
 
-const FREE_WATCHLIST_LIMIT = 3;
 
 function formatDate(ts: number): string {
   const date = new Date(ts * 1000);
@@ -153,9 +153,7 @@ function shortAddress(addr: string): string {
 
 export default function WhalesPage() {
   const [filter, setFilter] = useState('all');
-  const { publicKey, connected } = useWallet();
-  const [followingWallets, setFollowingWallets] = useState<string[]>([]);
-  const [limitWarning, setLimitWarning] = useState(false);
+  const { toast, toggleWhale, isFollowingWhale, limitHit, FREE_FOLLOW_LIMIT } = useFollows();
   const [tokenData, setTokenData] = useState<Record<string, TokenInfo>>({});
 
   useEffect(() => {
@@ -208,36 +206,6 @@ export default function WhalesPage() {
   function getTradeUSD(trade: WhaleTrade): string {
     const val = getTradeUSDRaw(trade);
     return val > 0 ? formatUSD(val) : '';
-  }
-
-  const storageKey = publicKey ? publicKey.toBase58() : null;
-
-  // Load follows from localStorage
-  useState(() => {
-    if (storageKey) {
-      try {
-        const saved = localStorage.getItem(`whales_${storageKey}`);
-        if (saved) setFollowingWallets(JSON.parse(saved));
-      } catch {}
-    }
-  });
-
-  function toggleFollow(address: string) {
-    if (!storageKey) return;
-    if (followingWallets.includes(address)) {
-      const newList = followingWallets.filter(a => a !== address);
-      localStorage.setItem(`whales_${storageKey}`, JSON.stringify(newList));
-      setFollowingWallets(newList);
-      setLimitWarning(false);
-      return;
-    }
-    if (followingWallets.length >= FREE_WATCHLIST_LIMIT) {
-      setLimitWarning(true);
-      return;
-    }
-    const newList = [...followingWallets, address];
-    localStorage.setItem(`whales_${storageKey}`, JSON.stringify(newList));
-    setFollowingWallets(newList);
   }
 
   const uniqueWhales = useMemo(() => new Set(ALL_TRADES.map(t => t.wallet)).size, []);
@@ -294,7 +262,7 @@ export default function WhalesPage() {
         </div>
 
         {/* Watchlist Limit Warning */}
-        {limitWarning && (
+        {limitHit && (
           <div style={{
             background: 'rgba(251, 191, 36, 0.1)',
             border: '1px solid rgba(251, 191, 36, 0.3)',
@@ -308,7 +276,7 @@ export default function WhalesPage() {
             gap: '8px',
           }}>
             <p style={{ color: '#fbbf24', fontSize: '14px', margin: 0 }}>
-              Free plan limit: {FREE_WATCHLIST_LIMIT} watchlist slots. Upgrade for unlimited.
+              Free plan limit: {FREE_FOLLOW_LIMIT} watchlist slots. Upgrade for unlimited.
             </p>
             <Link href="/pricing" style={{ textDecoration: 'none' }}>
               <button style={{
@@ -327,7 +295,7 @@ export default function WhalesPage() {
             </h2>
             <div style={{ display: 'flex', gap: '12px', overflowX: 'auto', paddingBottom: '8px' }}>
               {topWhales.map((whale) => {
-                const isFollowing = followingWallets.includes(whale.address);
+                const isFollowing = isFollowingWhale(whale.address);
                 const displayName = whale.label || shortAddress(whale.address);
                 return (
                   <div
@@ -344,10 +312,7 @@ export default function WhalesPage() {
                     }}
                   >
                     <button
-                      onClick={() => {
-                        if (connected) toggleFollow(whale.address);
-                        else document.querySelector<HTMLButtonElement>('.wallet-adapter-button')?.click();
-                      }}
+                      onClick={() => toggleWhale(whale.address)}
                       style={{
                         padding: '4px 10px',
                         background: isFollowing ? FOLLOW_BUTTON.activeBg : FOLLOW_BUTTON.inactiveBg,
@@ -390,7 +355,7 @@ export default function WhalesPage() {
             const badge = ACTION_BADGES[trade.action] || { bg: '#333', color: '#888', label: '?' };
             const symbol = getTokenSymbol(trade);
             const displayName = trade.walletLabel || shortAddress(trade.wallet);
-            const isFollowing = followingWallets.includes(trade.wallet);
+            const isFollowing = isFollowingWhale(trade.wallet);
 
             return (
               <TradeCard
@@ -398,8 +363,7 @@ export default function WhalesPage() {
                 followButton={
                   <button
                     onClick={() => {
-                      if (connected) toggleFollow(trade.wallet);
-                      else document.querySelector<HTMLButtonElement>('.wallet-adapter-button')?.click();
+                      toggleWhale(trade.wallet);
                     }}
                     style={{
                       padding: '4px 10px',
@@ -461,6 +425,7 @@ export default function WhalesPage() {
           </p>
         </div>
       </main>
+      <FollowToast message={toast.message} show={toast.show} />
       <Footer />
     </>
   );

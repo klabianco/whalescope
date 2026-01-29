@@ -4,6 +4,7 @@ import { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { Header } from '../components/Header';
+import { useFollows } from '../hooks/useFollows';
 import tradesData from '../../data/whale-trades.json';
 import whaleWalletsData from '../../data/whale-wallets.json';
 
@@ -37,22 +38,12 @@ interface FollowedPolitician {
 
 export default function WatchlistPage() {
   const { publicKey } = useWallet();
-  const [whaleFollows, setWhaleFollows] = useState<string[]>([]);
+  const { follows, toggleWhale, togglePolitician } = useFollows();
   const [politicians, setPoliticians] = useState<FollowedPolitician[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<'all' | 'crypto' | 'congress'>('all');
 
-  // Storage key: wallet if connected, otherwise anonymous ID
-  const storageKey = useMemo(() => {
-    if (publicKey) return publicKey.toBase58();
-    if (typeof window === 'undefined') return null;
-    let anonId = localStorage.getItem('whales_anon_id');
-    if (!anonId) {
-      anonId = 'anon_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
-      localStorage.setItem('whales_anon_id', anonId);
-    }
-    return anonId;
-  }, [publicKey]);
+  const whaleFollows = follows.whales;
 
   // Whale wallet lookup
   const walletLookup = useMemo(() => {
@@ -75,33 +66,21 @@ export default function WatchlistPage() {
     return map;
   }, []);
 
+  // Load politician details when follows change
   useEffect(() => {
-    if (!storageKey) { setLoading(false); return; }
-    loadWatchlist();
-  }, [storageKey]);
-
-  async function loadWatchlist() {
-    if (!storageKey) return;
-
-    // Load whale follows
-    try {
-      const saved = localStorage.getItem(`whales_${storageKey}`);
-      if (saved) setWhaleFollows(JSON.parse(saved));
-    } catch {}
-
-    // Load politicians
-    try {
-      const saved = localStorage.getItem(`politicians_${storageKey}`);
-      const slugs: string[] = saved ? JSON.parse(saved) : [];
-      
-      if (slugs.length > 0) {
-        const res = await fetch('/api/congress-trades');
-        const data = await res.json();
+    const slugs = follows.politicians;
+    if (slugs.length === 0) {
+      setPoliticians([]);
+      setLoading(false);
+      return;
+    }
+    fetch('/api/congress-trades')
+      .then(res => res.json())
+      .then(data => {
         const allTrades: Trade[] = data.trades || [];
-
         const followedList: FollowedPolitician[] = [];
         for (const slug of slugs) {
-          const trades = allTrades.filter(t => 
+          const trades = allTrades.filter(t =>
             t.politician.toLowerCase().replace(/ /g, '-') === slug
           );
           if (trades.length > 0) {
@@ -115,27 +94,10 @@ export default function WatchlistPage() {
           }
         }
         setPoliticians(followedList);
-      }
-    } catch {}
-    
-    setLoading(false);
-  }
-
-  function removeWhale(address: string) {
-    if (!storageKey) return;
-    const newList = whaleFollows.filter(w => w !== address);
-    localStorage.setItem(`whales_${storageKey}`, JSON.stringify(newList));
-    setWhaleFollows(newList);
-  }
-
-  function removePolitician(slug: string) {
-    if (!storageKey) return;
-    const saved = localStorage.getItem(`politicians_${storageKey}`);
-    const list: string[] = saved ? JSON.parse(saved) : [];
-    const newList = list.filter(s => s !== slug);
-    localStorage.setItem(`politicians_${storageKey}`, JSON.stringify(newList));
-    setPoliticians(politicians.filter(p => p.slug !== slug));
-  }
+      })
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, [follows.politicians]);
 
   function shortenAddress(addr: string): string {
     return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
@@ -257,7 +219,7 @@ export default function WatchlistPage() {
                       )}
                     </div>
                     <button
-                      onClick={() => removeWhale(address)}
+                      onClick={() => toggleWhale(address)}
                       style={{
                         padding: '6px 12px',
                         background: '#7f1d1d',
@@ -327,7 +289,7 @@ export default function WatchlistPage() {
                     </span>
                   </Link>
                   <button
-                    onClick={() => removePolitician(pol.slug)}
+                    onClick={() => togglePolitician(pol.slug)}
                     style={{
                       padding: '6px 12px',
                       background: '#7f1d1d',

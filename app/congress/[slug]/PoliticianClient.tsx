@@ -2,13 +2,13 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useWallet } from '@solana/wallet-adapter-react';
 import { FOLLOW_BUTTON } from '../../config/theme';
-import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import { CommitteeInfo } from '../../components/CommitteeCorrelation';
 import TradeAlerts from '../../components/TradeAlerts';
 import { Header } from '../../components/Header';
 import { Footer } from '../../components/Footer';
+import { FollowToast } from '../../components/FollowToast';
+import { useFollows } from '../../hooks/useFollows';
 
 interface Trade {
   politician: string;
@@ -31,27 +31,17 @@ interface CommitteeData {
 }
 
 export default function PoliticianClient({ slug }: { slug: string }) {
-  const { publicKey, connected } = useWallet();
+  const { toast, togglePolitician, isFollowingPolitician } = useFollows();
   const [trades, setTrades] = useState<Trade[]>([]);
   const [committeeData, setCommitteeData] = useState<CommitteeData>({ committees: {}, members: {} });
   const [loading, setLoading] = useState(true);
-  const [following, setFollowing] = useState(false);
   const [politicianInfo, setPoliticianInfo] = useState<{name: string; party: string; chamber: string} | null>(null);
 
-  const storageKey = publicKey ? publicKey.toBase58() : null;
+  const following = isFollowingPolitician(slug);
 
   useEffect(() => {
-    if (storageKey) {
-      try {
-        const saved = localStorage.getItem(`politicians_${storageKey}`);
-        const list = saved ? JSON.parse(saved) : [];
-        setFollowing(list.includes(slug));
-      } catch {
-        setFollowing(false);
-      }
-    }
     fetchData();
-  }, [slug, storageKey]);
+  }, [slug]);
 
   async function fetchData() {
     try {
@@ -96,19 +86,7 @@ export default function PoliticianClient({ slug }: { slug: string }) {
   }
 
   function toggleFollow() {
-    if (!storageKey) return;
-    
-    try {
-      const saved = localStorage.getItem(`politicians_${storageKey}`);
-      const list = saved ? JSON.parse(saved) : [];
-      const newList = following
-        ? list.filter((s: string) => s !== slug)
-        : [...list, slug];
-      localStorage.setItem(`politicians_${storageKey}`, JSON.stringify(newList));
-      setFollowing(!following);
-    } catch (err) {
-      console.error('Failed to toggle follow:', err);
-    }
+    togglePolitician(slug);
   }
 
   // Check if a trade has committee correlation
@@ -136,44 +114,23 @@ export default function PoliticianClient({ slug }: { slug: string }) {
   };
 
   // Follow button
-  const FollowButton = () => {
-    if (!connected) {
-      return (
-        <WalletMultiButton style={{
-          backgroundColor: '#4ade80',
-          color: '#000',
-          borderRadius: '8px',
-          fontSize: '13px',
-          fontWeight: '600',
-          height: '40px',
-          padding: '0 16px',
-          maxWidth: '160px',
-          overflow: 'hidden',
-          textOverflow: 'ellipsis',
-          whiteSpace: 'nowrap',
-          flexShrink: 0,
-        }}>Follow</WalletMultiButton>
-      );
-    }
-    
-    return (
-      <button
-        onClick={toggleFollow}
-        style={{
-          padding: '12px 24px',
-          background: following ? FOLLOW_BUTTON.activeBg : FOLLOW_BUTTON.inactiveBg,
-          color: following ? FOLLOW_BUTTON.activeColor : FOLLOW_BUTTON.inactiveColor,
-          border: following ? FOLLOW_BUTTON.activeBorder : FOLLOW_BUTTON.inactiveBorder,
-          borderRadius: '8px',
-          fontSize: '14px',
-          fontWeight: '600',
-          cursor: 'pointer'
-        }}
-      >
-        {following ? 'Following' : 'Follow'}
-      </button>
-    );
-  };
+  const FollowButton = () => (
+    <button
+      onClick={toggleFollow}
+      style={{
+        padding: '12px 24px',
+        background: following ? FOLLOW_BUTTON.activeBg : FOLLOW_BUTTON.inactiveBg,
+        color: following ? FOLLOW_BUTTON.activeColor : FOLLOW_BUTTON.inactiveColor,
+        border: following ? FOLLOW_BUTTON.activeBorder : FOLLOW_BUTTON.inactiveBorder,
+        borderRadius: '8px',
+        fontSize: '14px',
+        fontWeight: '600',
+        cursor: 'pointer'
+      }}
+    >
+      {following ? '✓ Following' : 'Follow'}
+    </button>
+  );
 
   return (
     <>
@@ -357,6 +314,7 @@ export default function PoliticianClient({ slug }: { slug: string }) {
 
       {/* Footer */}
     </main>
+    <FollowToast message={toast.message} show={toast.show} />
     <Footer />
     </>
   );
