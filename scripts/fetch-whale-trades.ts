@@ -58,6 +58,12 @@ export interface WhaleTrade {
   action: "BUY" | "SELL" | "TRANSFER" | "UNKNOWN";
 }
 
+// Stablecoins to exclude
+const STABLECOIN_MINTS = new Set([
+  "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v", // USDC
+  "Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB", // USDT
+]);
+
 // Known token mints to symbols
 const TOKEN_SYMBOLS: Record<string, string> = {
   "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v": "USDC",
@@ -187,6 +193,9 @@ async function fetchAllWhaleTrades(): Promise<WhaleTrade[]> {
         
         // Skip unknown/trivial transactions
         if (action === "UNKNOWN") continue;
+        
+        // Skip stablecoin trades
+        if (tokenInfo.mint && STABLECOIN_MINTS.has(tokenInfo.mint)) continue;
         
         allTrades.push({
           wallet: wallet.address,
