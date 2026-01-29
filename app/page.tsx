@@ -3,7 +3,6 @@
 import { useEffect, useState, useMemo } from 'react';
 import Link from 'next/link';
 import { useWallet } from '@solana/wallet-adapter-react';
-import { WalletReadyState } from '@solana/wallet-adapter-base';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { EmailCapture } from './components/EmailCapture';
@@ -50,9 +49,19 @@ export default function Home() {
   const [congressTrades, setCongressTrades] = useState<CongressTrade[]>([]);
   const [followingWallets, setFollowingWallets] = useState<string[]>([]);
   const [limitWarning, setLimitWarning] = useState(false);
-  const [connectPrompt, setConnectPrompt] = useState(false);
-  const { publicKey, connected, wallets, select } = useWallet();
-  const storageKey = publicKey?.toBase58();
+  const { publicKey } = useWallet();
+
+  // Storage key: wallet address if connected, otherwise a persistent anonymous ID
+  const storageKey = useMemo(() => {
+    if (publicKey) return publicKey.toBase58();
+    if (typeof window === 'undefined') return null;
+    let anonId = localStorage.getItem('whales_anon_id');
+    if (!anonId) {
+      anonId = 'anon_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+      localStorage.setItem('whales_anon_id', anonId);
+    }
+    return anonId;
+  }, [publicKey]);
 
   useEffect(() => {
     fetch('/api/congress-trades?limit=4')
@@ -73,6 +82,24 @@ export default function Home() {
       } catch {}
     }
   }, [storageKey]);
+
+  // Migrate: if user connects wallet after following anonymously, merge follows
+  useEffect(() => {
+    if (!publicKey) return;
+    const walletKey = publicKey.toBase58();
+    const anonId = localStorage.getItem('whales_anon_id');
+    if (!anonId) return;
+    try {
+      const anonFollows = JSON.parse(localStorage.getItem(`whales_${anonId}`) || '[]');
+      const walletFollows = JSON.parse(localStorage.getItem(`whales_${walletKey}`) || '[]');
+      if (anonFollows.length > 0) {
+        const merged = [...new Set([...walletFollows, ...anonFollows])];
+        localStorage.setItem(`whales_${walletKey}`, JSON.stringify(merged));
+        localStorage.removeItem(`whales_${anonId}`);
+        setFollowingWallets(merged);
+      }
+    } catch {}
+  }, [publicKey]);
 
   function toggleFollow(address: string) {
     if (!storageKey) return;
@@ -135,9 +162,8 @@ export default function Home() {
           </p>
           <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', flexWrap: 'wrap' }}>
             <Link href="/whales" style={{
-              background: connected ? '#fff' : '#111118',
-              color: connected ? '#000' : '#fff',
-              border: connected ? 'none' : '1px solid #333',
+              background: '#fff',
+              color: '#000',
               padding: '12px 28px',
               borderRadius: '8px',
               fontSize: '15px',
@@ -207,10 +233,7 @@ export default function Home() {
                   }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
                       <button
-                        onClick={() => {
-                          if (connected) toggleFollow(trade.wallet);
-                          else setConnectPrompt(true);
-                        }}
+                        onClick={() => toggleFollow(trade.wallet)}
                         style={{
                           background: isFollowing ? FOLLOW_BUTTON.activeBg : FOLLOW_BUTTON.inactiveBg,
                           color: isFollowing ? FOLLOW_BUTTON.activeColor : FOLLOW_BUTTON.inactiveColor,
@@ -323,99 +346,6 @@ export default function Home() {
         />
 
       </main>
-
-      {/* Custom connect prompt — explains WHY before opening wallet modal */}
-      {connectPrompt && (
-        <div
-          onClick={() => setConnectPrompt(false)}
-          style={{
-            position: 'fixed',
-            inset: 0,
-            background: 'rgba(0,0,0,0.7)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 1000,
-          }}
-        >
-          <div
-            onClick={e => e.stopPropagation()}
-            style={{
-              background: '#111118',
-              border: '1px solid #333',
-              borderRadius: '16px',
-              padding: '28px',
-              maxWidth: '380px',
-              width: '90%',
-              textAlign: 'center',
-            }}
-          >
-            <p style={{ color: '#fff', fontSize: '15px', fontWeight: '600', lineHeight: '1.5', marginBottom: '20px' }}>
-              Your wallet is your account. Connect to save your watchlist and get alerts when whales trade.
-            </p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              {wallets
-                .filter(w => w.readyState === WalletReadyState.Installed)
-                .map(w => (
-                  <button
-                    key={w.adapter.name}
-                    onClick={() => {
-                      select(w.adapter.name);
-                      setConnectPrompt(false);
-                    }}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '12px',
-                      background: '#1a1a24',
-                      border: '1px solid #333',
-                      borderRadius: '10px',
-                      padding: '12px 16px',
-                      color: '#fff',
-                      fontSize: '15px',
-                      fontWeight: '600',
-                      cursor: 'pointer',
-                      width: '100%',
-                    }}
-                  >
-                    <img src={w.adapter.icon} alt={w.adapter.name} style={{ width: '28px', height: '28px', borderRadius: '6px' }} />
-                    {w.adapter.name}
-                  </button>
-                ))}
-              {wallets.filter(w => w.readyState === WalletReadyState.Installed).length === 0 && (
-                <div>
-                  <p style={{ color: '#888', fontSize: '13px', marginBottom: '12px' }}>
-                    No wallet detected. Install a Solana wallet to get started.
-                  </p>
-                  <a
-                    href="https://phantom.app/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: '8px',
-                      background: FOLLOW_BUTTON.inactiveBg,
-                      color: FOLLOW_BUTTON.inactiveColor,
-                      border: FOLLOW_BUTTON.inactiveBorder,
-                      padding: '12px 16px',
-                      borderRadius: '10px',
-                      fontSize: '15px',
-                      fontWeight: '600',
-                      textDecoration: 'none',
-                      width: '100%',
-                      boxSizing: 'border-box',
-                    }}
-                  >
-                    Get Phantom Wallet
-                  </a>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
 
       <Footer />
     </>
