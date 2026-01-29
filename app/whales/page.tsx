@@ -2,10 +2,12 @@
 
 import { useState, useMemo } from 'react';
 import Link from 'next/link';
+import { useWallet } from '@solana/wallet-adapter-react';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
 import { EmailCapture } from '../components/EmailCapture';
 import { useAuth } from '../providers/AuthProvider';
+import { FOLLOW_BUTTON } from '../config/theme';
 import {
   FilterTabs,
   ProUpsellBanner,
@@ -30,7 +32,8 @@ interface WhaleTrade {
   action: 'BUY' | 'SELL' | 'TRANSFER' | 'UNKNOWN';
 }
 
-const TRADES: WhaleTrade[] = (tradesData as WhaleTrade[])
+const ALL_TRADES: WhaleTrade[] = (tradesData as WhaleTrade[])
+  .filter(t => t.action === 'BUY' || t.action === 'SELL')
   .sort((a, b) => b.timestamp - a.timestamp);
 
 const ACTION_BADGES: Record<string, { bg: string; color: string; label: string }> = {
@@ -38,14 +41,17 @@ const ACTION_BADGES: Record<string, { bg: string; color: string; label: string }
   SELL: { bg: '#7f1d1d', color: '#f87171', label: 'SELL' },
 };
 
+const FREE_WATCHLIST_LIMIT = 3;
+
 function isRecentTrade(trade: WhaleTrade): boolean {
   const now = Date.now() / 1000;
   return (now - trade.timestamp) < 24 * 60 * 60;
 }
 
-function formatTime(ts: number): string {
+function formatDate(ts: number): string {
   const date = new Date(ts * 1000);
-  const diffMs = Date.now() - date.getTime();
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
   const diffH = diffMs / (1000 * 60 * 60);
   if (diffH < 1) return `${Math.floor(diffMs / (1000 * 60))}m ago`;
   if (diffH < 24) return `${Math.floor(diffH)}h ago`;
@@ -68,6 +74,9 @@ function shortAddress(addr: string): string {
 
 export default function WhalesPage() {
   const [filter, setFilter] = useState('all');
+  const { publicKey, connected } = useWallet();
+  const [followingWallets, setFollowingWallets] = useState<string[]>([]);
+  const [limitWarning, setLimitWarning] = useState(false);
 
   let isPro = false;
   try {
@@ -75,13 +84,40 @@ export default function WhalesPage() {
     isPro = auth.isPro;
   } catch {}
 
-  const recentTradeCount = useMemo(() => TRADES.filter(isRecentTrade).length, []);
-  const uniqueWhales = useMemo(() => new Set(TRADES.map(t => t.wallet)).size, []);
+  const storageKey = publicKey ? publicKey.toBase58() : null;
 
-  // Only show buys and sells (no transfers)
-  const buysSells = TRADES.filter(t => t.action === 'BUY' || t.action === 'SELL');
+  // Load follows from localStorage
+  useState(() => {
+    if (storageKey) {
+      try {
+        const saved = localStorage.getItem(`whales_${storageKey}`);
+        if (saved) setFollowingWallets(JSON.parse(saved));
+      } catch {}
+    }
+  });
 
-  const filteredTrades = buysSells.filter(t => {
+  function toggleFollow(address: string) {
+    if (!storageKey) return;
+    if (followingWallets.includes(address)) {
+      const newList = followingWallets.filter(a => a !== address);
+      localStorage.setItem(`whales_${storageKey}`, JSON.stringify(newList));
+      setFollowingWallets(newList);
+      setLimitWarning(false);
+      return;
+    }
+    if (!isPro && followingWallets.length >= FREE_WATCHLIST_LIMIT) {
+      setLimitWarning(true);
+      return;
+    }
+    const newList = [...followingWallets, address];
+    localStorage.setItem(`whales_${storageKey}`, JSON.stringify(newList));
+    setFollowingWallets(newList);
+  }
+
+  const recentTradeCount = useMemo(() => ALL_TRADES.filter(isRecentTrade).length, []);
+  const uniqueWhales = useMemo(() => new Set(ALL_TRADES.map(t => t.wallet)).size, []);
+
+  const filteredTrades = ALL_TRADES.filter(t => {
     if (!isPro && isRecentTrade(t)) return false;
     if (filter === 'buy') return t.action === 'BUY';
     if (filter === 'sell') return t.action === 'SELL';
@@ -113,32 +149,31 @@ export default function WhalesPage() {
           </div>
         </div>
 
-        {/* Stats bar */}
-        <div style={{
-          display: 'flex',
-          gap: '16px',
-          marginBottom: '24px',
-          justifyContent: 'center',
-          flexWrap: 'wrap',
-        }}>
-          {[
-            { value: uniqueWhales, label: 'Whales Tracked', color: '#fff' },
-            { value: buysSells.length, label: 'Recent Trades', color: '#fff' },
-            { value: buysSells.filter(t => t.action === 'BUY').length, label: 'Buys', color: '#4ade80' },
-          ].map(({ value, label, color }) => (
-            <div key={label} style={{
-              background: '#111118',
-              border: '1px solid #222',
-              borderRadius: '8px',
-              padding: '10px 16px',
-              textAlign: 'center',
-              minWidth: '120px',
-            }}>
-              <div style={{ color, fontSize: '20px', fontWeight: '700' }}>{value}</div>
-              <div style={{ color: '#666', fontSize: '12px' }}>{label}</div>
-            </div>
-          ))}
-        </div>
+        {/* Watchlist Limit Warning */}
+        {limitWarning && (
+          <div style={{
+            background: 'rgba(251, 191, 36, 0.1)',
+            border: '1px solid rgba(251, 191, 36, 0.3)',
+            borderRadius: '12px',
+            padding: '12px 16px',
+            marginBottom: '16px',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            gap: '8px',
+          }}>
+            <p style={{ color: '#fbbf24', fontSize: '14px', margin: 0 }}>
+              Free plan limit: {FREE_WATCHLIST_LIMIT} watchlist slots. Upgrade for unlimited.
+            </p>
+            <Link href="/pricing" style={{ textDecoration: 'none' }}>
+              <button style={{
+                background: '#fbbf24', color: '#000', border: 'none', borderRadius: '6px',
+                padding: '6px 14px', fontSize: '13px', fontWeight: '600', cursor: 'pointer',
+              }}>Upgrade to Pro</button>
+            </Link>
+          </div>
+        )}
 
         {/* Pro Upsell */}
         {!isPro && (
@@ -158,38 +193,46 @@ export default function WhalesPage() {
           isPro={isPro}
           emptyMessage="No trades found for this filter."
           renderCard={(trade, i) => {
-            const badge = ACTION_BADGES[trade.action] || ACTION_BADGES.UNKNOWN;
+            const badge = ACTION_BADGES[trade.action] || { bg: '#333', color: '#888', label: '?' };
             const symbol = trade.tokenSymbol || (trade.tokenMint ? shortAddress(trade.tokenMint) : '???');
             const displayName = trade.walletLabel || shortAddress(trade.wallet);
+            const isFollowing = followingWallets.includes(trade.wallet);
 
             return (
               <TradeCard
                 key={`${trade.signature}-${i}`}
-                badge={badge}
+                followButton={
+                  <button
+                    onClick={() => {
+                      if (connected) toggleFollow(trade.wallet);
+                      else document.querySelector<HTMLButtonElement>('.wallet-adapter-button')?.click();
+                    }}
+                    style={{
+                      padding: '4px 10px',
+                      background: isFollowing ? FOLLOW_BUTTON.activeBg : FOLLOW_BUTTON.inactiveBg,
+                      color: isFollowing ? FOLLOW_BUTTON.activeColor : FOLLOW_BUTTON.inactiveColor,
+                      border: isFollowing ? FOLLOW_BUTTON.activeBorder : FOLLOW_BUTTON.inactiveBorder,
+                      borderRadius: '6px',
+                      fontSize: '12px',
+                      fontWeight: '600',
+                      cursor: 'pointer',
+                      flexShrink: 0,
+                    }}
+                  >
+                    {isFollowing ? '✓' : '+'}
+                  </button>
+                }
                 actor={displayName}
                 actorHref={`/wallet/${trade.wallet}`}
-                actorMeta={<span style={{ color: '#555' }}>{trade.walletValue}</span>}
-                timestamp={formatTime(trade.timestamp)}
-                highlight={symbol}
-                bottomRight={
-                  <div style={{ textAlign: 'right' }}>
-                    <div style={{ color: '#fff', fontWeight: '500' }}>
-                      {trade.tokenAmount !== undefined
-                        ? `${formatAmount(trade.tokenAmount)} ${symbol}`
-                        : '—'}
-                    </div>
-                    <div style={{ color: '#666', fontSize: '12px' }}>
-                      <a
-                        href={`https://solscan.io/tx/${trade.signature}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        style={{ color: '#60a5fa', textDecoration: 'none' }}
-                      >
-                        View on Solscan ↗
-                      </a>
-                    </div>
-                  </div>
+                badge={badge}
+                asset={symbol}
+                amount={
+                  trade.tokenAmount !== undefined
+                    ? `${formatAmount(trade.tokenAmount)} ${symbol}`
+                    : '—'
                 }
+                date={formatDate(trade.timestamp)}
+                txUrl={`https://solscan.io/tx/${trade.signature}`}
               />
             );
           }}

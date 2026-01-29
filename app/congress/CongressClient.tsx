@@ -8,6 +8,7 @@ import { EmailCapture } from '../components/EmailCapture';
 import TradeAlerts from '../components/TradeAlerts';
 import { Header } from '../components/Header';
 import { useAuth } from '../providers/AuthProvider';
+import { FOLLOW_BUTTON } from '../config/theme';
 import {
   FilterTabs,
   ProUpsellBanner,
@@ -68,12 +69,33 @@ function isRecentTrade(trade: CongressTrade): boolean {
 
 export default function CongressClient({ trades, topTraders, committeeData, politicians }: Props) {
   const [filter, setFilter] = useState('all');
+  const [followingPoliticians, setFollowingPoliticians] = useState<string[]>([]);
 
   let isPro = false;
   try {
     const auth = useAuth();
     isPro = auth.isPro;
   } catch {}
+
+  // Load follows from localStorage
+  useState(() => {
+    try {
+      const saved = localStorage.getItem('congress_following');
+      if (saved) setFollowingPoliticians(JSON.parse(saved));
+    } catch {}
+  });
+
+  function toggleFollow(name: string) {
+    if (followingPoliticians.includes(name)) {
+      const newList = followingPoliticians.filter(n => n !== name);
+      localStorage.setItem('congress_following', JSON.stringify(newList));
+      setFollowingPoliticians(newList);
+      return;
+    }
+    const newList = [...followingPoliticians, name];
+    localStorage.setItem('congress_following', JSON.stringify(newList));
+    setFollowingPoliticians(newList);
+  }
 
   const recentTradeCount = useMemo(() => trades.filter(isRecentTrade).length, [trades]);
   const flaggedCount = trades.filter(t => hasCorrelation(t, committeeData)).length;
@@ -112,7 +134,7 @@ export default function CongressClient({ trades, topTraders, committeeData, poli
           </div>
         </div>
 
-        {/* Trade Alerts Signup */}
+        {/* Trade Alerts */}
         <div style={{ marginBottom: '32px' }}>
           <TradeAlerts politicians={politicians} compact={true} />
         </div>
@@ -151,12 +173,7 @@ export default function CongressClient({ trades, topTraders, committeeData, poli
         )}
 
         {/* Pro Upsell */}
-        {!isPro && (
-          <ProUpsellBanner
-            count={recentTradeCount}
-            label="trade filed"
-          />
-        )}
+        {!isPro && <ProUpsellBanner count={recentTradeCount} label="trade filed" />}
 
         {/* Filter Tabs */}
         <FilterTabs tabs={tabs} active={filter} onChange={setFilter} />
@@ -188,35 +205,44 @@ export default function CongressClient({ trades, topTraders, committeeData, poli
           }
           renderCard={(trade, i) => {
             const isFlagged = hasCorrelation(trade, committeeData);
+            const isFollowing = followingPoliticians.includes(trade.politician);
+
             return (
               <TradeCard
                 key={i}
+                followButton={
+                  <button
+                    onClick={() => toggleFollow(trade.politician)}
+                    style={{
+                      padding: '4px 10px',
+                      background: isFollowing ? FOLLOW_BUTTON.activeBg : FOLLOW_BUTTON.inactiveBg,
+                      color: isFollowing ? FOLLOW_BUTTON.activeColor : FOLLOW_BUTTON.inactiveColor,
+                      border: isFollowing ? FOLLOW_BUTTON.activeBorder : FOLLOW_BUTTON.inactiveBorder,
+                      borderRadius: '6px',
+                      fontSize: '12px',
+                      fontWeight: '600',
+                      cursor: 'pointer',
+                      flexShrink: 0,
+                    }}
+                  >
+                    {isFollowing ? '✓' : '+'}
+                  </button>
+                }
+                actor={trade.politician}
+                actorHref={`/congress/${encodeURIComponent(trade.politician.toLowerCase().replace(/ /g, '-'))}`}
                 badge={{
                   label: trade.type === 'Purchase' ? 'BUY' : 'SELL',
                   bg: trade.type === 'Purchase' ? '#064e3b' : '#7f1d1d',
                   color: trade.type === 'Purchase' ? '#4ade80' : '#f87171',
                 }}
-                actor={trade.politician}
-                actorHref={`/congress/${encodeURIComponent(trade.politician.toLowerCase().replace(/ /g, '-'))}`}
-                actorMeta={
-                  <span style={{ color: trade.party === 'D' ? '#60a5fa' : '#f87171' }}>
-                    ({trade.party}) · {trade.chamber}
-                  </span>
-                }
                 extras={
                   isFlagged ? (
                     <CommitteeCorrelation trade={trade} committeeData={committeeData} showBadge={true} />
                   ) : undefined
                 }
-                timestamp={`Filed ${trade.filed}`}
-                highlight={trade.ticker}
-                highlightMeta={trade.company}
-                bottomRight={
-                  <div style={{ textAlign: 'right' }}>
-                    <div style={{ color: '#fff', fontWeight: '500' }}>{trade.amount}</div>
-                    <div style={{ color: '#666', fontSize: '12px' }}>Traded {trade.traded}</div>
-                  </div>
-                }
+                asset={trade.ticker}
+                amount={trade.amount}
+                date={`Filed ${trade.filed}`}
                 background={
                   isFlagged
                     ? 'linear-gradient(135deg, rgba(251, 191, 36, 0.05) 0%, #111118 100%)'

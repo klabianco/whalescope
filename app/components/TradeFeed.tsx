@@ -8,31 +8,29 @@ import Link from 'next/link';
 export interface FilterTab {
   key: string;
   label: string;
-  /** Optional accent color override (default: #4ade80) */
   color?: string;
-  /** Optional count badge */
   count?: number;
 }
 
 export interface TradeCardProps {
-  /** Left badge */
-  badge: { label: string; bg: string; color: string };
-  /** Primary actor name */
+  /** Follow button (rendered by each page with its own logic) */
+  followButton?: React.ReactNode;
+  /** Actor name (politician or wallet) */
   actor: string;
   /** Link for the actor */
   actorHref: string;
-  /** Secondary info next to actor (party, wallet value, etc.) */
-  actorMeta?: React.ReactNode;
-  /** Extra badges/components after actor line */
+  /** Buy/Sell badge */
+  badge: { label: string; bg: string; color: string };
+  /** What was traded (ticker/token symbol) */
+  asset: string;
+  /** Dollar amount or amount range */
+  amount: string;
+  /** Date string */
+  date: string;
+  /** Optional transaction link URL */
+  txUrl?: string;
+  /** Extra badges after actor (committee correlation, etc.) */
   extras?: React.ReactNode;
-  /** Right side of header row (date, filed time) */
-  timestamp: string;
-  /** Main highlight text (ticker, token symbol) */
-  highlight: string;
-  /** Text next to highlight (company name, token amount) */
-  highlightMeta?: string;
-  /** Right side of bottom row */
-  bottomRight?: React.ReactNode;
   /** Card background override */
   background?: string;
   /** Card border override */
@@ -43,13 +41,13 @@ export interface TradeCardProps {
 
 const TRADES_PER_PAGE = 25;
 
-export function FilterTabs({ 
-  tabs, 
-  active, 
-  onChange 
-}: { 
-  tabs: FilterTab[]; 
-  active: string; 
+export function FilterTabs({
+  tabs,
+  active,
+  onChange,
+}: {
+  tabs: FilterTab[];
+  active: string;
   onChange: (key: string) => void;
 }) {
   return (
@@ -93,12 +91,12 @@ export function FilterTabs({
   );
 }
 
-export function ProUpsellBanner({ 
-  count, 
+export function ProUpsellBanner({
+  count,
   label = 'trade',
   description = 'Pro members see new trades instantly. Free users get a 24h delay.',
-}: { 
-  count: number; 
+}: {
+  count: number;
   label?: string;
   description?: string;
 }) {
@@ -144,15 +142,15 @@ export function ProUpsellBanner({
 }
 
 export function TradeCard({
-  badge,
+  followButton,
   actor,
   actorHref,
-  actorMeta,
+  badge,
+  asset,
+  amount,
+  date,
+  txUrl,
   extras,
-  timestamp,
-  highlight,
-  highlightMeta,
-  bottomRight,
   background,
   border,
 }: TradeCardProps) {
@@ -163,55 +161,61 @@ export function TradeCard({
       borderRadius: '12px',
       padding: '16px 20px',
     }}>
+      {/* Row 1: Follow + Name + Badge */}
       <div style={{
         display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'flex-start',
+        alignItems: 'center',
+        gap: '10px',
         marginBottom: '12px',
+        flexWrap: 'wrap',
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
-          <span style={{
-            background: badge.bg,
-            color: badge.color,
-            padding: '4px 10px',
-            borderRadius: '6px',
-            fontSize: '12px',
-            fontWeight: '600',
-          }}>
-            {badge.label}
-          </span>
-          <div>
-            <Link
-              href={actorHref}
-              style={{ color: '#fff', fontWeight: '600', textDecoration: 'none' }}
-            >
-              {actor}
-            </Link>
-            {actorMeta && (
-              <span style={{ fontSize: '12px', marginLeft: '8px' }}>
-                {actorMeta}
-              </span>
-            )}
-          </div>
-          {extras}
-        </div>
-        <span style={{ color: '#666', fontSize: '13px', whiteSpace: 'nowrap' }}>
-          {timestamp}
+        {followButton}
+        <Link
+          href={actorHref}
+          style={{ color: '#fff', fontWeight: '600', textDecoration: 'none', fontSize: '15px' }}
+        >
+          {actor}
+        </Link>
+        <span style={{
+          background: badge.bg,
+          color: badge.color,
+          padding: '3px 8px',
+          borderRadius: '5px',
+          fontSize: '11px',
+          fontWeight: '700',
+          letterSpacing: '0.5px',
+        }}>
+          {badge.label}
         </span>
+        {extras}
       </div>
 
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div>
-          <span style={{ color: '#4ade80', fontWeight: '600', fontSize: '18px' }}>
-            {highlight}
-          </span>
-          {highlightMeta && (
-            <span style={{ color: '#888', marginLeft: '8px' }}>
-              {highlightMeta}
-            </span>
-          )}
-        </div>
-        {bottomRight}
+      {/* Row 2: Asset | Amount | Date | Tx link */}
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: '16px',
+        flexWrap: 'wrap',
+      }}>
+        <span style={{ color: '#4ade80', fontWeight: '600', fontSize: '16px' }}>
+          {asset}
+        </span>
+        <span style={{ color: '#fff', fontWeight: '500', fontSize: '14px' }}>
+          {amount}
+        </span>
+        <span style={{ color: '#666', fontSize: '13px' }}>
+          {date}
+        </span>
+        {txUrl && (
+          <a
+            href={txUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: '#60a5fa', fontSize: '12px', textDecoration: 'none', marginLeft: 'auto' }}
+          >
+            View tx ↗
+          </a>
+        )}
       </div>
     </div>
   );
@@ -283,10 +287,6 @@ export function EmptyState({ message }: { message: string }) {
   );
 }
 
-/**
- * Generic paginated trade feed with pro gating.
- * Pass renderCard to customise each row.
- */
 export function TradeFeedList<T>({
   trades,
   isPro,
