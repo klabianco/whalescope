@@ -10,12 +10,18 @@ interface ParsedTrade {
   timestamp: number;
   type: string;
   description: string;
-  action: 'BUY' | 'SELL' | 'SWAP' | 'TRANSFER' | 'UNKNOWN';
+  action: 'BUY' | 'SELL' | 'UNKNOWN';
   tokenSymbol?: string;
   tokenMint?: string;
   amount?: number;
   solAmount?: number;
 }
+
+// Stablecoins to exclude
+const STABLECOIN_MINTS = new Set([
+  'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v', // USDC
+  'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB', // USDT
+]);
 
 interface Props {
   address: string;
@@ -44,22 +50,18 @@ function parseTrades(txns: any[], walletAddress: string): ParsedTrade[] {
     const desc = tx.description || '';
     const type = tx.type || 'UNKNOWN';
     
-    // Determine action from Helius enriched data
     let action: ParsedTrade['action'] = 'UNKNOWN';
     let tokenSymbol: string | undefined;
     let tokenMint: string | undefined;
     let amount: number | undefined;
     let solAmount: number | undefined;
 
-    // Check token transfers
     const tokenTransfers = tx.tokenTransfers || [];
     const nativeTransfers = tx.nativeTransfers || [];
 
     if (type === 'SWAP') {
-      action = 'SWAP';
-      // Figure out if it's a buy or sell based on token flow
-      const received = tokenTransfers.find((t: any) => t.toUserAccount === walletAddress);
-      const sent = tokenTransfers.find((t: any) => t.fromUserAccount === walletAddress);
+      const received = tokenTransfers.find((t: any) => t.toUserAccount === walletAddress && t.mint !== 'So11111111111111111111111111111111111111112');
+      const sent = tokenTransfers.find((t: any) => t.fromUserAccount === walletAddress && t.mint !== 'So11111111111111111111111111111111111111112');
       
       if (received) {
         action = 'BUY';
@@ -71,24 +73,33 @@ function parseTrades(txns: any[], walletAddress: string): ParsedTrade[] {
         amount = sent.tokenAmount;
       }
 
-      // SOL amount from native transfers
       const solReceived = nativeTransfers.find((t: any) => t.toUserAccount === walletAddress);
       const solSent = nativeTransfers.find((t: any) => t.fromUserAccount === walletAddress);
-      if (action === 'SELL' && solReceived) {
-        solAmount = solReceived.amount / 1e9;
-      } else if (action === 'BUY' && solSent) {
-        solAmount = solSent.amount / 1e9;
-      }
+      if (action === 'SELL' && solReceived) solAmount = solReceived.amount / 1e9;
+      else if (action === 'BUY' && solSent) solAmount = solSent.amount / 1e9;
     } else if (type === 'TRANSFER') {
-      action = 'TRANSFER';
-      const received = tokenTransfers.find((t: any) => t.toUserAccount === walletAddress);
-      const sent = tokenTransfers.find((t: any) => t.fromUserAccount === walletAddress);
-      if (received) {
-        tokenMint = received.mint;
-        amount = received.tokenAmount;
-      } else if (sent) {
-        tokenMint = sent.mint;
-        amount = sent.tokenAmount;
+      // Classify transfers by direction
+      const sentToken = tokenTransfers.find((t: any) => t.fromUserAccount === walletAddress);
+      const receivedToken = tokenTransfers.find((t: any) => t.toUserAccount === walletAddress);
+      const sentNative = nativeTransfers.find((t: any) => t.fromUserAccount === walletAddress);
+      const receivedNative = nativeTransfers.find((t: any) => t.toUserAccount === walletAddress);
+
+      if (sentToken && !receivedToken) {
+        action = 'SELL';
+        tokenMint = sentToken.mint;
+        amount = sentToken.tokenAmount;
+      } else if (receivedToken && !sentToken) {
+        action = 'BUY';
+        tokenMint = receivedToken.mint;
+        amount = receivedToken.tokenAmount;
+      } else if (sentNative && !receivedNative) {
+        action = 'SELL';
+        tokenMint = 'So11111111111111111111111111111111111111112';
+        amount = sentNative.amount / 1e9;
+      } else if (receivedNative && !sentNative) {
+        action = 'BUY';
+        tokenMint = 'So11111111111111111111111111111111111111112';
+        amount = receivedNative.amount / 1e9;
       }
     }
 
@@ -103,7 +114,9 @@ function parseTrades(txns: any[], walletAddress: string): ParsedTrade[] {
       amount,
       solAmount,
     };
-  });
+  })
+  // Filter out stablecoins and unknowns
+  .filter(t => t.action !== 'UNKNOWN' && !(t.tokenMint && STABLECOIN_MINTS.has(t.tokenMint)));
 }
 
 export default function WalletClient({ address, walletLabel, walletDescription }: Props) {
@@ -135,7 +148,6 @@ export default function WalletClient({ address, walletLabel, walletDescription }
     totalTrades: trades.length,
     buys: trades.filter(t => t.action === 'BUY').length,
     sells: trades.filter(t => t.action === 'SELL').length,
-    swaps: trades.filter(t => t.action === 'SWAP').length,
     firstSeen: trades.length > 0
       ? new Date(Math.min(...trades.map(t => t.timestamp)) * 1000).toLocaleDateString()
       : 'N/A',
@@ -151,9 +163,6 @@ export default function WalletClient({ address, walletLabel, walletDescription }
   const actionColors: Record<string, { bg: string; text: string }> = {
     BUY: { bg: '#064e3b', text: '#4ade80' },
     SELL: { bg: '#7f1d1d', text: '#f87171' },
-    SWAP: { bg: '#1e3a5f', text: '#60a5fa' },
-    TRANSFER: { bg: '#374151', text: '#9ca3af' },
-    UNKNOWN: { bg: '#374151', text: '#9ca3af' },
   };
 
   return (
@@ -297,21 +306,12 @@ export default function WalletClient({ address, walletLabel, walletDescription }
                         }}>
                           {trade.action}
                         </span>
-                        <span style={{ color: '#555', fontSize: '12px' }}>
-                          {trade.type}
-                        </span>
                       </div>
                       <span style={{ color: '#666', fontSize: '14px' }}>
                         {timeAgo(trade.timestamp)}
                       </span>
                     </div>
                     
-                    {trade.description && (
-                      <p style={{ color: '#ccc', fontSize: '14px', lineHeight: '1.5', marginBottom: '8px' }}>
-                        {trade.description}
-                      </p>
-                    )}
-
                     <div style={{ display: 'flex', gap: '16px', alignItems: 'center', marginTop: '8px' }}>
                       {trade.amount != null && trade.amount > 0 && (
                         <span style={{ color: '#fff', fontSize: '14px', fontWeight: '600' }}>
