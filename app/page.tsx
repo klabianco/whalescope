@@ -46,9 +46,13 @@ export default function Home() {
       .then(res => res.ok ? res.json() : [])
       .then(setTrades)
       .catch(() => setTrades([]));
-    fetch('/congress-trades.json')
+    fetch('/api/congress-trades?limit=4')
       .then(res => res.ok ? res.json() : [])
-      .then(setCongressTrades)
+      .then((data: any) => {
+        // API returns { trades: [...] } or array
+        const trades = Array.isArray(data) ? data : (data.trades || []);
+        setCongressTrades(trades);
+      })
       .catch(() => setCongressTrades([]));
   }, []);
   

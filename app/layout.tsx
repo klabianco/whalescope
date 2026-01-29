@@ -4,8 +4,27 @@ import './globals.css'
 import { ClientProviders } from './providers/ClientProviders'
 
 export const metadata: Metadata = {
-  title: 'WhaleScope - Track Smart Money on Solana',
-  description: 'See what profitable wallets are buying before it pumps',
+  title: 'WhaleScope — Track Congress Trades & Crypto Whales',
+  description: 'Free real-time tracking of Congress stock trades and crypto whale wallets. See what politicians and smart money are buying before everyone else.',
+  metadataBase: new URL('https://whalescope.app'),
+  openGraph: {
+    title: 'WhaleScope — Track Congress Trades & Crypto Whales',
+    description: 'Free real-time tracking of Congress stock trades and crypto whale wallets. See what politicians and smart money are buying.',
+    url: 'https://whalescope.app',
+    siteName: 'WhaleScope',
+    type: 'website',
+    locale: 'en_US',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'WhaleScope — Track Congress Trades & Crypto Whales',
+    description: 'Free real-time tracking of Congress stock trades and crypto whale wallets.',
+    creator: '@WrenTheAI',
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 }
 
 export default function RootLayout({
