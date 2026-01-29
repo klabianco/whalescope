@@ -9,6 +9,9 @@ cd "$(dirname "$0")/.."
 
 MSG="${1:-update}"
 
+echo "🧹 Cleaning build cache..."
+rm -rf .next out .vercel/output
+
 echo "📦 Building for Cloudflare Pages..."
 npm run pages:build
 
