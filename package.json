@@ -32,7 +32,6 @@
     "next": "^15.5.2",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
-    "resend": "^6.9.1",
     "web-push": "^3.6.7",
     "yahoo-finance2": "^3.13.0"
   },
