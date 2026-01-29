@@ -104,7 +104,14 @@ export default function PricingClient() {
         </div>
 
         {/* Pricing Cards */}
-        <div style={{ 
+        <style>{`
+          @media (max-width: 640px) {
+            .ws-pricing-grid { grid-template-columns: 1fr !important; }
+            .ws-compare-grid { grid-template-columns: 1fr 90px 90px 90px !important; font-size: 12px !important; }
+            .ws-compare-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+          }
+        `}</style>
+        <div className="ws-pricing-grid" style={{ 
           display: 'grid',
           gridTemplateColumns: 'repeat(2, 1fr)',
           gap: '24px',
@@ -262,10 +269,12 @@ export default function PricingClient() {
             How WhaleScope compares
           </h2>
           
-          <div style={{
+          <div className="ws-compare-wrap">
+          <div className="ws-compare-grid" style={{
             display: 'grid',
             gridTemplateColumns: '1fr 130px 130px 130px',
-            gap: '12px'
+            gap: '12px',
+            minWidth: '400px',
           }}>
             {/* Header */}
             <div style={{ color: '#71717a', fontSize: '13px', fontWeight: '600' }}></div>
@@ -327,6 +336,7 @@ export default function PricingClient() {
             <div style={{ color: '#22c55e', fontSize: '14px', fontWeight: '700', textAlign: 'center', padding: '12px 0', borderTop: '1px solid #27272a' }}>${480 - PRICING.pro.yearly}/yr</div>
             <div style={{ color: '#22c55e', fontSize: '14px', fontWeight: '700', textAlign: 'center', padding: '12px 0', borderTop: '1px solid #27272a' }}>${588 - PRICING.pro.yearly}/yr</div>
           </div>
+          </div>{/* close ws-compare-wrap */}
         </div>
 
         {/* FAQ Section */}
