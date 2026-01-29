@@ -222,9 +222,6 @@ export default function Home() {
                     padding: '14px 16px',
                   }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-                      <span style={{ color: '#fff', fontWeight: '600', fontSize: '14px' }}>
-                        {trade.walletLabel || trade.wallet.slice(0, 8) + '...'}
-                      </span>
                       <button
                         onClick={() => {
                           if (connected) toggleFollow(trade.wallet);
@@ -243,6 +240,9 @@ export default function Home() {
                       >
                         {isFollowing ? '✓ Following' : '+ Follow'}
                       </button>
+                      <span style={{ color: '#fff', fontWeight: '600', fontSize: '14px' }}>
+                        {trade.walletLabel || trade.wallet.slice(0, 8) + '...'}
+                      </span>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                       <div>
