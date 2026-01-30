@@ -50,9 +50,21 @@ function shortAddr(addr: string): string {
 }
 
 export default function WalletClient({ address, walletLabel, walletDescription }: Props) {
-  const trades = useMemo(
+  // All trades for this wallet (for stats)
+  const allWalletTrades = useMemo(
     () => ALL_TRADES.filter(t => t.wallet === address).sort((a, b) => b.timestamp - a.timestamp),
     [address]
+  );
+
+  // Filtered trades for display — remove dust (< 0.1 SOL equivalent)
+  const trades = useMemo(
+    () => allWalletTrades.filter(t => {
+      // Keep trades with meaningful amounts
+      if (t.solAmount && t.solAmount >= 0.1) return true;
+      if (t.tokenAmount && t.tokenAmount >= 1) return true;
+      return false;
+    }),
+    [allWalletTrades]
   );
 
   const stats = {
@@ -188,30 +200,39 @@ export default function WalletClient({ address, walletLabel, walletDescription }
                       </span>
                     </div>
 
-                    <div style={{ display: 'flex', gap: '16px', alignItems: 'center', marginTop: '8px' }}>
-                      <span style={{ color: '#4ade80', fontWeight: '600', fontSize: '16px' }}>
+                    {/* Token + Amount */}
+                    <div style={{ marginTop: '4px' }}>
+                      <span style={{ color: '#fff', fontWeight: '700', fontSize: '16px' }}>
                         {symbol}
                       </span>
                       {trade.tokenAmount != null && trade.tokenAmount > 0 && (
-                        <span style={{ color: '#fff', fontSize: '14px', fontWeight: '600' }}>
+                        <span style={{ color: '#ccc', fontSize: '14px', marginLeft: '8px' }}>
                           {formatNumber(trade.tokenAmount)} {symbol}
                         </span>
                       )}
+                      {trade.solAmount != null && trade.solAmount > 0 && (
+                        <span style={{ color: '#888', fontSize: '13px', marginLeft: '8px' }}>
+                          ({formatNumber(trade.solAmount)} SOL)
+                        </span>
+                      )}
+                    </div>
+                    {/* Links */}
+                    <div style={{ display: 'flex', gap: '16px', marginTop: '8px' }}>
                       {trade.tokenMint && (
                         <Link
                           href={`/token/${trade.tokenMint}`}
-                          style={{ color: '#60a5fa', fontSize: '13px', textDecoration: 'none' }}
+                          style={{ color: '#60a5fa', fontSize: '12px', textDecoration: 'none' }}
                         >
-                          View token →
+                          View token ↗
                         </Link>
                       )}
                       <a
                         href={`https://solscan.io/tx/${trade.signature}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        style={{ color: '#888', fontSize: '13px', textDecoration: 'none', marginLeft: 'auto' }}
+                        style={{ color: '#888', fontSize: '12px', textDecoration: 'none' }}
                       >
-                        View tx →
+                        View tx ↗
                       </a>
                     </div>
                   </div>
