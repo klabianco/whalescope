@@ -65,7 +65,7 @@ export default function Home() {
   const { toast, toggleWhale, isFollowingWhale, limitHit } = useFollows();
 
   useEffect(() => {
-    fetch('/api/congress-trades?limit=4')
+    fetch('/api/congress-trades?limit=3')
       .then(res => res.ok ? res.json() : [])
       .then((data: any) => {
         const trades = Array.isArray(data) ? data : (data.trades || []);
@@ -100,6 +100,11 @@ export default function Home() {
     if (!n) return '';
     if (n >= 1000) return `${(n / 1000).toFixed(1)}K SOL`;
     return `${n.toFixed(1)} SOL`;
+  };
+
+  const formatUSD = (val: string) => {
+    // walletValue is like "$32.3M" — use it directly as trade value display
+    return val || '';
   };
   
   return (
@@ -160,11 +165,12 @@ export default function Home() {
 
             <div style={{ 
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
               gap: '10px',
             }}>
               {whaleTrades.map((trade, i) => {
                 const isFollowing = isFollowingWhale(trade.wallet);
+                const shortAddr = trade.wallet.slice(0, 6) + '...' + trade.wallet.slice(-4);
                 return (
                   <div key={i} style={{
                     background: '#111118',
@@ -172,46 +178,51 @@ export default function Home() {
                     borderRadius: '10px',
                     padding: '14px 16px',
                   }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                    {/* Row 1: Token + Action badge + Follow */}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <span style={{ color: '#fff', fontSize: '16px', fontWeight: '700' }}>{trade.tokenSymbol}</span>
+                        <span style={{
+                          background: trade.action === 'BUY' ? '#064e3b' : '#7f1d1d',
+                          color: trade.action === 'BUY' ? '#4ade80' : '#f87171',
+                          padding: '2px 8px',
+                          borderRadius: '4px',
+                          fontSize: '11px',
+                          fontWeight: '600',
+                        }}>
+                          {trade.action}
+                        </span>
+                      </div>
                       <button
                         onClick={() => toggleWhale(trade.wallet)}
                         style={{
                           background: isFollowing ? FOLLOW_BUTTON.activeBg : FOLLOW_BUTTON.inactiveBg,
                           color: isFollowing ? FOLLOW_BUTTON.activeColor : FOLLOW_BUTTON.inactiveColor,
                           border: isFollowing ? FOLLOW_BUTTON.activeBorder : FOLLOW_BUTTON.inactiveBorder,
-                          padding: '4px 12px',
+                          padding: '3px 10px',
                           borderRadius: '6px',
-                          fontSize: '12px',
+                          fontSize: '11px',
                           fontWeight: '600',
                           cursor: 'pointer',
                         }}
                       >
-                        {isFollowing ? '✓ Following' : '+ Follow'}
+                        {isFollowing ? '✓' : '+'}
                       </button>
-                      <span style={{ color: '#fff', fontWeight: '600', fontSize: '14px' }}>
-                        {getWalletDisplayName(trade.wallet, trade.walletLabel, trade.walletValue)}
+                    </div>
+                    {/* Row 2: Trade value — the hero number */}
+                    <div style={{ marginBottom: '6px' }}>
+                      <span style={{ color: '#fff', fontSize: '20px', fontWeight: '700' }}>
+                        {trade.walletValue || formatSol(trade.solAmount) || '—'}
                       </span>
                     </div>
+                    {/* Row 3: Wallet + time */}
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <div>
-                        <span style={{ color: '#ccc', fontSize: '15px', fontWeight: '600' }}>{trade.tokenSymbol}</span>
-                        <span style={{
-                          background: trade.action === 'BUY' ? '#064e3b' : '#7f1d1d',
-                          color: trade.action === 'BUY' ? '#4ade80' : '#f87171',
-                          padding: '2px 6px',
-                          borderRadius: '4px',
-                          fontSize: '10px',
-                          fontWeight: '600',
-                          marginLeft: '8px',
-                        }}>
-                          {trade.action}
-                        </span>
-                      </div>
-                      <span style={{ color: '#555', fontSize: '12px' }}>{formatSol(trade.solAmount)}</span>
-                    </div>
-                    <div style={{ fontSize: '11px', color: '#444', marginTop: '6px' }}>
-                      {formatTime(trade.timestamp)}
-                      {trade.walletLabel && !trade.walletLabel.includes('...') ? ` · ${trade.walletValue}` : ''}
+                      <Link href={`/wallet/${trade.wallet}`} style={{ color: '#666', fontSize: '12px', textDecoration: 'none' }}>
+                        {shortAddr}
+                      </Link>
+                      <span style={{ color: '#555', fontSize: '11px' }}>
+                        {formatTime(trade.timestamp)}
+                      </span>
                     </div>
                   </div>
                 );
@@ -238,10 +249,10 @@ export default function Home() {
             </div>
             <div style={{ 
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
               gap: '10px',
             }}>
-              {congressTrades.slice(0, 4).map((trade, i) => (
+              {congressTrades.slice(0, 3).map((trade, i) => (
                 <Link key={i} href={`/congress/${trade.politician.toLowerCase().replace(/ /g, '-')}`} style={{ textDecoration: 'none' }}>
                   <div style={{
                     background: '#111118',
