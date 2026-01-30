@@ -92,8 +92,8 @@ export default function Home() {
 
     const liveFiltered = liveTrades
       .filter(t => !EXCLUDED_WALLETS.has(t.wallet) && (t.action === 'BUY' || t.action === 'SELL'))
-      // Homepage only shows significant trades — filter out dust
-      .filter(t => (t.solAmount && t.solAmount >= 10) || (t.tokenAmount && t.tokenAmount >= 1000));
+      // Homepage hero cards only show significant trades (≥100 SOL swaps)
+      .filter(t => t.solAmount && t.solAmount >= 100);
 
     const liveSigs = new Set(liveFiltered.map(t => t.signature));
     const combined = [
