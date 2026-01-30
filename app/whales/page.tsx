@@ -243,18 +243,26 @@ export default function WhalesPage() {
     });
     return Object.entries(counts)
       .sort((a, b) => b[1].count - a[1].count)
-      .slice(0, 8)
+      .slice(0, 5)
       .map(([address, info]) => ({ address, ...info }));
   }, []);
 
-  const filteredTrades = ALL_TRADES.filter(t => {
-    if (filter === 'buy' && t.action !== 'BUY') return false;
-    if (filter === 'sell' && t.action !== 'SELL') return false;
-    // Filter out dust trades under $1
-    const usd = getTradeUSDRaw(t);
-    if (usd > 0 && usd < 1) return false;
-    return true;
-  });
+  // Limit trades per wallet to prevent one whale dominating the entire feed
+  const MAX_TRADES_PER_WALLET = 5;
+  const filteredTrades = (() => {
+    const walletCounts: Record<string, number> = {};
+    return ALL_TRADES.filter(t => {
+      if (filter === 'buy' && t.action !== 'BUY') return false;
+      if (filter === 'sell' && t.action !== 'SELL') return false;
+      // Filter out small trades — whale tracker should only show significant moves
+      const usd = getTradeUSDRaw(t);
+      if (usd > 0 && usd < 1000) return false;
+      // Per-wallet limit for feed diversity
+      walletCounts[t.wallet] = (walletCounts[t.wallet] || 0) + 1;
+      if (walletCounts[t.wallet] > MAX_TRADES_PER_WALLET) return false;
+      return true;
+    });
+  })();
 
   const tabs: FilterTab[] = [
     { key: 'all', label: 'All Trades' },
@@ -328,10 +336,12 @@ export default function WhalesPage() {
                       border: '1px solid #222',
                       borderRadius: '12px',
                       padding: '16px 20px',
-                      minWidth: '180px',
+                      minWidth: '160px',
+                      maxWidth: '200px',
                       display: 'flex',
                       flexDirection: 'column',
                       gap: '8px',
+                      overflow: 'hidden',
                     }}
                   >
                     <button
@@ -354,7 +364,7 @@ export default function WhalesPage() {
                       href={`/wallet/${whale.address}`}
                       style={{ textDecoration: 'none' }}
                     >
-                      <span style={{ color: '#fff', fontWeight: '600' }}>{displayName}</span>
+                      <span style={{ color: '#fff', fontWeight: '600', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', display: 'block' }}>{displayName}</span>
                     </Link>
                     <div style={{ color: '#888', fontSize: '13px' }}>
                       {whale.count} trades
@@ -377,7 +387,9 @@ export default function WhalesPage() {
           renderCard={(trade, i) => {
             const badge = ACTION_BADGES[trade.action] || { bg: '#333', color: '#888', label: '?' };
             const symbol = getTokenSymbol(trade);
-            const displayName = getWalletDisplayName(trade.wallet, trade.walletLabel, trade.walletValue);
+            // In the trade feed, show short address to avoid repeating "$27.4M Whale" on every row
+            // The wallet display name is used in the "Most Active Whales" section instead
+            const displayName = shortAddress(trade.wallet);
             const isFollowing = isFollowingWhale(trade.wallet);
 
             return (
