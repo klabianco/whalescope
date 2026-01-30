@@ -62,6 +62,7 @@ const TOTAL_TRACKED_WALLETS = (whaleWalletsData as { wallets: { address: string;
 
 export default function Home() {
   const [congressTrades, setCongressTrades] = useState<CongressTrade[]>([]);
+  const [liveTrades, setLiveTrades] = useState<WhaleTrade[]>([]);
   const { toast, toggleWhale, isFollowingWhale, limitHit } = useFollows();
 
   useEffect(() => {
@@ -72,20 +73,42 @@ export default function Home() {
         setCongressTrades(trades);
       })
       .catch(() => setCongressTrades([]));
+
+    // Fetch live whale trades from webhook data
+    fetch('/api/whale-trades?limit=50')
+      .then(res => res.json())
+      .then(data => {
+        if (data.trades && data.trades.length > 0) {
+          setLiveTrades(data.trades);
+        }
+      })
+      .catch(() => {});
   }, []);
 
   const whaleTrades = useMemo(() => {
+    // Merge live + static data
+    const staticTrades = (tradesData as WhaleTrade[])
+      .filter(t => !EXCLUDED_WALLETS.has(t.wallet) && t.tokenSymbol && (t.action === 'BUY' || t.action === 'SELL'));
+
+    const liveFiltered = liveTrades
+      .filter(t => !EXCLUDED_WALLETS.has(t.wallet) && (t.action === 'BUY' || t.action === 'SELL'));
+
+    const liveSigs = new Set(liveFiltered.map(t => t.signature));
+    const combined = [
+      ...liveFiltered,
+      ...staticTrades.filter(t => !liveSigs.has(t.signature)),
+    ].sort((a, b) => b.timestamp - a.timestamp);
+
+    // Dedupe by wallet (show 1 trade per wallet)
     const seen = new Set<string>();
-    return (tradesData as WhaleTrade[])
-      .filter(t => !EXCLUDED_WALLETS.has(t.wallet) && t.tokenSymbol && (t.action === 'BUY' || t.action === 'SELL'))
-      .sort((a, b) => b.timestamp - a.timestamp)
+    return combined
       .filter(t => {
         if (seen.has(t.wallet)) return false;
         seen.add(t.wallet);
         return true;
       })
       .slice(0, 6);
-  }, []);
+  }, [liveTrades]);
 
   const formatTime = (ts: number) => {
     const d = new Date(ts * 1000);

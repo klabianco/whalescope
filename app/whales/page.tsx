@@ -176,9 +176,22 @@ export default function WhalesPage() {
   const [filter, setFilter] = useState('all');
   const { toast, toggleWhale, isFollowingWhale, limitHit, FREE_FOLLOW_LIMIT } = useFollows();
   const [tokenData, setTokenData] = useState<Record<string, TokenInfo>>({});
+  const [liveTrades, setLiveTrades] = useState<WhaleTrade[]>([]);
+  const [liveSource, setLiveSource] = useState<'static' | 'live'>('static');
 
   useEffect(() => {
     fetchTokenData().then(setTokenData);
+
+    // Fetch live trades from Supabase (webhook data)
+    fetch('/api/whale-trades?limit=200')
+      .then(res => res.json())
+      .then(data => {
+        if (data.trades && data.trades.length > 0) {
+          setLiveTrades(data.trades);
+          setLiveSource('live');
+        }
+      })
+      .catch(() => {});
   }, []);
 
   // Get resolved token symbol from DexScreener data
@@ -247,11 +260,28 @@ export default function WhalesPage() {
       .map(([address, info]) => ({ address, ...info }));
   }, []);
 
+  // Merge live trades with static — prefer live data, fall back to static
+  const mergedTrades = useMemo(() => {
+    if (liveTrades.length === 0) return ALL_TRADES;
+
+    // Build a set of signatures from live data
+    const liveSigs = new Set(liveTrades.map(t => t.signature));
+
+    // Live trades first, then static trades not in live data
+    const combined = [
+      ...liveTrades.filter(t => t.action === 'BUY' || t.action === 'SELL')
+        .filter(t => !EXCLUDED_WALLETS.has(t.wallet) && !isBotLabel(t.walletLabel)),
+      ...ALL_TRADES.filter(t => !liveSigs.has(t.signature)),
+    ];
+
+    return combined.sort((a, b) => b.timestamp - a.timestamp);
+  }, [liveTrades]);
+
   // Limit trades per wallet to prevent one whale dominating the entire feed
   const MAX_TRADES_PER_WALLET = 5;
   const filteredTrades = (() => {
     const walletCounts: Record<string, number> = {};
-    return ALL_TRADES.filter(t => {
+    return mergedTrades.filter(t => {
       if (filter === 'buy' && t.action !== 'BUY') return false;
       if (filter === 'sell' && t.action !== 'SELL') return false;
       // Filter out small trades — whale tracker should only show significant moves
@@ -456,7 +486,9 @@ export default function WhalesPage() {
               Solscan
             </a>
             <br />
-            <span style={{ color: '#4ade80' }}>Updated daily</span>
+            <span style={{ color: '#4ade80' }}>
+              {liveSource === 'live' ? '🟢 Live data' : 'Updated daily'}
+            </span>
           </p>
         </div>
       </main>
