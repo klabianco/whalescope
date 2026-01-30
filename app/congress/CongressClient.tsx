@@ -6,7 +6,6 @@ import CommitteeCorrelation from '../components/CommitteeCorrelation';
 import { Footer } from '../components/Footer';
 import { EmailCapture } from '../components/EmailCapture';
 import { FollowToast } from '../components/FollowToast';
-import TradeAlerts from '../components/TradeAlerts';
 import { Header } from '../components/Header';
 import { FOLLOW_BUTTON } from '../config/theme';
 import { useFollows } from '../hooks/useFollows';
@@ -100,11 +99,6 @@ export default function CongressClient({ trades, topTraders, committeeData, poli
               Your Watchlist →
             </Link>
           </div>
-        </div>
-
-        {/* Trade Alerts */}
-        <div style={{ marginBottom: '32px' }}>
-          <TradeAlerts politicians={politicians} compact={true} />
         </div>
 
         {/* Top Traders */}

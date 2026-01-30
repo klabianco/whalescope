@@ -32,7 +32,7 @@ export const Footer = () => {
           Leaderboard
         </Link>
         <Link href="/search" style={{ color: '#666', textDecoration: 'none', fontSize: '14px' }}>
-          Tokens
+          Search
         </Link>
       </div>
       <p style={{ color: '#444', fontSize: '13px', margin: 0 }}>

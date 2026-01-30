@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { FOLLOW_BUTTON } from '../../config/theme';
 import { CommitteeInfo } from '../../components/CommitteeCorrelation';
-import TradeAlerts from '../../components/TradeAlerts';
 import { Header } from '../../components/Header';
 import { Footer } from '../../components/Footer';
 import { FollowToast } from '../../components/FollowToast';
@@ -150,11 +149,11 @@ export default function PoliticianClient({ slug }: { slug: string }) {
           <div style={{ 
             display: 'flex', 
             flexWrap: 'wrap',
-            justifyContent: 'space-between', 
             alignItems: 'flex-start',
             gap: '12px',
             marginBottom: '24px' 
           }}>
+            <FollowButton />
             <div style={{ minWidth: 0, flex: '1 1 200px' }}>
               <h1 style={{ fontSize: '36px', marginBottom: '8px', wordBreak: 'break-word' }}>
                 {politicianInfo.name}
@@ -170,7 +169,6 @@ export default function PoliticianClient({ slug }: { slug: string }) {
                 {politicianInfo.chamber}
               </p>
             </div>
-            <FollowButton />
           </div>
 
           {/* Committee Info */}
@@ -218,14 +216,25 @@ export default function PoliticianClient({ slug }: { slug: string }) {
             </div>
           </div>
 
-          {/* Trade Alerts for this politician */}
-          <div style={{ marginBottom: '32px' }}>
-            <TradeAlerts 
-              politicians={[politicianInfo.name]} 
-              defaultPolitician={politicianInfo.name}
-              compact={true} 
-            />
-          </div>
+          {/* Follow prompt */}
+          {!following && (
+            <div style={{
+              background: '#18181b',
+              border: '1px solid #27272a',
+              padding: '20px',
+              borderRadius: '16px',
+              textAlign: 'center',
+              marginBottom: '32px',
+            }}>
+              <p style={{ color: '#fff', fontSize: '16px', margin: '0 0 12px' }}>
+                Follow {politicianInfo.name} to track their trades
+              </p>
+              <p style={{ color: '#71717a', fontSize: '14px', margin: '0 0 16px' }}>
+                Get notified on your watchlist when they buy or sell
+              </p>
+              <FollowButton />
+            </div>
+          )}
 
           {/* Trades */}
           <h2 style={{ fontSize: '20px', marginBottom: '16px', color: '#fff' }}>
