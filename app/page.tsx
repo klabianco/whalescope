@@ -44,6 +44,22 @@ const EXCLUDED_WALLETS = new Set(
     .map(w => w.address)
 );
 
+// Build wallet display name lookup
+function getWalletDisplayName(address: string, tradeLabel: string, tradeValue: string): string {
+  const wallets = (whaleWalletsData as { wallets: { address: string; name: string; type: string }[] }).wallets;
+  const dbWallet = wallets.find(w => w.address === address);
+  const dbName = dbWallet?.name || '';
+  // Use real DB label if it's not just a truncated address
+  if (dbName && !dbName.includes('...')) return dbName;
+  // If trade label is a real name, use it
+  if (tradeLabel && !tradeLabel.includes('...')) return tradeLabel;
+  // Value-based label
+  if (tradeValue) return `${tradeValue} Whale`;
+  return address.slice(0, 8) + '...' + address.slice(-4);
+}
+
+const TOTAL_TRACKED_WALLETS = (whaleWalletsData as { wallets: { address: string; name: string; type: string }[] }).wallets.length;
+
 export default function Home() {
   const [congressTrades, setCongressTrades] = useState<CongressTrade[]>([]);
   const { toast, toggleWhale, isFollowingWhale, limitHit } = useFollows();
@@ -96,7 +112,7 @@ export default function Home() {
             Track the whales. Follow the money.
           </h1>
           <p style={{ fontSize: '17px', color: '#888', marginBottom: '24px' }}>
-            157 crypto wallets · 125 politicians · real-time alerts
+            {TOTAL_TRACKED_WALLETS} crypto wallets · 125 politicians · real-time alerts
           </p>
           <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', flexWrap: 'wrap' }}>
             <Link href="/whales" style={{
@@ -173,7 +189,7 @@ export default function Home() {
                         {isFollowing ? '✓ Following' : '+ Follow'}
                       </button>
                       <span style={{ color: '#fff', fontWeight: '600', fontSize: '14px' }}>
-                        {trade.walletLabel || trade.wallet.slice(0, 8) + '...'}
+                        {getWalletDisplayName(trade.wallet, trade.walletLabel, trade.walletValue)}
                       </span>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -194,7 +210,8 @@ export default function Home() {
                       <span style={{ color: '#555', fontSize: '12px' }}>{formatSol(trade.solAmount)}</span>
                     </div>
                     <div style={{ fontSize: '11px', color: '#444', marginTop: '6px' }}>
-                      {formatTime(trade.timestamp)} · {trade.walletValue}
+                      {formatTime(trade.timestamp)}
+                      {trade.walletLabel && !trade.walletLabel.includes('...') ? ` · ${trade.walletValue}` : ''}
                     </div>
                   </div>
                 );

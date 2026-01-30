@@ -151,6 +151,27 @@ function shortAddress(addr: string): string {
   return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
 }
 
+// Build a lookup of wallet address → best display name from whale DB
+const WALLET_LABELS: Record<string, string> = {};
+(whaleWalletsData as { wallets: { address: string; name: string; type: string }[] }).wallets.forEach(w => {
+  const name = w.name || '';
+  // If the name is just a truncated address, skip it
+  if (!name || name.includes('...')) return;
+  WALLET_LABELS[w.address] = name;
+});
+
+function getWalletDisplayName(address: string, tradeLabel: string, tradeValue: string): string {
+  // Use real DB label if available
+  if (WALLET_LABELS[address]) return WALLET_LABELS[address];
+  // If trade label is a real name (not truncated address), use it
+  if (tradeLabel && !tradeLabel.includes('...')) return tradeLabel;
+  // Otherwise, create a value-based label like "$32M Whale"
+  if (tradeValue) {
+    return `${tradeValue} Whale`;
+  }
+  return shortAddress(address);
+}
+
 export default function WhalesPage() {
   const [filter, setFilter] = useState('all');
   const { toast, toggleWhale, isFollowingWhale, limitHit, FREE_FOLLOW_LIMIT } = useFollows();
@@ -208,7 +229,9 @@ export default function WhalesPage() {
     return val > 0 ? formatUSD(val) : '';
   }
 
-  const uniqueWhales = useMemo(() => new Set(ALL_TRADES.map(t => t.wallet)).size, []);
+  // Total wallets in our database (not just those with recent trades)
+  const totalTrackedWallets = (whaleWalletsData as { wallets: { address: string; name: string; type: string }[] }).wallets.length;
+  const uniqueWhales = totalTrackedWallets;
 
   // Most active whales (last 30 days)
   const topWhales = useMemo(() => {
@@ -296,7 +319,7 @@ export default function WhalesPage() {
             <div style={{ display: 'flex', gap: '12px', overflowX: 'auto', paddingBottom: '8px' }}>
               {topWhales.map((whale) => {
                 const isFollowing = isFollowingWhale(whale.address);
-                const displayName = whale.label || shortAddress(whale.address);
+                const displayName = getWalletDisplayName(whale.address, whale.label, whale.value);
                 return (
                   <div
                     key={whale.address}
@@ -354,7 +377,7 @@ export default function WhalesPage() {
           renderCard={(trade, i) => {
             const badge = ACTION_BADGES[trade.action] || { bg: '#333', color: '#888', label: '?' };
             const symbol = getTokenSymbol(trade);
-            const displayName = trade.walletLabel || shortAddress(trade.wallet);
+            const displayName = getWalletDisplayName(trade.wallet, trade.walletLabel, trade.walletValue);
             const isFollowing = isFollowingWhale(trade.wallet);
 
             return (
