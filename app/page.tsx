@@ -91,7 +91,9 @@ export default function Home() {
       .filter(t => !EXCLUDED_WALLETS.has(t.wallet) && t.tokenSymbol && (t.action === 'BUY' || t.action === 'SELL'));
 
     const liveFiltered = liveTrades
-      .filter(t => !EXCLUDED_WALLETS.has(t.wallet) && (t.action === 'BUY' || t.action === 'SELL'));
+      .filter(t => !EXCLUDED_WALLETS.has(t.wallet) && (t.action === 'BUY' || t.action === 'SELL'))
+      // Homepage only shows significant trades — filter out dust
+      .filter(t => (t.solAmount && t.solAmount >= 10) || (t.tokenAmount && t.tokenAmount >= 1000));
 
     const liveSigs = new Set(liveFiltered.map(t => t.signature));
     const combined = [
