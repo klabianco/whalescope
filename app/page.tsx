@@ -141,32 +141,67 @@ export default function Home() {
           <h1 style={{ fontSize: '42px', fontWeight: '700', marginBottom: '12px', lineHeight: '1.2' }}>
             Track the whales. Follow the money.
           </h1>
-          <p style={{ fontSize: '17px', color: '#888', marginBottom: '24px' }}>
+          <p style={{ fontSize: '17px', color: '#888', marginBottom: '20px' }}>
             {TOTAL_TRACKED_WALLETS} crypto wallets · 125 politicians · real-time alerts
           </p>
+
+          {/* Primary CTA: Email capture — ABOVE the fold */}
+          <div style={{ maxWidth: '480px', margin: '0 auto 24px' }}>
+            <EmailCapture
+              source="homepage-hero"
+              headline=""
+              subtext=""
+              buttonText="Get Free Alerts"
+              compact={true}
+            />
+          </div>
+
+          {/* Social proof stats */}
+          <div style={{
+            display: 'flex',
+            justifyContent: 'center',
+            gap: '24px',
+            flexWrap: 'wrap',
+            marginBottom: '20px',
+          }}>
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ color: '#4ade80', fontSize: '22px', fontWeight: '700' }}>$174M+</div>
+              <div style={{ color: '#555', fontSize: '12px' }}>whale volume tracked</div>
+            </div>
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ color: '#4ade80', fontSize: '22px', fontWeight: '700' }}>1,200+</div>
+              <div style={{ color: '#555', fontSize: '12px' }}>trades this month</div>
+            </div>
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ color: '#4ade80', fontSize: '22px', fontWeight: '700' }}>125</div>
+              <div style={{ color: '#555', fontSize: '12px' }}>politicians tracked</div>
+            </div>
+          </div>
+
           <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', flexWrap: 'wrap' }}>
             <Link href="/whales" style={{
-              background: '#fff',
-              color: '#000',
-              padding: '12px 28px',
+              background: '#111118',
+              color: '#fff',
+              border: '1px solid #333',
+              padding: '10px 24px',
               borderRadius: '8px',
-              fontSize: '15px',
+              fontSize: '14px',
               fontWeight: '600',
               textDecoration: 'none',
             }}>
-              🐋 Crypto Whales
+              Explore Crypto Whales
             </Link>
             <Link href="/congress" style={{
               background: '#111118',
               color: '#fff',
               border: '1px solid #333',
-              padding: '12px 28px',
+              padding: '10px 24px',
               borderRadius: '8px',
-              fontSize: '15px',
+              fontSize: '14px',
               fontWeight: '600',
               textDecoration: 'none',
             }}>
-              🏛️ Politician Trades
+              Explore Politician Trades
             </Link>
           </div>
         </div>
@@ -256,6 +291,45 @@ export default function Home() {
           </div>
         )}
 
+        {/* Inline upgrade teaser between sections */}
+        <div style={{
+          background: 'linear-gradient(135deg, rgba(34, 197, 94, 0.08) 0%, rgba(96, 165, 250, 0.06) 100%)',
+          border: '1px solid rgba(34, 197, 94, 0.2)',
+          borderRadius: '12px',
+          padding: '20px 24px',
+          marginBottom: '28px',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: '12px',
+        }}>
+          <div>
+            <p style={{ color: '#fff', fontSize: '15px', fontWeight: '600', margin: 0 }}>
+              These trades are 24h delayed on the free plan
+            </p>
+            <p style={{ color: '#71717a', fontSize: '13px', margin: '4px 0 0' }}>
+              Pro members get alerts within seconds of on-chain confirmation.
+            </p>
+          </div>
+          <Link href="/pricing" style={{ textDecoration: 'none' }}>
+            <span style={{
+              background: '#22c55e',
+              color: '#000',
+              border: 'none',
+              borderRadius: '8px',
+              padding: '10px 20px',
+              fontSize: '14px',
+              fontWeight: '600',
+              cursor: 'pointer',
+              whiteSpace: 'nowrap',
+              display: 'inline-block',
+            }}>
+              See Pro Plans
+            </span>
+          </Link>
+        </div>
+
         {/* Congress trades — secondary */}
         {congressTrades.length > 0 && (
           <div style={{ marginBottom: '32px' }}>
@@ -314,11 +388,11 @@ export default function Home() {
           </div>
         )}
 
-        {/* Single CTA */}
+        {/* Bottom CTA — different angle for visitors who scrolled */}
         <EmailCapture 
-          source="homepage"
-          headline="Get free weekly alerts"
-          subtext="Crypto whale moves + politician trades. No spam."
+          source="homepage-bottom"
+          headline="Don't miss the next whale move"
+          subtext="Get a free weekly email with the biggest crypto trades and politician stock picks. Join 200+ traders."
           buttonText="Subscribe Free"
           compact={false}
         />

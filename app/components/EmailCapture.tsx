@@ -58,10 +58,14 @@ export function EmailCapture({
         padding: compact ? '16px 0' : '32px',
         textAlign: 'center',
       }}>
-        <div style={{ fontSize: '24px', marginBottom: '8px' }}>✅</div>
-        <p style={{ color: '#22c55e', fontSize: '16px', fontWeight: '600', margin: 0 }}>
-          You&apos;re in! Check your inbox soon.
+        <p style={{ color: '#22c55e', fontSize: compact ? '15px' : '16px', fontWeight: '600', margin: 0 }}>
+          You&apos;re in! Check your inbox for a welcome email.
         </p>
+        {!compact && (
+          <p style={{ color: '#71717a', fontSize: '13px', marginTop: '8px' }}>
+            Want real-time alerts? <a href="/pricing" style={{ color: '#4ade80', textDecoration: 'underline' }}>Upgrade to Pro</a>
+          </p>
+        )}
       </div>
     );
   }
@@ -74,7 +78,7 @@ export function EmailCapture({
       padding: compact ? '16px 0' : '32px',
       textAlign: 'center',
     }}>
-      {!compact && (
+      {!compact && headline && (
         <>
           <h3 style={{ 
             color: '#fff', 
@@ -89,6 +93,11 @@ export function EmailCapture({
             {subtext}
           </p>
         </>
+      )}
+      {compact && (
+        <p style={{ color: '#888', fontSize: '13px', margin: '0 0 8px', textAlign: 'center' }}>
+          Free weekly alerts -- whale moves + politician trades. No spam.
+        </p>
       )}
 
       <form onSubmit={handleSubmit} style={{

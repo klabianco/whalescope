@@ -304,23 +304,84 @@ export function EmptyState({ message }: { message: string }) {
   );
 }
 
+/** Inline email CTA card shown inside the trade feed */
+export function InlineFeedCTA() {
+  return (
+    <div style={{
+      background: 'linear-gradient(135deg, #0a1628 0%, #0f1f17 100%)',
+      border: '1px solid #1e3a2f',
+      borderRadius: '12px',
+      padding: '20px 24px',
+      textAlign: 'center',
+    }}>
+      <p style={{ color: '#fff', fontSize: '15px', fontWeight: '600', margin: '0 0 4px' }}>
+        Want these trades in your inbox?
+      </p>
+      <p style={{ color: '#71717a', fontSize: '13px', margin: '0 0 12px' }}>
+        Free weekly alerts -- no spam, unsubscribe anytime.
+      </p>
+      <div style={{ display: 'flex', gap: '8px', maxWidth: '380px', margin: '0 auto', justifyContent: 'center', flexWrap: 'wrap' }}>
+        <a href="#email-capture-bottom" style={{
+          background: '#22c55e',
+          color: '#000',
+          padding: '10px 24px',
+          borderRadius: '8px',
+          fontSize: '14px',
+          fontWeight: '600',
+          textDecoration: 'none',
+          whiteSpace: 'nowrap',
+        }}>
+          Get Free Alerts
+        </a>
+        <a href="/pricing" style={{
+          background: 'transparent',
+          color: '#22c55e',
+          padding: '10px 24px',
+          borderRadius: '8px',
+          fontSize: '14px',
+          fontWeight: '600',
+          textDecoration: 'none',
+          border: '1px solid rgba(34, 197, 94, 0.3)',
+          whiteSpace: 'nowrap',
+        }}>
+          See Pro Plans
+        </a>
+      </div>
+    </div>
+  );
+}
+
 export function TradeFeedList<T>({
   trades,
   renderCard,
   emptyMessage = 'No trades found.',
+  showInlineCTA = true,
 }: {
   trades: T[];
   isPro?: boolean; // kept for API compat but no longer gates
   renderCard: (trade: T, index: number) => React.ReactNode;
   emptyMessage?: string;
+  showInlineCTA?: boolean;
 }) {
   const [visibleCount, setVisibleCount] = useState(TRADES_PER_PAGE);
+  const INLINE_CTA_POSITION = 8;
 
   if (trades.length === 0) return <EmptyState message={emptyMessage} />;
 
+  const visibleTrades = trades.slice(0, visibleCount);
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-      {trades.slice(0, visibleCount).map((trade, i) => renderCard(trade, i))}
+      {visibleTrades.map((trade, i) => (
+        <div key={i}>
+          {renderCard(trade, i)}
+          {showInlineCTA && i === INLINE_CTA_POSITION - 1 && trades.length > INLINE_CTA_POSITION && (
+            <div style={{ marginTop: '8px' }}>
+              <InlineFeedCTA />
+            </div>
+          )}
+        </div>
+      ))}
       {visibleCount < trades.length && (
         <ShowMoreButton
           remaining={trades.length - visibleCount}

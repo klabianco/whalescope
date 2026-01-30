@@ -406,6 +406,41 @@ export default function WhalesPage() {
           </div>
         )}
 
+        {/* Real-time delay notice */}
+        <div style={{
+          background: 'linear-gradient(135deg, rgba(34, 197, 94, 0.08) 0%, #111118 100%)',
+          border: '1px solid rgba(34, 197, 94, 0.25)',
+          borderRadius: '12px',
+          padding: '14px 20px',
+          marginBottom: '20px',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: '10px',
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span style={{ fontSize: '14px' }}>&#x23F3;</span>
+            <span style={{ color: '#a1a1aa', fontSize: '14px' }}>
+              Free tier: <strong style={{ color: '#fbbf24' }}>24h delayed</strong>. Pro members see trades in real time.
+            </span>
+          </div>
+          <Link href="/pricing" style={{ textDecoration: 'none' }}>
+            <span style={{
+              background: '#22c55e',
+              color: '#000',
+              padding: '8px 16px',
+              borderRadius: '8px',
+              fontSize: '13px',
+              fontWeight: '600',
+              whiteSpace: 'nowrap',
+              display: 'inline-block',
+            }}>
+              Upgrade to Pro
+            </span>
+          </Link>
+        </div>
+
         {/* Filter Tabs */}
         <FilterTabs tabs={tabs} active={filter} onChange={setFilter} />
 
@@ -463,11 +498,11 @@ export default function WhalesPage() {
         />
 
         {/* Email Capture */}
-        <div style={{ marginTop: '40px' }}>
+        <div id="email-capture-bottom" style={{ marginTop: '40px' }}>
           <EmailCapture
             source="whales"
             headline="Get whale trade alerts"
-            subtext="Know when big wallets move — delivered free to your inbox."
+            subtext="Know when big wallets move -- delivered free to your inbox. Join 200+ traders."
             buttonText="Get Free Alerts"
           />
         </div>
