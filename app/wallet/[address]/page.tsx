@@ -18,9 +18,6 @@ export function generateStaticParams() {
   return wallets.map((w) => ({ address: w.address }));
 }
 
-// Allow dynamic params for any wallet address not in our DB
-export const dynamicParams = true;
-
 function getWalletInfo(address: string): { label: string; description: string } {
   const found = wallets.find((w) => w.address === address);
   if (found) {
