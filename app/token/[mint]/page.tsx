@@ -1,5 +1,8 @@
 import TokenClient from './TokenClient';
 
+// Allow any token mint, not just pre-rendered ones
+export const dynamicParams = true;
+
 // Pre-render popular tokens
 export function generateStaticParams() {
   return [
