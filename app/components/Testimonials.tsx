@@ -57,7 +57,14 @@ export function Testimonials() {
         Traders who stopped guessing
       </h2>
 
-      <div style={{
+      <style>{`
+        @media (max-width: 640px) {
+          .ws-testimonials-grid {
+            grid-template-columns: 1fr !important;
+          }
+        }
+      `}</style>
+      <div className="ws-testimonials-grid" style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
         gap: '20px',

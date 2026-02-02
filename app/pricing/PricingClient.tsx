@@ -6,6 +6,7 @@ import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
 import { EmailCapture } from '../components/EmailCapture';
 import { YouVsSmartMoney } from '../components/YouVsSmartMoney';
+import { PricingUrgency } from '../components/PricingUrgency';
 import { PRICING, PRICING_DISPLAY } from '../config/pricing';
 import { trackPricingView, trackStartProClick } from '../lib/tracking';
 
@@ -106,6 +107,9 @@ export default function PricingClient() {
 
         {/* You vs Smart Money comparison - FOMO driver */}
         <YouVsSmartMoney />
+
+        {/* Urgency - recent signups */}
+        <PricingUrgency />
 
         {/* Pricing Cards */}
         <style>{`

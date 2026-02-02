@@ -10,6 +10,8 @@ import { FOLLOW_BUTTON } from './config/theme';
 import { useFollows } from './hooks/useFollows';
 import { Testimonials } from './components/Testimonials';
 import { ExitIntentModal } from './components/ExitIntentModal';
+import { ActivityTicker } from './components/ActivityTicker';
+import { ValueLoopDemo } from './components/ValueLoopDemo';
 import tradesData from '../data/whale-trades.json';
 import whaleWalletsData from '../data/whale-wallets.json';
 
@@ -144,6 +146,9 @@ export default function Home() {
     <>
       <Header />
       <main style={{ maxWidth: '900px', margin: '0 auto', padding: '20px' }}>
+        {/* Real-time activity ticker */}
+        <ActivityTicker />
+        
         {/* Hero — crypto first */}
         <div style={{ textAlign: 'center', marginBottom: '32px' }}>
           <h1 style={{ fontSize: '42px', fontWeight: '700', marginBottom: '12px', lineHeight: '1.2' }}>
@@ -216,6 +221,9 @@ export default function Home() {
             </Link>
           </div>
         </div>
+
+        {/* Animated value loop demo */}
+        <ValueLoopDemo />
 
         {/* Whale trades with Follow buttons */}
         {whaleTrades.length > 0 && (
