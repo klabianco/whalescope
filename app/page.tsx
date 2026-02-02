@@ -12,6 +12,10 @@ import { Testimonials } from './components/Testimonials';
 import { ExitIntentModal } from './components/ExitIntentModal';
 import { ActivityTicker } from './components/ActivityTicker';
 import { ValueLoopDemo } from './components/ValueLoopDemo';
+import { StickyCTA } from './components/StickyCTA';
+import { ScrollDepthTracker } from './components/ScrollDepthTracker';
+import { WhyThisMatters } from './components/WhyThisMatters';
+import { HomepageFAQ } from './components/HomepageFAQ';
 import tradesData from '../data/whale-trades.json';
 import whaleWalletsData from '../data/whale-wallets.json';
 
@@ -225,6 +229,9 @@ export default function Home() {
         {/* Animated value loop demo */}
         <ValueLoopDemo />
 
+        {/* Why this matters - concrete examples */}
+        <WhyThisMatters />
+
         {/* Whale trades with Follow buttons */}
         {whaleTrades.length > 0 && (
           <div style={{ marginBottom: '28px' }}>
@@ -414,6 +421,9 @@ export default function Home() {
           </div>
         )}
 
+        {/* FAQ - address objections */}
+        <HomepageFAQ />
+
         {/* Bottom CTA — different angle for visitors who scrolled */}
         <EmailCapture 
           source="homepage-bottom"
@@ -427,6 +437,8 @@ export default function Home() {
 
       <FollowToast message={toast.message} show={toast.show} />
       <ExitIntentModal />
+      <StickyCTA />
+      <ScrollDepthTracker />
       <Footer />
     </>
   );

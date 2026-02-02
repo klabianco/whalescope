@@ -37,3 +37,10 @@ export const trackHeroCTAClick = (destination: string) => trackEvent('hero_cta_c
 export const trackExitIntentShow = () => trackEvent('exit_intent', 'show');
 export const trackExitIntentDismiss = () => trackEvent('exit_intent', 'dismiss');
 export const trackPricingEngagement = (section: string) => trackEvent('pricing_engagement', section);
+
+// Scroll depth tracking
+export const trackScrollDepth = (depth: number) => trackEvent('scroll_depth', `${depth}pct`);
+
+// Sticky CTA tracking
+export const trackStickyCTAShow = () => trackEvent('sticky_cta', 'show');
+export const trackStickyCTAClick = () => trackEvent('sticky_cta', 'click');

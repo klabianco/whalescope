@@ -114,16 +114,23 @@ export function EmailCapture({
           onChange={(e) => setEmail(e.target.value)}
           placeholder="you@email.com"
           required
+          autoFocus={compact}
+          autoComplete="email"
           style={{
             flex: '1 1 240px',
             padding: '12px 16px',
             background: '#18181b',
-            border: '1px solid #27272a',
+            border: status === 'error' ? '1px solid #f87171' : '1px solid #27272a',
             borderRadius: '10px',
             color: '#fff',
             fontSize: '15px',
             outline: 'none',
             minWidth: '200px',
+            transition: 'border-color 0.2s ease',
+          }}
+          onFocus={(e) => e.target.style.borderColor = '#22c55e'}
+          onBlur={(e) => {
+            if (status !== 'error') e.target.style.borderColor = '#27272a';
           }}
         />
         <button
