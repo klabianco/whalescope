@@ -8,6 +8,7 @@ import { EmailCapture } from './components/EmailCapture';
 import { FollowToast } from './components/FollowToast';
 import { FOLLOW_BUTTON } from './config/theme';
 import { useFollows } from './hooks/useFollows';
+import { Testimonials } from './components/Testimonials';
 import tradesData from '../data/whale-trades.json';
 import whaleWalletsData from '../data/whale-wallets.json';
 
@@ -303,6 +304,9 @@ export default function Home() {
             </div>
           </div>
         )}
+
+        {/* Social proof testimonials */}
+        <Testimonials />
 
         {/* Inline upgrade teaser between sections */}
         <div style={{
