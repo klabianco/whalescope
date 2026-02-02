@@ -89,7 +89,7 @@ export function EmailCapture({
           }}>
             {headline}
           </h3>
-          <p style={{ color: '#71717a', fontSize: '14px', marginBottom: '20px', maxWidth: '400px', margin: '0 auto 20px' }}>
+          <p style={{ color: '#71717a', fontSize: '14px', marginBottom: '20px', maxWidth: '450px', margin: '0 auto 20px' }}>
             {subtext}
           </p>
         </>

@@ -115,9 +115,15 @@ export default function Home() {
   const formatTime = (ts: number) => {
     const d = new Date(ts * 1000);
     const now = Date.now();
-    const diffH = Math.floor((now - d.getTime()) / 3600000);
-    if (diffH < 1) return 'Just now';
+    const diffMs = now - d.getTime();
+    const diffM = Math.floor(diffMs / 60000);
+    const diffH = Math.floor(diffMs / 3600000);
+    if (diffM < 5) return '🔴 Live';
+    if (diffM < 60) return `${diffM}m ago`;
     if (diffH < 24) return `${diffH}h ago`;
+    const diffD = Math.floor(diffH / 24);
+    if (diffD === 1) return 'Yesterday';
+    if (diffD < 7) return `${diffD}d ago`;
     return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   };
 
@@ -139,10 +145,13 @@ export default function Home() {
         {/* Hero — crypto first */}
         <div style={{ textAlign: 'center', marginBottom: '32px' }}>
           <h1 style={{ fontSize: '42px', fontWeight: '700', marginBottom: '12px', lineHeight: '1.2' }}>
-            Track the whales. Follow the money.
+            Know what smart money is doing before the pump
           </h1>
-          <p style={{ fontSize: '17px', color: '#888', marginBottom: '20px' }}>
+          <p style={{ fontSize: '17px', color: '#888', marginBottom: '8px' }}>
             {TOTAL_TRACKED_WALLETS} crypto wallets · 125 politicians · real-time alerts
+          </p>
+          <p style={{ fontSize: '13px', color: '#666', marginBottom: '20px' }}>
+            Data from Helius RPC + Congressional filings · Updated every 60 seconds
           </p>
 
           {/* Primary CTA: Email capture — ABOVE the fold */}
@@ -280,7 +289,11 @@ export default function Home() {
                       <Link href={`/wallet/${trade.wallet}`} style={{ color: '#666', fontSize: '12px', textDecoration: 'none' }}>
                         {shortAddr}
                       </Link>
-                      <span style={{ color: '#555', fontSize: '11px' }}>
+                      <span style={{ 
+                        color: formatTime(trade.timestamp).includes('🔴') ? '#22c55e' : '#888', 
+                        fontSize: '11px',
+                        fontWeight: formatTime(trade.timestamp).includes('🔴') ? '600' : '400'
+                      }}>
                         {formatTime(trade.timestamp)}
                       </span>
                     </div>
@@ -378,7 +391,7 @@ export default function Home() {
                       <span style={{ color: '#ccc', fontSize: '15px', fontWeight: '600' }}>{trade.ticker}</span>
                       <span style={{ color: '#555', fontSize: '12px' }}>{trade.amount}</span>
                     </div>
-                    <div style={{ fontSize: '11px', color: '#444', marginTop: '6px' }}>
+                    <div style={{ fontSize: '11px', color: '#666', marginTop: '6px' }}>
                       Filed {trade.filed} · {trade.party === 'D' ? '🔵' : trade.party === 'R' ? '🔴' : '⚪'} {trade.chamber}
                     </div>
                   </div>
@@ -392,7 +405,7 @@ export default function Home() {
         <EmailCapture 
           source="homepage-bottom"
           headline="Don't miss the next whale move"
-          subtext="Get a free weekly email with the biggest crypto trades and politician stock picks. Join 200+ traders."
+          subtext="Get a free weekly email with the biggest crypto trades and politician stock picks. No spam, unsubscribe anytime."
           buttonText="Subscribe Free"
           compact={false}
         />
