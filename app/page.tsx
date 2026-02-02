@@ -9,6 +9,7 @@ import { FollowToast } from './components/FollowToast';
 import { FOLLOW_BUTTON } from './config/theme';
 import { useFollows } from './hooks/useFollows';
 import { Testimonials } from './components/Testimonials';
+import { ExitIntentModal } from './components/ExitIntentModal';
 import tradesData from '../data/whale-trades.json';
 import whaleWalletsData from '../data/whale-wallets.json';
 
@@ -417,6 +418,7 @@ export default function Home() {
       </main>
 
       <FollowToast message={toast.message} show={toast.show} />
+      <ExitIntentModal />
       <Footer />
     </>
   );

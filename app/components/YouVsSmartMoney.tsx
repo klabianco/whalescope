@@ -1,5 +1,7 @@
 'use client';
 
+import { trackPricingEngagement } from '../lib/tracking';
+
 /**
  * Comparison showing what you miss without real-time data
  * Designed to create FOMO and justify the Pro upgrade
@@ -145,16 +147,19 @@ export function YouVsSmartMoney() {
           Stop trading blind. Get the same data the smart money uses.
         </p>
         <a href="#pricing" style={{ textDecoration: 'none' }}>
-          <button style={{
-            padding: '14px 32px',
-            background: '#22c55e',
-            color: '#000',
-            border: 'none',
-            borderRadius: '10px',
-            fontSize: '16px',
-            fontWeight: '600',
-            cursor: 'pointer',
-          }}>
+          <button
+            onClick={() => trackPricingEngagement('you_vs_smart_money_cta')}
+            style={{
+              padding: '14px 32px',
+              background: '#22c55e',
+              color: '#000',
+              border: 'none',
+              borderRadius: '10px',
+              fontSize: '16px',
+              fontWeight: '600',
+              cursor: 'pointer',
+            }}
+          >
             See Pro Plans
           </button>
         </a>
