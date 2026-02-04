@@ -260,10 +260,16 @@ export async function POST(request: NextRequest) {
       parsedTrades.push({ tx, parsed });
     }
 
-    // Step 2: Collect unique mints and resolve prices
-    const uniqueMints = [...new Set(parsedTrades.map(t => t.parsed.tokenMint).filter(Boolean))];
-    const solPrice = await fetchSOLPrice();
-    const tokenInfo = await resolveTokens(uniqueMints, solPrice);
+    // Step 2: Resolve prices (best-effort, never blocks storage)
+    let solPrice = 0;
+    let tokenInfo: Record<string, { symbol: string; price: number }> = {};
+    try {
+      const uniqueMints = [...new Set(parsedTrades.map(t => t.parsed.tokenMint).filter(Boolean))];
+      solPrice = await fetchSOLPrice();
+      tokenInfo = await resolveTokens(uniqueMints, solPrice);
+    } catch (e) {
+      console.error('[Webhook] Price resolution failed, storing with nulls:', e);
+    }
 
     // Step 3: Build trade records with prices
     const trades: Array<Record<string, unknown>> = [];
@@ -276,10 +282,8 @@ export async function POST(request: NextRequest) {
       // Calculate USD value
       let usdValue: number | null = null;
       if (parsed.solAmount > 0 && solPrice > 0) {
-        // For swaps, sol_amount * SOL price is the most reliable
         usdValue = Math.round(parsed.solAmount * solPrice * 100) / 100;
       } else if (parsed.tokenAmount > 0 && tokenPrice > 0) {
-        // For transfers or token-to-token swaps
         usdValue = Math.round(parsed.tokenAmount * tokenPrice * 100) / 100;
       }
 
@@ -295,18 +299,36 @@ export async function POST(request: NextRequest) {
         usd_value: usdValue,
         description: tx.description || '',
         timestamp: tx.timestamp ? new Date(tx.timestamp * 1000).toISOString() : new Date().toISOString(),
-        raw_data: tx,
+        raw_data: JSON.parse(JSON.stringify(tx)),
       });
     }
 
     if (trades.length > 0) {
-      const { error } = await supabase
-        .from('whale_trades')
-        .upsert(trades, { onConflict: 'signature', ignoreDuplicates: true });
+      // Use raw fetch to Supabase REST API for maximum CF edge compatibility
+      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+      const serviceKey = process.env.SUPABASE_SERVICE_KEY;
+      
+      const res = await fetch(`${supabaseUrl}/rest/v1/whale_trades`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': serviceKey!,
+          'Authorization': `Bearer ${serviceKey}`,
+          'Prefer': 'resolution=merge-duplicates',
+        },
+        body: JSON.stringify(trades),
+      });
 
-      if (error) {
-        console.error('[Webhook] Supabase insert error:', error.message);
-        return NextResponse.json({ ok: false, error: error.message }, { status: 500 });
+      if (!res.ok) {
+        const status = res.status;
+        // On rate limit, return 200 so Helius doesn't retry immediately
+        if (status === 429) {
+          console.warn(`[Webhook] Rate limited, ${trades.length} trades dropped`);
+          return NextResponse.json({ ok: true, processed: 0, rateLimited: true });
+        }
+        const errBody = await res.text();
+        console.error('[Webhook] Supabase error:', status, errBody);
+        return NextResponse.json({ ok: false, error: errBody }, { status: 500 });
       }
     }
 
@@ -315,11 +337,11 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ ok: true, processed: trades.length, priced: withPrice, solPrice });
   } catch (error: any) {
     console.error('[Webhook] Error:', error?.message || error);
-    return NextResponse.json({ ok: false, error: 'Internal error' }, { status: 500 });
+    return NextResponse.json({ ok: false, error: error?.message || 'Internal error' }, { status: 500 });
   }
 }
 
-// Helius also does a GET health check
+// Helius health check
 export async function GET() {
-  return NextResponse.json({ status: 'ok', service: 'whalescope-helius-webhook' });
+  return NextResponse.json({ status: 'ok', service: 'whalescope-helius-webhook', version: 'v3-price-resolve' });
 }
