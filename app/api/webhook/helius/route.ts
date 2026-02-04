@@ -2,15 +2,104 @@
  * Helius Webhook Receiver
  * 
  * Receives enhanced transaction data from Helius webhooks for tracked whale wallets.
- * Parses SWAP and TRANSFER events, stores in Supabase whale_trades table.
+ * Parses SWAP and TRANSFER events, resolves token symbols + USD prices,
+ * stores in Supabase whale_trades table.
  * 
- * Webhook ID: 53fe862c-a69d-4bca-857b-68de2cb77741
+ * Webhook ID: 708a3cdd-f138-438e-ae80-c68493d06b25
  * Endpoint: https://whalescope.app/api/webhook/helius
  */
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
 export const runtime = 'edge';
+
+// Well-known token mints
+const KNOWN_TOKENS: Record<string, { symbol: string; price: number | null }> = {
+  'So11111111111111111111111111111111111111112': { symbol: 'SOL', price: null }, // fetched live
+  'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v': { symbol: 'USDC', price: 1 },
+  'Es9vMFrzaCERmKfrUqBPNSZCwGLJMRME7jBZYCmahUPj': { symbol: 'USDT', price: 1 },
+  'mSoLzYCxHdYgdzU16g5QSh3i5K3z3KZK7ytfqcJm7So': { symbol: 'mSOL', price: null },
+  'J1toso1uCk3RLmjorhTtrVwY9HJ7X8V9yYac6Y7kGCPn': { symbol: 'JitoSOL', price: null },
+  'DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263': { symbol: 'BONK', price: null },
+  'JUPyiwrYJFskUPiHa7hkeR8VUtAeFoSYbKedZNsDvCN': { symbol: 'JUP', price: null },
+  'EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm': { symbol: 'WIF', price: null },
+  '7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs': { symbol: 'WETH', price: null },
+  'bSo13r4TkiE4KumL71LsHTPpL2euBYLFx6h9HP3piy1': { symbol: 'bSOL', price: null },
+};
+
+async function fetchSOLPrice(): Promise<number> {
+  try {
+    const res = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd', {
+      signal: AbortSignal.timeout(3000),
+    });
+    const data = await res.json();
+    return data?.solana?.usd || 0;
+  } catch {
+    return 0;
+  }
+}
+
+async function fetchTokenInfo(mint: string): Promise<{ symbol: string; priceUsd: number } | null> {
+  try {
+    const res = await fetch(`https://api.dexscreener.com/tokens/v1/solana/${mint}`, {
+      signal: AbortSignal.timeout(3000),
+    });
+    const data = await res.json();
+    const pairs = Array.isArray(data) ? data : data?.pairs || [];
+    if (pairs.length > 0) {
+      // Use the pair with highest liquidity
+      const best = pairs.sort((a: any, b: any) => (b.liquidity?.usd || 0) - (a.liquidity?.usd || 0))[0];
+      return {
+        symbol: best.baseToken?.symbol || 'UNKNOWN',
+        priceUsd: parseFloat(best.priceUsd) || 0,
+      };
+    }
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+async function resolveTokens(mints: string[], solPrice: number): Promise<Record<string, { symbol: string; price: number }>> {
+  const resolved: Record<string, { symbol: string; price: number }> = {};
+
+  // Resolve known tokens first
+  for (const mint of mints) {
+    const known = KNOWN_TOKENS[mint];
+    if (known) {
+      if (known.price !== null) {
+        resolved[mint] = { symbol: known.symbol, price: known.price };
+      } else if (known.symbol === 'SOL' || known.symbol === 'mSOL' || known.symbol === 'JitoSOL' || known.symbol === 'bSOL') {
+        // SOL-pegged tokens use SOL price (close enough for estimates)
+        resolved[mint] = { symbol: known.symbol, price: solPrice };
+      } else {
+        // Known symbol but unknown price, fetch it
+        const info = await fetchTokenInfo(mint);
+        resolved[mint] = { symbol: known.symbol, price: info?.priceUsd || 0 };
+      }
+    }
+  }
+
+  // Fetch unknown tokens from DexScreener (batch: max 5 concurrent)
+  const unknowns = mints.filter(m => !resolved[m]);
+  const batches = [];
+  for (let i = 0; i < unknowns.length; i += 5) {
+    batches.push(unknowns.slice(i, i + 5));
+  }
+
+  for (const batch of batches) {
+    const results = await Promise.allSettled(batch.map(m => fetchTokenInfo(m)));
+    results.forEach((r, i) => {
+      if (r.status === 'fulfilled' && r.value) {
+        resolved[batch[i]] = { symbol: r.value.symbol, price: r.value.priceUsd };
+      } else {
+        resolved[batch[i]] = { symbol: 'UNKNOWN', price: 0 };
+      }
+    });
+  }
+
+  return resolved;
+}
 
 function getSupabase() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -138,24 +227,26 @@ export async function POST(request: NextRequest) {
     }
 
     const supabase = getSupabase();
-    const trades: Array<Record<string, unknown>> = [];
+
+    // Step 1: Parse all transactions
+    const parsedTrades: Array<{
+      tx: HeliusTransaction;
+      parsed: { action: string; tokenMint: string; tokenAmount: number; solAmount: number; wallet: string };
+    }> = [];
 
     for (const tx of transactions) {
       if (!tx.signature) continue;
 
       let parsed = null;
 
-      // Try parsing as swap first
       if (tx.type === 'SWAP' || tx.events?.swap) {
         parsed = parseSwapAction(tx);
       }
 
-      // Fall back to transfer
       if (!parsed && (tx.type === 'TRANSFER' || tx.tokenTransfers?.length || tx.nativeTransfers?.length)) {
         parsed = parseTransfer(tx);
       }
 
-      // If we couldn't parse it, store as UNKNOWN
       if (!parsed) {
         parsed = {
           action: 'UNKNOWN',
@@ -166,16 +257,42 @@ export async function POST(request: NextRequest) {
         };
       }
 
+      parsedTrades.push({ tx, parsed });
+    }
+
+    // Step 2: Collect unique mints and resolve prices
+    const uniqueMints = [...new Set(parsedTrades.map(t => t.parsed.tokenMint).filter(Boolean))];
+    const solPrice = await fetchSOLPrice();
+    const tokenInfo = await resolveTokens(uniqueMints, solPrice);
+
+    // Step 3: Build trade records with prices
+    const trades: Array<Record<string, unknown>> = [];
+
+    for (const { tx, parsed } of parsedTrades) {
+      const info = parsed.tokenMint ? tokenInfo[parsed.tokenMint] : null;
+      const symbol = info?.symbol || null;
+      const tokenPrice = info?.price || 0;
+
+      // Calculate USD value
+      let usdValue: number | null = null;
+      if (parsed.solAmount > 0 && solPrice > 0) {
+        // For swaps, sol_amount * SOL price is the most reliable
+        usdValue = Math.round(parsed.solAmount * solPrice * 100) / 100;
+      } else if (parsed.tokenAmount > 0 && tokenPrice > 0) {
+        // For transfers or token-to-token swaps
+        usdValue = Math.round(parsed.tokenAmount * tokenPrice * 100) / 100;
+      }
+
       trades.push({
         signature: tx.signature,
         wallet: parsed.wallet,
         wallet_label: '',
         action: parsed.action,
         token_mint: parsed.tokenMint || null,
-        token_symbol: null, // Will be resolved client-side via DexScreener
+        token_symbol: symbol,
         token_amount: parsed.tokenAmount || null,
         sol_amount: parsed.solAmount || null,
-        usd_value: null, // Will be resolved client-side
+        usd_value: usdValue,
         description: tx.description || '',
         timestamp: tx.timestamp ? new Date(tx.timestamp * 1000).toISOString() : new Date().toISOString(),
         raw_data: tx,
@@ -183,7 +300,6 @@ export async function POST(request: NextRequest) {
     }
 
     if (trades.length > 0) {
-      // Upsert to avoid duplicates on signature
       const { error } = await supabase
         .from('whale_trades')
         .upsert(trades, { onConflict: 'signature', ignoreDuplicates: true });
@@ -194,8 +310,9 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    console.log(`[Webhook] Processed ${trades.length} whale trades from Helius`);
-    return NextResponse.json({ ok: true, processed: trades.length });
+    const withPrice = trades.filter(t => t.usd_value !== null).length;
+    console.log(`[Webhook] Processed ${trades.length} trades (${withPrice} with USD prices, SOL=$${solPrice})`);
+    return NextResponse.json({ ok: true, processed: trades.length, priced: withPrice, solPrice });
   } catch (error: any) {
     console.error('[Webhook] Error:', error?.message || error);
     return NextResponse.json({ ok: false, error: 'Internal error' }, { status: 500 });
