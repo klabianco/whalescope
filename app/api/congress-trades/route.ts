@@ -92,10 +92,10 @@ export async function GET(request: NextRequest) {
       const nameGuess = politicianSlug.replace(/-/g, ' ');
       query = query.ilike('politician', `%${nameGuess}%`);
     } else if (!isPro) {
-      // Free users on main feed: exclude trades filed in last 24 hours
-      const yesterday = new Date();
-      yesterday.setDate(yesterday.getDate() - 1);
-      const yesterdayStr = yesterday.toISOString().split('T')[0];
+      // Free users on main feed: exclude trades filed in last 7 days
+      const cutoff = new Date();
+      cutoff.setDate(cutoff.getDate() - 7);
+      const yesterdayStr = cutoff.toISOString().split('T')[0];
       
       query = query
         .lte('filed_date', yesterdayStr)

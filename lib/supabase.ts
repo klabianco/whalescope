@@ -13,6 +13,8 @@ export interface User {
   plan: 'free' | 'pro' | 'enterprise';
   telegram_chat_id?: string;
   discord_user_id?: string;
+  stripe_customer_id?: string;
+  stripe_subscription_id?: string;
   created_at: string;
   updated_at: string;
 }

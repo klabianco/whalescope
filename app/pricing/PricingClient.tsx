@@ -11,6 +11,7 @@ import { PRICING, PRICING_DISPLAY } from '../config/pricing';
 import { trackPricingView, trackStartProClick } from '../lib/tracking';
 
 type BillingPeriod = 'monthly' | 'yearly';
+type PaymentMethod = 'card' | 'crypto';
 
 const CheckIcon = () => (
   <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style={{ flexShrink: 0 }}>
@@ -26,10 +27,33 @@ const XIcon = () => (
 
 export default function PricingClient() {
   const [billing, setBilling] = useState<BillingPeriod>('yearly');
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
 
   useEffect(() => {
     trackPricingView();
   }, []);
+
+  const handleStripeCheckout = async () => {
+    setCheckoutLoading(true);
+    trackStartProClick(billing === 'yearly' ? 'pro_yearly' : 'pro_monthly');
+    try {
+      const res = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ plan: billing }),
+      });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        alert(data.error || 'Failed to start checkout');
+        setCheckoutLoading(false);
+      }
+    } catch (err) {
+      alert('Something went wrong. Please try again.');
+      setCheckoutLoading(false);
+    }
+  };
 
   return (
     <>
@@ -198,8 +222,8 @@ export default function PricingClient() {
               </p>
               <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 {[
-                  'Politician trades (24h delay)',
-                  'Whale trades (24h delay)',
+                  'Politician trades (7-day delay)',
+                  'Whale trades (7-day delay)',
                   'Top 50 leaderboard',
                   '3 watchlist slots',
                   'Solana only',
@@ -258,24 +282,41 @@ export default function PricingClient() {
               )}
             </div>
 
-            <Link 
-              href={`/subscribe?plan=${billing === 'yearly' ? 'pro_yearly' : 'pro_monthly'}`} 
-              style={{ textDecoration: 'none' }}
-              onClick={() => trackStartProClick(billing === 'yearly' ? 'pro_yearly' : 'pro_monthly')}
-            >
-              <button style={{
+            <button
+              onClick={handleStripeCheckout}
+              disabled={checkoutLoading}
+              style={{
                 width: '100%',
                 padding: '14px 24px',
-                background: '#fff',
-                color: '#000',
+                background: checkoutLoading ? '#27272a' : '#fff',
+                color: checkoutLoading ? '#71717a' : '#000',
                 border: 'none',
                 borderRadius: '10px',
                 fontSize: '15px',
                 fontWeight: '600',
+                cursor: checkoutLoading ? 'wait' : 'pointer',
+                marginBottom: '8px'
+              }}
+            >
+              {checkoutLoading ? 'Redirecting...' : '💳 Pay with Card'}
+            </button>
+            <Link
+              href={`/subscribe?plan=${billing === 'yearly' ? 'pro_yearly' : 'pro_monthly'}`}
+              style={{ textDecoration: 'none' }}
+            >
+              <button style={{
+                width: '100%',
+                padding: '10px 24px',
+                background: 'transparent',
+                color: '#71717a',
+                border: '1px solid #27272a',
+                borderRadius: '10px',
+                fontSize: '13px',
+                fontWeight: '500',
                 cursor: 'pointer',
                 marginBottom: '32px'
               }}>
-                Start with Pro
+                Pay with Crypto (USDC)
               </button>
             </Link>
 
@@ -409,11 +450,11 @@ export default function PricingClient() {
             {[
               {
                 q: 'What payment methods do you accept?',
-                a: 'We accept USDC and SOL on Solana. Pay directly from your wallet.'
+                a: 'We accept all major credit/debit cards via Stripe, plus USDC on Solana for crypto users.'
               },
               {
                 q: 'Is this a recurring subscription?',
-                a: 'No — it\'s a one-time payment. You won\'t be auto-charged. We\'ll email you before your access expires so you can renew if you\'d like.'
+                a: 'Card payments are recurring subscriptions — cancel anytime from your account page. Crypto payments are one-time with manual renewal.'
               },
               {
                 q: 'How real-time are the alerts?',

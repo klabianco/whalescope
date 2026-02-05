@@ -32,10 +32,10 @@ async function getFreeTierTrades(): Promise<CongressTrade[]> {
 
     const supabase = createClient(url, key);
     
-    // Free tier: trades older than 24h, max 25
-    const yesterday = new Date();
-    yesterday.setDate(yesterday.getDate() - 1);
-    const yesterdayStr = yesterday.toISOString().split('T')[0];
+    // Free tier: trades older than 7 days, max 25
+    const cutoff = new Date();
+    cutoff.setDate(cutoff.getDate() - 7);
+    const yesterdayStr = cutoff.toISOString().split('T')[0];
     
     const { data, error } = await supabase
       .from('congress_trades')

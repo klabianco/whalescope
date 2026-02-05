@@ -134,39 +134,48 @@ export default function CongressClient({ trades, topTraders, committeeData, poli
           </div>
         )}
 
-        {/* Real-time delay notice */}
+        {/* Pro upgrade CTA banner */}
         <div style={{
-          background: 'linear-gradient(135deg, rgba(34, 197, 94, 0.08) 0%, #111118 100%)',
-          border: '1px solid rgba(34, 197, 94, 0.25)',
+          background: 'linear-gradient(135deg, rgba(34, 197, 94, 0.12) 0%, rgba(34, 197, 94, 0.04) 50%, #111118 100%)',
+          border: '1px solid rgba(34, 197, 94, 0.35)',
           borderRadius: '12px',
-          padding: '14px 20px',
+          padding: '20px',
           marginBottom: '20px',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          flexWrap: 'wrap',
-          gap: '10px',
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ fontSize: '14px' }}>&#x23F3;</span>
-            <span style={{ color: '#a1a1aa', fontSize: '14px' }}>
-              Free tier: <strong style={{ color: '#fbbf24' }}>24h delayed</strong>. Pro members see filings instantly.
-            </span>
+          <div style={{ 
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            gap: '12px',
+          }}>
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                <span style={{ fontSize: '16px' }}>🔒</span>
+                <span style={{ color: '#fff', fontSize: '15px', fontWeight: '600' }}>
+                  See today's trades
+                </span>
+              </div>
+              <span style={{ color: '#a1a1aa', fontSize: '13px' }}>
+                You're seeing trades with a <strong style={{ color: '#fbbf24' }}>7-day delay</strong>. 
+                Pro members see filings the moment they're reported.
+              </span>
+            </div>
+            <Link href="/pricing" style={{ textDecoration: 'none', flexShrink: 0 }}>
+              <span style={{
+                background: '#22c55e',
+                color: '#000',
+                padding: '10px 20px',
+                borderRadius: '8px',
+                fontSize: '14px',
+                fontWeight: '600',
+                whiteSpace: 'nowrap',
+                display: 'inline-block',
+              }}>
+                Upgrade to Pro — $24/mo
+              </span>
+            </Link>
           </div>
-          <Link href="/pricing" style={{ textDecoration: 'none' }}>
-            <span style={{
-              background: '#22c55e',
-              color: '#000',
-              padding: '8px 16px',
-              borderRadius: '8px',
-              fontSize: '13px',
-              fontWeight: '600',
-              whiteSpace: 'nowrap',
-              display: 'inline-block',
-            }}>
-              Upgrade to Pro
-            </span>
-          </Link>
         </div>
 
         {/* Filter Tabs */}
