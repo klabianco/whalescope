@@ -119,7 +119,7 @@ We built **WhaleScope** specifically to track large-wallet movements—and that 
 
 Whether you're tracking **pelosi stocks**, watching for the next suspicious sell-off, or just want to see what your representative is buying, WhaleScope makes it simple. No PDF parsing required.
 
-[Try WhaleScope Free →](/signup)
+[Try WhaleScope Free →](/auth/signup)
 
 ---
 
@@ -133,7 +133,7 @@ The data is public. The patterns are there. The question is whether you're watch
 
 ---
 
-*Want real-time alerts on congress trades and whale wallet movements? [Join WhaleScope](/signup) and never miss a filing again.*
+*Want real-time alerts on congress trades and whale wallet movements? [Join WhaleScope](/auth/signup) and never miss a filing again.*
 
 ---
 
