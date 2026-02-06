@@ -22,21 +22,70 @@ interface AccountData {
   } | null;
 }
 
+interface EmailSession {
+  authenticated: boolean;
+  user?: {
+    id: string;
+    email: string;
+    plan: string;
+    walletAddress: string | null;
+  };
+}
+
 export default function AccountPage() {
   const { publicKey, connected } = useWallet();
   const [account, setAccount] = useState<AccountData | null>(null);
+  const [emailSession, setEmailSession] = useState<EmailSession | null>(null);
   const [loading, setLoading] = useState(true);
   const [canceling, setCanceling] = useState(false);
   const [cancelConfirm, setCancelConfirm] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
+  // Check for email session on mount
+  useEffect(() => {
+    checkEmailSession();
+  }, []);
+
   useEffect(() => {
     if (connected && publicKey) {
       fetchAccount();
-    } else {
+    } else if (!emailSession?.authenticated) {
       setLoading(false);
     }
-  }, [connected, publicKey]);
+  }, [connected, publicKey, emailSession]);
+
+  async function checkEmailSession() {
+    try {
+      const res = await fetch('/api/auth/session');
+      const data = await res.json();
+      setEmailSession(data);
+      if (data.authenticated && data.user) {
+        // Convert email session to account format
+        setAccount({
+          plan: data.user.plan,
+          email: data.user.email,
+          alert_email: data.user.email,
+          subscription: data.user.plan === 'pro' ? {
+            status: 'active',
+            plan: 'pro',
+            currentPeriodEnd: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+            paymentMethod: 'stripe',
+            lastPaymentSignature: '',
+          } : null,
+        });
+      }
+    } catch (err) {
+      console.error('Failed to check email session:', err);
+    }
+    setLoading(false);
+  }
+
+  async function handleLogout() {
+    await fetch('/api/auth/session', { method: 'POST' });
+    setEmailSession(null);
+    setAccount(null);
+    window.location.href = '/';
+  }
 
   async function fetchAccount() {
     setLoading(true);
@@ -100,8 +149,8 @@ export default function AccountPage() {
   const isExpired = account?.subscription?.status === 'expired';
   const expiryDate = account?.subscription?.currentPeriodEnd;
 
-  // Not connected — prompt to connect wallet
-  if (!connected) {
+  // Not connected and no email session — prompt to connect or login
+  if (!connected && !emailSession?.authenticated) {
     return (
       <>
         <Header />
@@ -113,25 +162,50 @@ export default function AccountPage() {
             textAlign: 'center',
           }}>
             <div style={{ fontSize: '48px', marginBottom: '16px' }}>🔐</div>
-            <h2 style={{ color: '#fff', marginBottom: '8px' }}>Connect Your Wallet</h2>
+            <h2 style={{ color: '#fff', marginBottom: '8px' }}>Sign In</h2>
             <p style={{ color: '#888', marginBottom: '24px' }}>
-              Connect your Solana wallet to view your account settings.
+              Connect your wallet or log in with email to view your account.
             </p>
-            <WalletMultiButton style={{
-              backgroundColor: '#4ade80',
-              color: '#000',
-              borderRadius: '8px',
-              fontSize: '16px',
-              fontWeight: '600',
-              height: '48px',
-              padding: '0 32px',
-            }}>Connect Wallet</WalletMultiButton>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', maxWidth: '280px', margin: '0 auto' }}>
+              <WalletMultiButton style={{
+                backgroundColor: '#4ade80',
+                color: '#000',
+                borderRadius: '8px',
+                fontSize: '16px',
+                fontWeight: '600',
+                height: '48px',
+                padding: '0 32px',
+                width: '100%',
+                justifyContent: 'center',
+              }}>Connect Wallet</WalletMultiButton>
+              <Link
+                href="/auth/login"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  backgroundColor: '#27272a',
+                  color: '#fff',
+                  borderRadius: '8px',
+                  fontSize: '16px',
+                  fontWeight: '600',
+                  height: '48px',
+                  padding: '0 32px',
+                  textDecoration: 'none',
+                  border: '1px solid #3f3f46',
+                }}
+              >
+                Log In with Email
+              </Link>
+            </div>
           </div>
         </main>
         <Footer />
       </>
     );
   }
+
+  const isEmailSession = emailSession?.authenticated && !connected;
 
   return (
     <>
@@ -468,7 +542,7 @@ export default function AccountPage() {
               </div>
             )}
 
-            {/* Wallet Info */}
+            {/* Account Info */}
             <div style={{
               background: '#18181b',
               border: '1px solid #27272a',
@@ -476,29 +550,53 @@ export default function AccountPage() {
               padding: '28px',
             }}>
               <h2 style={{ color: '#fff', fontSize: '18px', fontWeight: '600', margin: '0 0 16px 0' }}>
-                Wallet
+                {isEmailSession ? 'Account' : 'Wallet'}
               </h2>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span style={{
-                  color: '#a1a1aa',
-                  fontSize: '14px',
-                  fontFamily: 'monospace',
-                }}>
-                  {publicKey!.toBase58().slice(0, 6)}...{publicKey!.toBase58().slice(-6)}
-                </span>
-                <a
-                  href={`https://solscan.io/account/${publicKey!.toBase58()}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{
-                    color: '#60a5fa',
-                    fontSize: '13px',
-                    textDecoration: 'none',
-                  }}
-                >
-                  View on Solscan ↗
-                </a>
-              </div>
+              {isEmailSession ? (
+                <div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                    <span style={{ color: '#71717a', fontSize: '14px' }}>Email</span>
+                    <span style={{ color: '#a1a1aa', fontSize: '14px' }}>{emailSession.user?.email}</span>
+                  </div>
+                  <button
+                    onClick={handleLogout}
+                    style={{
+                      width: '100%',
+                      padding: '12px',
+                      background: 'transparent',
+                      color: '#71717a',
+                      border: '1px solid #27272a',
+                      borderRadius: '8px',
+                      fontSize: '14px',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    Log Out
+                  </button>
+                </div>
+              ) : (
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{
+                    color: '#a1a1aa',
+                    fontSize: '14px',
+                    fontFamily: 'monospace',
+                  }}>
+                    {publicKey!.toBase58().slice(0, 6)}...{publicKey!.toBase58().slice(-6)}
+                  </span>
+                  <a
+                    href={`https://solscan.io/account/${publicKey!.toBase58()}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      color: '#60a5fa',
+                      fontSize: '13px',
+                      textDecoration: 'none',
+                    }}
+                  >
+                    View on Solscan ↗
+                  </a>
+                </div>
+              )}
             </div>
           </>
         )}
