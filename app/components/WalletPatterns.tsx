@@ -255,7 +255,7 @@ export function WalletPatternsTooltip({
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
             {stats.last5Trades.map((trade, i) => {
-              const symbol = trade.tokenSymbol || trade.boughtSymbol || trade.soldSymbol || '???';
+              const symbol = trade.tokenSymbol || trade.boughtSymbol || trade.soldSymbol || 'Unknown';
               const isBuy = trade.action === 'BUY';
               return (
                 <div key={i} style={{
