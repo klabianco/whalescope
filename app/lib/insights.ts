@@ -82,8 +82,13 @@ export function getAllInsights(): InsightMeta[] {
     };
   });
   
-  // Sort by date, newest first
-  return insights.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  // Sort by date, newest first (secondary sort by slug descending for same-day articles)
+  return insights.sort((a, b) => {
+    const dateCompare = new Date(b.date).getTime() - new Date(a.date).getTime();
+    if (dateCompare !== 0) return dateCompare;
+    // For same date, sort by slug descending (newer slugs typically have later names)
+    return b.slug.localeCompare(a.slug);
+  });
 }
 
 export function getInsightBySlug(slug: string): InsightArticle | null {
