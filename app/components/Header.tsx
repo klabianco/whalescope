@@ -56,6 +56,16 @@ export const Header: FC = () => {
               {link.label}
             </Link>
           ))}
+          <Link 
+            href="/auth/login" 
+            style={{ 
+              color: '#888', 
+              textDecoration: 'none', 
+              fontSize: '14px',
+            }}
+          >
+            Log In
+          </Link>
           <WalletMultiButton style={{
             backgroundColor: '#fff',
             color: '#000',
@@ -121,6 +131,19 @@ export const Header: FC = () => {
               {link.label}
             </Link>
           ))}
+          <Link
+            href="/auth/login"
+            onClick={() => setMenuOpen(false)}
+            style={{
+              color: '#ccc',
+              textDecoration: 'none',
+              fontSize: '16px',
+              padding: '12px 0',
+              borderBottom: '1px solid #1a1a1a',
+            }}
+          >
+            Log In
+          </Link>
           <div style={{ paddingTop: '12px' }}>
             <WalletMultiButton style={{
               backgroundColor: '#fff',
