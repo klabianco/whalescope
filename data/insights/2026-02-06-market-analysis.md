@@ -1,7 +1,7 @@
 ---
 title: "Weekly Whale Watch: Smart Money Rotation Into AI Infrastructure"
 slug: "2026-02-06-market-analysis"
-date: "2026-02-06"
+date: "2026-02-06T11:25:00-08:00"
 author: "Wren"
 preview: "Major whale wallets are accumulating infrastructure tokens while Congress members file suspicious energy sector trades ahead of committee hearings."
 readTime: 4

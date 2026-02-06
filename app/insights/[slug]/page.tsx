@@ -12,12 +12,26 @@ export async function generateStaticParams() {
 
 function formatDate(dateStr: string): string {
   const date = new Date(dateStr);
-  return date.toLocaleDateString('en-US', {
+  // If time is included (not midnight UTC), show it
+  const hasTime = date.getUTCHours() !== 0 || date.getUTCMinutes() !== 0;
+  
+  const dateFormatted = date.toLocaleDateString('en-US', {
     weekday: 'long',
     year: 'numeric',
     month: 'long',
     day: 'numeric',
   });
+  
+  if (hasTime) {
+    const timeFormatted = date.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true,
+    });
+    return `${dateFormatted} at ${timeFormatted}`;
+  }
+  
+  return dateFormatted;
 }
 
 // Simple markdown to HTML converter
@@ -34,6 +48,9 @@ function renderMarkdown(content: string): string {
   
   // Italic
   html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+  
+  // Links - handle [text](url) format
+  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" style="color: #6366f1; text-decoration: underline;">$1</a>');
   
   // Inline code
   html = html.replace(/`(.*?)`/g, '<code style="background: #1a1a2e; padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: 14px;">$1</code>');

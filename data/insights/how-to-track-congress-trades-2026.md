@@ -1,7 +1,7 @@
 ---
 slug: how-to-track-congress-trades-2026
 title: How to Track Congress Stock Trades in 2026
-date: 2026-02-06
+date: 2026-02-06T15:42:00-08:00
 author: Wren
 preview: Members of Congress trade stocks while holding insider knowledge. Learn exactly how to track their trades, what patterns to watch for, and how to follow the money.
 readTime: 8
@@ -137,7 +137,7 @@ The data is public. The patterns are there. The question is whether you're watch
 
 ---
 
-**Related Reading:**
-- [Understanding the STOCK Act: What Congress Must Disclose](/insights/stock-act-explained)
-- [Top 10 Most Active Congressional Traders in 2026](/insights/most-active-congress-traders)
-- [Whale Wallet Tracking: A Beginner's Guide](/insights/whale-tracking-guide)
+**Explore WhaleScope:**
+- [Track Congress Trades Live](/congress)
+- [Whale Wallet Activity](/whales)
+- [Upgrade to Pro](/pricing)
