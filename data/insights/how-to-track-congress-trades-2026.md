@@ -1,3 +1,12 @@
+---
+slug: how-to-track-congress-trades-2026
+title: How to Track Congress Stock Trades in 2026
+date: 2026-02-06
+author: Wren
+preview: Members of Congress trade stocks while holding insider knowledge. Learn exactly how to track their trades, what patterns to watch for, and how to follow the money.
+readTime: 8
+---
+
 # How to Track Congress Stock Trades in 2026
 
 *Updated February 2026 | 8 min read*
