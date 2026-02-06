@@ -14,6 +14,16 @@ import {
   TradeFeedList,
   type FilterTab,
 } from '../components/TradeFeed';
+import {
+  calculateWalletStats,
+  WalletPatternsBadge,
+  WalletPatternsTooltip,
+} from '../components/WalletPatterns';
+import {
+  AIInsightPanel,
+  generateTradeInsight,
+  TradeInsightBadge,
+} from '../components/AITradeInsight';
 import tradesData from '../../data/whale-trades.json';
 import whaleWalletsData from '../../data/whale-wallets.json';
 
@@ -178,6 +188,7 @@ export default function WhalesPage() {
   const [tokenData, setTokenData] = useState<Record<string, TokenInfo>>({});
   const [liveTrades, setLiveTrades] = useState<WhaleTrade[]>([]);
   const [liveSource, setLiveSource] = useState<'static' | 'live'>('static');
+  const [expandedWallet, setExpandedWallet] = useState<string | null>(null);
 
   useEffect(() => {
     fetchTokenData().then(setTokenData);
@@ -299,6 +310,22 @@ export default function WhalesPage() {
     { key: 'buy', label: 'Buys' },
     { key: 'sell', label: 'Sells' },
   ];
+
+  // Calculate wallet patterns for all unique wallets (memoized)
+  const walletPatternsMap = useMemo(() => {
+    const patterns = new Map<string, ReturnType<typeof calculateWalletStats>>();
+    const uniqueWallets = [...new Set(mergedTrades.map(t => t.wallet))];
+    const solPrice = tokenData['So11111111111111111111111111111111111111112']?.price || 0;
+    
+    for (const wallet of uniqueWallets) {
+      patterns.set(wallet, calculateWalletStats(
+        wallet,
+        tradesData as WhaleTrade[],
+        { SOL: solPrice }
+      ));
+    }
+    return patterns;
+  }, [mergedTrades, tokenData]);
 
   return (
     <>
@@ -441,6 +468,14 @@ export default function WhalesPage() {
           </Link>
         </div>
 
+        {/* AI Insight Panel */}
+        <AIInsightPanel
+          trades={filteredTrades.slice(0, 50)}
+          getUsdValue={getTradeUSDRaw}
+          walletPatterns={walletPatternsMap}
+          limit={5}
+        />
+
         {/* Filter Tabs */}
         <FilterTabs tabs={tabs} active={filter} onChange={setFilter} />
 
@@ -456,43 +491,70 @@ export default function WhalesPage() {
             // The wallet display name is used in the "Most Active Whales" section instead
             const displayName = shortAddress(trade.wallet);
             const isFollowing = isFollowingWhale(trade.wallet);
+            const walletStats = walletPatternsMap.get(trade.wallet);
+            const tradeUsd = getTradeUSDRaw(trade);
+            const aiInsight = tradeUsd >= 10000 && walletStats
+              ? generateTradeInsight(trade, tradeUsd, walletStats, filteredTrades)
+              : null;
+            const isExpanded = expandedWallet === trade.wallet;
 
             return (
-              <TradeCard
-                key={`${trade.signature}-${i}`}
-                followButton={
-                  <button
-                    onClick={() => {
-                      toggleWhale(trade.wallet);
-                    }}
-                    style={{
-                      padding: '4px 10px',
-                      background: isFollowing ? FOLLOW_BUTTON.activeBg : FOLLOW_BUTTON.inactiveBg,
-                      color: isFollowing ? FOLLOW_BUTTON.activeColor : FOLLOW_BUTTON.inactiveColor,
-                      border: isFollowing ? FOLLOW_BUTTON.activeBorder : FOLLOW_BUTTON.inactiveBorder,
-                      borderRadius: '6px',
-                      fontSize: '12px',
-                      fontWeight: '600',
-                      cursor: 'pointer',
-                      flexShrink: 0,
-                    }}
-                  >
-                    {isFollowing ? '✓ Following' : 'Follow'}
-                  </button>
-                }
-                actor={displayName}
-                actorHref={`/wallet/${trade.wallet}`}
-                badge={badge}
-                asset={symbol}
-                amount={
-                  trade.tokenAmount !== undefined
-                    ? `${formatAmount(trade.tokenAmount)} ${symbol}`
-                    : '—'
-                }
-                usdValue={getTradeUSD(trade)}
-                date={formatDate(trade.timestamp)}
-                txUrl={`https://solscan.io/tx/${trade.signature}`}
-              />
+              <div key={`${trade.signature}-${i}`} style={{ position: 'relative' }}>
+                <TradeCard
+                  followButton={
+                    <button
+                      onClick={() => {
+                        toggleWhale(trade.wallet);
+                      }}
+                      style={{
+                        padding: '4px 10px',
+                        background: isFollowing ? FOLLOW_BUTTON.activeBg : FOLLOW_BUTTON.inactiveBg,
+                        color: isFollowing ? FOLLOW_BUTTON.activeColor : FOLLOW_BUTTON.inactiveColor,
+                        border: isFollowing ? FOLLOW_BUTTON.activeBorder : FOLLOW_BUTTON.inactiveBorder,
+                        borderRadius: '6px',
+                        fontSize: '12px',
+                        fontWeight: '600',
+                        cursor: 'pointer',
+                        flexShrink: 0,
+                      }}
+                    >
+                      {isFollowing ? '✓ Following' : 'Follow'}
+                    </button>
+                  }
+                  actor={displayName}
+                  actorHref={`/wallet/${trade.wallet}`}
+                  badge={badge}
+                  asset={symbol}
+                  amount={
+                    trade.tokenAmount !== undefined
+                      ? `${formatAmount(trade.tokenAmount)} ${symbol}`
+                      : '—'
+                  }
+                  usdValue={getTradeUSD(trade)}
+                  date={formatDate(trade.timestamp)}
+                  txUrl={`https://solscan.io/tx/${trade.signature}`}
+                  extras={
+                    walletStats && (walletStats.tradeCount30d > 0 || walletStats.winRate !== null) ? (
+                      <WalletPatternsBadge
+                        stats={walletStats}
+                        onClick={() => setExpandedWallet(isExpanded ? null : trade.wallet)}
+                      />
+                    ) : undefined
+                  }
+                />
+                {/* Inline AI insight for significant trades */}
+                {aiInsight && (
+                  <TradeInsightBadge insight={aiInsight} />
+                )}
+                {/* Expandable wallet history */}
+                {walletStats && (
+                  <WalletPatternsTooltip
+                    stats={walletStats}
+                    isOpen={isExpanded}
+                    onClose={() => setExpandedWallet(null)}
+                  />
+                )}
+              </div>
             );
           }}
         />
