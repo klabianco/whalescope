@@ -15,6 +15,7 @@ import {
   TradeFeedList,
   type FilterTab,
 } from '../components/TradeFeed';
+import { CongressAIInsightPanel } from '../components/CongressAIInsight';
 
 interface CongressTrade {
   politician: string;
@@ -133,6 +134,9 @@ export default function CongressClient({ trades, topTraders, committeeData, poli
             </div>
           </div>
         )}
+
+        {/* AI Insight Panel */}
+        <CongressAIInsightPanel trades={trades} />
 
         {/* Pro upgrade CTA banner */}
         <div style={{
