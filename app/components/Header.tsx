@@ -17,6 +17,7 @@ export const Header: FC = () => {
     { href: '/search', label: 'Search' },
     { href: '/firehose', label: '🔥 Firehose' },
     { href: '/pricing', label: 'Pricing' },
+    { href: '/faq', label: 'FAQ' },
     { href: '/watchlist', label: 'Watchlist' },
   ];
 
