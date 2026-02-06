@@ -13,6 +13,7 @@ export const Header: FC = () => {
     { href: '/whales', label: 'Crypto' },
     { href: '/congress', label: 'Politicians' },
     { href: '/leaderboard', label: 'Leaderboard' },
+    { href: '/insights', label: 'Insights' },
     { href: '/search', label: 'Search' },
     { href: '/firehose', label: '🔥 Firehose' },
     { href: '/pricing', label: 'Pricing' },

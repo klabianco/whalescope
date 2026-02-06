@@ -171,6 +171,11 @@ export function AIInsightPanel({
 }) {
   const significantTrades = useMemo(() => {
     return trades
+      // Filter out trades with unknown symbols first
+      .filter(trade => {
+        const symbol = trade.tokenSymbol || trade.boughtSymbol || trade.soldSymbol;
+        return symbol && symbol !== '???' && symbol !== 'UNKNOWN';
+      })
       .map(trade => ({
         trade,
         usdValue: getUsdValue(trade),
