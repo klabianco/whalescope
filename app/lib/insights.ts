@@ -77,7 +77,7 @@ export function getAllInsights(): InsightMeta[] {
       title: meta.title || 'Untitled',
       date: meta.date || '',
       author: meta.author || 'Wren',
-      preview: meta.preview || '',
+      preview: meta.preview || meta.description || '',
       readTime: meta.readTime || 5,
     };
   });
@@ -113,7 +113,7 @@ export function getInsightBySlug(slug: string): InsightArticle | null {
         title: meta.title || 'Untitled',
         date: meta.date || '',
         author: meta.author || 'Wren',
-        preview: meta.preview || '',
+        preview: meta.preview || meta.description || '',
         readTime: meta.readTime || 5,
         content,
       };
